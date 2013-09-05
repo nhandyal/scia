@@ -31,7 +31,8 @@ var userSchema = mongoose.Schema({
 var users = mongoose.model("users", userSchema);
 
 
-// Initialize Express
+// Express
+app.use(express.static(__dirname + '../public'));
 app.enable('trust proxy');
 
 /*
@@ -40,6 +41,10 @@ app.all("*", function(req, res){
 				res.send('Hello World');
 });
 */
+
+app.get("/", function(req, res){
+				res.render("index.html");
+});
 
 app.get("/addUser", function(req, res){
 				var name = req.query.user,
