@@ -1,9 +1,9 @@
 body{
-	border-top: 5px solid #990000;
 	background: #FFF;
 	font-family: 'Open Sans', sans-serif;
 	color: #333333;
 }
+
 
 p{
 	margin: 5px 0;
@@ -56,6 +56,40 @@ header p {
 	margin-left:132px;
 }
 
+#login{
+	text-align:right;
+}
+
+.navigation
+{
+	position:absolute;
+	right:0;
+	bottom:4px;
+}
+
+.navigation ul{
+	
+}
+
+.navigation ul li{
+	display:block;
+	float:left;
+	padding:3px 15px;
+}
+
+.navigation ul li a{
+	font-family: 'Lato', sans-serif;
+	text-transform: uppercase;
+	transition: all .25s ease;
+	font-weight:700;
+}
+
+.navigation ul li a:hover{
+	color: #ff0101;
+	transition: 0.2s ease;
+	border-bottom: 2px solid #999;
+}
+/*
 nav
 {
 	position:absolute;
@@ -81,14 +115,17 @@ nav ul li a{
 }
 
 nav ul li a:hover{
-	color: #990000;
+	color: #ff0101;
 	transition: 0.2s ease;
-	border-bottom: 2px solid #FFCC00;
-}
+	border-bottom: 2px solid #999;
+}*/
+
+
 
 .top-shadow{
+	
+	border-top: 5px solid #ff0101;
 	position: absolute;
-	background-image: url(img/shadow-top.png);
 	background-repeat: no-repeat;
 	background-position: bottom center;
 	height: 42px;
@@ -152,20 +189,31 @@ nav ul li a:hover{
     float:left;
 }
 
+.slider-back{
+	
+}
+
+
 .text {
     position:absolute;
-    top:3em;
+    top:15em;
     margin:0;
-    left:3em;
+    right:6em;
     color:white;
     width:22.5em;
     text-shadow:1px 1px black;
+	padding:20px;
+	background:#000;
+    border-radius:1em;
+	opacity:0.7;
+	filter:alpha(opacity=40);
+	
 }
 
 .text h3 {
     font-size:3em;
     line-height: 1;
-    margin: 0 0 1em 0;
+    margin: 0 0 7px 0;
     text-shadow: 1px 1px 2px black;
 }
 
@@ -173,7 +221,7 @@ nav ul li a:hover{
     border:none;
     outline:none;
     border-radius:.5em;
-    padding:.5em 1em;
+    padding:.5em .2em;
     font-size:1.5em;
     line-height:1em;
     background: #eee;
@@ -182,18 +230,17 @@ nav ul li a:hover{
     box-shadow: 0 0 5px rgba(0, 0, 0, .9);
     color:#666;
     text-shadow:1px 1px white;
-    margin-top:2em;
+    margin-top:1em;
     cursor: pointer;
     -webkit-transition: all .5s ease;
     -moz-transition: all .5s ease;
     -ms-transition: all .5s ease;
     -o-transition: all .5s ease;
     transition: all .5s ease;
-	
 }
 
 .cta:hover {
-    margin-left:.75em;
+    margin-left:.2em;
 }
 
 #spacer{
@@ -230,7 +277,7 @@ nav ul li a:hover{
 	width:auto;
 	max-width:900px;
 	margin:0 auto;
-	padding:70px 0 45px 0;
+	padding:30px 0 300px 0;
 }
 
 #boxcontent article{
@@ -271,7 +318,7 @@ nav ul li a:hover{
 	font-family:'Lato',sans-serif;
 	margin:0 auto;
 	font-weight:700;
-	margin-top:20px;
+	margin-top:50px;
 }
 
 #four_columns, #text_columns{
@@ -325,7 +372,7 @@ nav ul li a:hover{
 	margin: 120px 0;
 }
 
-.row{
+.row1{
 	position:relative;
 	margin: 40px 0 0 50px;
 	float:right;

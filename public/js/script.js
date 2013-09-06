@@ -1,5 +1,5 @@
 window.onload = function() {
-
+	
     function $(el) {
         return document.querySelector(el);
     }
@@ -21,9 +21,9 @@ window.onload = function() {
 
     control = {
 
-        margin: function(n) {
+       /* margin: function(n) {
             sliderContent.style.marginLeft = '-'+n+'00%';
-        },
+        },*/
 
         prev: function() {
             (n === 0) ? n = (slideCount - 1) : n--;
