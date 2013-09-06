@@ -1,5 +1,5 @@
 html
-head
+  head
     meta(http-equiv='Content-Type', content='text/html; charset=utf-8')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     title USC SCIA
@@ -23,20 +23,22 @@ head
       .navigation
         ul
           li
-            a(href='about') About
+            a(href='about.html') About
           li
-            a(href='events') Events
+            a(href='events.html') Events
           li
-            a(href='') Contact
+            a(href='board.html') Board
+          li
+            a(href='contact.html') Contact
           li
             a(data-toggle='modal', href='#myModal') Sign Up/Log In
             //
-               Modal 
+                        <Modal> </Modal>
             #myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
               .modal-dialog
                 .modal-content
                   .modal-header
-                    button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+                    button.close(type='button', data-dismiss='modal', aria-hidden='true') Ã—
                     h4.modal-title Sign Up/Log In
                   .modal-body
                     form(method='POST', action='', accept-charset='UTF-8')
@@ -47,31 +49,28 @@ head
                       button.btn.btn-warning.btn-block(type='submit', name='submit', style='margin-top: 20px;') Sign in
                       h2(style='padding: 10px 0 10px 0;') OR
                       button#membership-signup.btn.btn-danger.btn-block(name='submit') Become a Member Now!
-                //
-                   /.modal-content 
-              //
-                 /.modal-dialog 
-            //
-               /.modal 
-
+                // /.modal-content
+              // /.modal-dialog
+            // /.modal
     .top-shadow
-    section#slider
-      #slider-content
-        section
-          img(src='img/slider-image01.jpg', alt='SCIA')
-
-        section
-          img(src='img/slider-image02.jpg', alt='SCIA')
-
-        section
-          img(src='img/slider-image03.jpg', alt='SCIA')
-
     #aboutpage
-    section#spacer
-      p
-        a(href='') RSVP for Beach Bonfire + Welcome back party
-
-
+    .page-title Events
+    section#boxcontent
+      .row
+        .col-md-6
+          p
+            | Come by our mixer THIS Friday at 6 PM to learn more about SCIA, how to get involved, and most importantly to meet some seriously cool new people!
+          | Then join us as we move the party to the beach for a bonfire as we roast marshmallows while the sun sets!
+          p "fun water bottles" will be provided 
+          p MIXER: 6 PM at Doheney Memorial Library, Room 240
+          p
+            | MEMBERSHIP: Become a member at the meeting before buses leave to get the discounted member price.
+          | BONFIRE: $5 for members
+          | $10 for non-members
+          a(href='https://www.facebook.com/events/503607386391052/')
+            button.btn.btn-primary(type='button') Facebook Event
+        .col-md-6
+          img(src='https://sphotos-a-sjc.xx.fbcdn.net/hphotos-ash3/1231236_599828100059145_465704342_n.jpg', width='450px', height='300px')
     footer
       .wrapper
         p
