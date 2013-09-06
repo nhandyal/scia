@@ -1,0 +1,90 @@
+html
+  head
+    meta(http-equiv='Content-Type', content='text/html; charset=utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    title USC SCIA
+    link(rel='shortcut icon', href='img/favicon.ico', type='image/x-icon')
+    link(rel='stylesheet', href='bootstrap.css', type='text/css', media='screen')
+    link(rel='stylesheet', href='reset.css', type='text/css', media='screen')
+    link(rel='stylesheet', href='style.css', type='text/css', media='screen')
+    link(href='lightbox/css/lightbox.css', rel='stylesheet')
+    link(href='http://fonts.googleapis.com/css?family=PT+Sans:400,700', rel='stylesheet', type='text/css')
+    link(href='http://fonts.googleapis.com/css?family=Open+Sans|Baumans', rel='stylesheet', type='text/css')
+    link(href='http://fonts.googleapis.com/css?family=Lato:700', rel='stylesheet', type='text/css')
+    script(type='text/javascript', src='http://code.jquery.com/jquery-latest.min.js')
+    script(src='js/prefixfree.min.js')
+    script(src='js/script.js')
+    script(src='js/bootstrap.js')
+    script(src='lightbox/js/lightbox-2.6.min.js')
+    script(src='js/smoothScrolling.js')
+  body(style='')
+    header
+      img(src='img/logo.png', alt='USC SCIA', width='144', height='79')
+      .navigation
+        ul
+          li
+            a(href='about.html') About
+          li
+            a(href='events.html') Events
+          li
+            a(href='contact.html') Contact
+          li
+            a(data-toggle='modal', href='#myModal') Sign Up/Log In
+            //
+               Modal 
+            #myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+              .modal-dialog
+                .modal-content
+                  .modal-header
+                    button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+                    h4.modal-title Sign Up/Log In
+                  .modal-body
+                    form(method='POST', action='', accept-charset='UTF-8')
+                      .form-group
+                        input#exampleInputEmail1.form-control(type='email', placeholder='Email')
+                      .form-group
+                        input#exampleInputPassword1.form-control(type='password', placeholder='Password')
+                      button.btn.btn-warning.btn-block(type='submit', name='submit', style='margin-top: 20px;') Sign in
+                      h2(style='padding: 10px 0 10px 0;') OR
+                      button#membership-signup.btn.btn-danger.btn-block(name='submit') Become a Member Now!
+                //
+                   /.modal-content 
+              //
+                 /.modal-dialog 
+            //
+               /.modal 
+
+    .top-shadow
+
+    #aboutpage
+
+    .page-title Contact Us
+    section#boxcontent
+      .row
+        ..col-md-6..col-md-offset-3
+          .form-group
+            input#exampleInputEmail1.form-control(type='email', placeholder='Full Name')
+          .form-group
+            input#exampleInputEmail1.form-control(type='email', placeholder='Enter USC email')
+          .form-group
+            input#exampleInputPassword1.form-control(type='password', placeholder='Password')
+          .form-group
+            input#exampleInputPassword1.form-control(type='password', placeholder='Confirm Password')
+          .form-group
+            input#exampleInputPassword1.form-control(type='text', placeholder='Year')
+          .form-group
+            input#exampleInputPassword1.form-control(type='text', placeholder='Major')
+          button.btn.btn-default(type='submit') Submit
+
+    footer
+      .wrapper
+        p
+          a(href='http://www.uscscia.com') SCIA
+          | . All Rights Reserved.
+        .social
+          a(href='https://www.facebook.com/uscscia')
+            img(src='img/facebook.png', alt='facebook', width='25')
+          a(href='#')
+            img(src='img/instagram.png', alt='instagram', width='25')
+          a(href='#')
+            img(src='img/twitter.png', alt='twitter', width='25')
