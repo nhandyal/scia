@@ -277,7 +277,7 @@ nav ul li a:hover{
 	width:auto;
 	max-width:900px;
 	margin:0 auto;
-	padding:70px 0 300px 0;
+	padding:30px 0 300px 0;
 }
 
 #boxcontent article{
@@ -318,7 +318,7 @@ nav ul li a:hover{
 	font-family:'Lato',sans-serif;
 	margin:0 auto;
 	font-weight:700;
-	margin-top:20px;
+	margin-top:50px;
 }
 
 #four_columns, #text_columns{
