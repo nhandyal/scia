@@ -1,38 +1,26 @@
+var user = require("../application/controllers/user");
+
 module.exports = function(app){
 
 
-	app.get("/", function(req, res){
-		res.render("indexMain");
+	app.get("/*", function(req, res){
+		function isNumber(n) {
+		  	return !isNaN(parseFloat(n)) && isFinite(n);
+		}
+
+		var path = (req.url).split("/");
+		if(path[0]=="" && path[1] == ""){
+			res.render("index")
+		}
+		else if( isNumber(path[1]) ) {
+			user.queryUser(req, res, path[1]);
+		} else {
+			res.redirect(301, 'https://www.uscscia.com');
+		}
 	});
 
 
 	app.post("/addUser", function(req, res){
-		console.log(req);
-		console.log(req.body.firstName);
-		console.log(req.body.lastName);
-		console.log(req.body.email);
-		console.log(req.body.phonenumber);
-		console.log(req.body.major);
-		console.log(req.body.year);
-		res.send("lol");
-
-		/*
-		var name = req.query.user,
-			email = req.query.email;
-
-		var user = new users({
-			name: name,
-			email: email
-		});
-
-		user.save(function(err, result){
-			if(err){
-				res.send("something bad happend");
-			}
-			else{
-				res.send("saved new user");
-			}
-		});
-*/
+		user.create(req, res);
 	});
 }
