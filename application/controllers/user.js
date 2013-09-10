@@ -39,10 +39,14 @@ exports.queryUser = function(req, res, cardIDString){
 			res.redirect(301, 'https://www.uscscia.com');
 		}
 		else{
-			var newUser = dbRes[0],
-				confString = newUser.f_name + " " + newUser.l_name + " -- " + newUser.email + " -- cardid: " + newUser.card_id;
-			
-			res.send(confString);
+			try{
+				var newUser = dbRes[0],
+					confString = newUser.f_name + " " + newUser.l_name + " -- " + newUser.email + " -- cardid: " + newUser.card_id;
+				
+				res.send(confString);
+			} catch (err) {
+				res.send("Invalid user id");
+			}
 		}
 	});
 }
