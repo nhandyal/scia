@@ -1,6 +1,6 @@
 SCIA.ZuneView = {
 
-	zuneImgElements : [],
+	zuneCards : [],
 	
 	init : function(viewportTiles, margin, zuneContainerId){
 		
@@ -11,23 +11,48 @@ SCIA.ZuneView = {
 		}
 
 		function ZuneElement(size, originX, originY) {
+			var flipContainer = document.createElement("div"),
+				flipper = document.createElement("div"),
+				front = document.createElement("div"),
+				back = document.createElement("div"),
+				imgFront = document.createElement("img"),
+				imgBack = document.createElement("img"),
+				dimension = size*tile.width;
 
-            var containingDiv = document.createElement("div");
-            var displayedImg = document.createElement("img");
-            
-            containingDiv.style.width = tile.width * size;
-            containingDiv.style.height = tile.height * size;
-            containingDiv.style.top = originY;
-            containingDiv.style.left = originX;
+			flipContainer.className = "flip-container";
+			flipContainer.style.width = dimension;
+			flipContainer.style.height = dimension;
+			flipContainer.style.top = originY;
+			flipContainer.style.left = originX;
 
-            displayedImg.src = SELF.getRandomImg();
-            displayedImg.width = tile.width * size;
-            displayedImg.height = tile.height * size;
+			flipper.className = "flipper";
+			
+			front.className = "front";
+			
+			back.className = "back";
+			
+			imgFront.className = "imgFront";
+			imgFront.width = dimension;
+			imgFront.height = dimension;
+			imgFront.src = SELF.getRandomImg();
+			
+			imgBack.className = "imgBack";
+			imgBack.width = dimension;
+			imgBack.height = dimension;
+			imgBack.src = SELF.getRandomImg();
 
-            containingDiv.appendChild(displayedImg);
-            SELF.zuneImgElements.push(displayedImg);
+			front.appendChild(imgFront);
+			back.appendChild(imgBack);
 
-            return containingDiv;
+			flipper.appendChild(front);
+			flipper.appendChild(back);
+
+			flipContainer.appendChild(flipper);
+
+			var zuneCard = new SELF.ZuneCard(flipContainer, imgFront, imgBack);
+			SELF.zuneCards.push(zuneCard);
+
+			return flipContainer;
         }
 
 		var viewport = SCIA.utils.getWindowSize(),
@@ -89,9 +114,11 @@ SCIA.ZuneView = {
 			}
 		}
 
+		/*
 		setInterval(function(){
 			SELF.updateZuneImgs();
 		}, 1200);
+		*/
 
 		/* PRINTS THE MINIMAP, for dev use only */
 		/*
@@ -112,7 +139,16 @@ SCIA.ZuneView = {
 
 	updateZuneImgs : function(){
 		// pick a random zune tile and random new img
-		var selectionIndex = Math.floor(Math.random() * this.zuneImgElements.length);
-		this.zuneImgElements[selectionIndex].src = this.getRandomImg();
+		var selectionIndex = Math.floor(Math.random() * this.zuneCards.length);
+		this.zuneCards[selectionIndex].src = this.getRandomImg();
+	},
+
+	ZuneCard : function(flipContainer, imgElementFront, imgElementBack){
+		return {
+			flipContainer : flipContainer,
+			imgFront : imgElementFront,
+			imgBack : imgElementBack,
+			frontVisible : true
+		};
 	}
 };
