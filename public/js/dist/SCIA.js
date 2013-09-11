@@ -125,11 +125,11 @@
                 }
             }
 
-            /*
-		setInterval(function(){
-			SELF.updateZuneImgs();
-		}, 1200);
-		*/
+
+            setInterval(function() {
+                SELF.updateZuneImgs();
+            }, 2500);
+
 
             /* PRINTS THE MINIMAP, for dev use only */
             /*
@@ -151,7 +151,19 @@
         updateZuneImgs: function() {
             // pick a random zune tile and random new img
             var selectionIndex = Math.floor(Math.random() * this.zuneCards.length);
-            this.zuneCards[selectionIndex].src = this.getRandomImg();
+            var zuneCard = this.zuneCards[selectionIndex];
+            var SELF = this;
+
+            if (zuneCard.frontVisible) {
+                // front --> back transition
+                zuneCard.imgBack.src = SELF.getRandomImg();
+            } else {
+                // back --> front transition
+                zuneCard.imgFront.src = SELF.getRandomImg();
+            }
+
+            zuneCard.frontVisible = !zuneCard.frontVisible;
+            zuneCard.flipContainer.classList.toggle("flip");
         },
 
         ZuneCard: function(flipContainer, imgElementFront, imgElementBack) {
