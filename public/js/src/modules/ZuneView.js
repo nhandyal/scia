@@ -78,6 +78,9 @@ SCIA.ZuneView = {
 		}
 
 
+		/* Used to ensure proper logo placement and size */
+		var firstIteration = true;
+
 		// iterate over the entire grid
 		for(r = 0; r < viewportTiles.height; r++) {
 			for(c = 0; c < viewportTiles.width; c++) {
@@ -92,6 +95,10 @@ SCIA.ZuneView = {
 					gridX = c,
 					gridY = r,
 					trueSize = 0;
+
+
+				if(firstIteration)
+					size = 2;
 
 				// find the true size of the element
 				// check both the upper and lower bounds
@@ -112,9 +119,15 @@ SCIA.ZuneView = {
 				renderX = c * tile.width;
 				renderY = r * tile.height;
 				element = new ZuneElement(trueSize, renderX, renderY);
+				if(firstIteration){
+					var zuneCard = SELF.zuneCards[0];
+					zuneCard.imgFront.src = "../assets/images/logo.png";
+					zuneCard.imgBack.src = "../assets/images/logo.png";
+					SELF.zuneCards = [];
+					firstIteration = false;
+				}
+
 				zuneContainer.appendChild(element);
-
-
 				gridChar = nextChar(gridChar);
 			}
 		}
