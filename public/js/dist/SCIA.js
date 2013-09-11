@@ -13,7 +13,7 @@
 
         zuneCards: [],
 
-        init: function(viewportTiles, margin, zuneContainerId) {
+        init: function(viewportTiles, zuneContainerId) {
 
             var SELF = this;
 
@@ -71,24 +71,23 @@
                 width: zuneContainer.clientWidth,
                 height: zuneContainer.clientHeight
             },
-                grid = new Array(viewportTiles.width),
-                gridChar = "A",
                 tile = {
-                    width: viewport.width / viewportTiles.width,
-                    height: viewport.width / viewportTiles.width
+                    width: viewport.height / viewportTiles.height,
+                    height: viewport.height / viewportTiles.height
                 },
+                gridChar = "A",
+
                 renderX = 0,
                 renderY = 0,
                 element = null;
+            viewportTiles.width = Math.ceil(viewport.width / tile.width);
 
 
-
-            // calculate the visible number of tiles based on horizontal tiles
-            viewportTiles.height = Math.ceil(viewport.height / tile.width);
-
+            var grid = new Array(viewportTiles.width);
             for (c = 0; c < viewportTiles.width; c++) {
                 grid[c] = new Array(viewportTiles.height);
             }
+
 
             // iterate over the entire grid
             for (r = 0; r < viewportTiles.height; r++) {
@@ -106,9 +105,11 @@
                         trueSize = 0;
 
                     // find the true size of the element
-                    while (trueSize < size && gridX < viewportTiles.width && grid[gridX][gridY] === undefined) {
+                    // check both the upper and lower bounds
+                    while (trueSize < size && gridX < viewportTiles.width && grid[gridX][r] === undefined && gridY < viewportTiles.height) {
                         trueSize++;
                         gridX++;
+                        gridY++;
                     }
 
                     // fill the true size square on the grid
@@ -186,6 +187,26 @@
                 width: window.innerWidth,
                 height: window.innerHeight
             };
+        },
+
+        getGCD: function(a, b) {
+            var remainder = -1,
+                larger = 0,
+                smaller = 0;
+
+            while (remainder !== 0) {
+                larger = a > b ? a : b;
+                smaller = a > b ? b : a;
+
+                remainder = larger % smaller;
+                if (a > b) {
+                    a = remainder;
+                } else {
+                    b = remainder;
+                }
+            }
+
+            return smaller;
         }
     };
 
