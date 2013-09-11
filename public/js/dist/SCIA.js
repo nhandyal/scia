@@ -42,14 +42,14 @@
 
                 back.className = "back";
 
-                imgFront.className = "imgFront";
-                imgFront.width = dimension;
-                imgFront.height = dimension;
+                imgFront.className = "imgFront zuneImg";
+                imgFront.width = dimension - 5;
+                imgFront.height = dimension - 5;
                 imgFront.src = SELF.getRandomImg();
 
-                imgBack.className = "imgBack";
-                imgBack.width = dimension;
-                imgBack.height = dimension;
+                imgBack.className = "imgBack zuneImg";
+                imgBack.width = dimension - 5;
+                imgBack.height = dimension - 5;
                 imgBack.src = SELF.getRandomImg();
 
                 front.appendChild(imgFront);
@@ -66,7 +66,11 @@
                 return flipContainer;
             }
 
-            var viewport = SCIA.utils.getWindowSize(),
+            var zuneContainer = document.getElementById(zuneContainerId);
+            var viewport = {
+                width: zuneContainer.clientWidth,
+                height: zuneContainer.clientHeight
+            },
                 grid = new Array(viewportTiles.width),
                 gridChar = "A",
                 tile = {
@@ -75,8 +79,8 @@
                 },
                 renderX = 0,
                 renderY = 0,
-                element = null,
-                zuneContainer = document.getElementById(zuneContainerId);
+                element = null;
+
 
 
             // calculate the visible number of tiles based on horizontal tiles
@@ -96,7 +100,7 @@
                         continue;
                     }
 
-                    var size = Math.floor(Math.random() * 4) + 1,
+                    var size = Math.floor(Math.random() * 4) + 2,
                         gridX = c,
                         gridY = r,
                         trueSize = 0;
