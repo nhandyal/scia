@@ -108,7 +108,7 @@ SCIA.ZuneView = {
 					gridY++;
 				}
 
-				// fill the true size square on the grid
+				// fill the true size square on the minimap
 				for(gridX = c; gridX < c + trueSize; gridX++) {
 					for(gridY = r; gridY < r + trueSize; gridY++) {
 						grid[gridX][gridY] = gridChar;
