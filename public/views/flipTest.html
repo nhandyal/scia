@@ -1,0 +1,78 @@
+<html>
+	<head>
+		<style>
+			.flip-container{
+				-webkit-perspective: 1000;
+				-moz-perspective: 1000;
+				perspective: 1000;
+			}
+			.flip-container:hover .flipper, .flip-container.flip .flipper {
+				-webkit-transform: rotateY(180deg);
+				-moz-transform: rotateY(180deg);
+				transform: rotateY(180deg);
+				filter: FlipH;
+    			-ms-filter: "FlipH";
+			}
+			.flip-container, .front, .back {
+				width: 320px;
+				height: 480px;
+			}
+			.flipper {
+				-webkit-transition: 0.6s;
+				-webkit-transform-style: preserve-3d;
+
+				-moz-transition: 0.6s;
+				-moz-transform-style: preserve-3d;
+
+				transition: 0.6s;
+				transform-style: preserve-3d;
+
+				position: relative;
+			}
+			.front, .back {
+				-webkit-backface-visibility: hidden;
+				-moz-backface-visibility: hidden;
+				backface-visibility: hidden;
+
+				position: absolute;
+				top: 0;
+				left: 0;
+			}
+			/* front pane, placed above back */
+			.front {
+				z-index: 2;
+				background: lightgreen;
+			}
+
+			/* back, initially hidden pane */
+			.back {
+				background: lightblue;
+				-webkit-transform: rotateY(180deg);
+				-moz-transform: rotateY(180deg);
+				transform: rotateY(180deg);
+			}
+		</style>
+		<script type="text/javascript">
+			function toggleFlip(){
+				var element = document.getElementById("card");
+				
+			}
+		</script>
+	</head>
+	<body>
+
+		<div id="card" class="flip-container vertical">
+			<div class="flipper">
+				<div class="front">
+					<!-- front content -->
+
+				</div>
+				<div class="back">
+					<!-- back content -->
+
+				</div>
+			</div>
+		</div>
+		<button onclick="toggleFlip()">Click Me</button>
+	</body>
+</html>

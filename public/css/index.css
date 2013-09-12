@@ -1,0 +1,123 @@
+body{
+	padding: 0px;
+	margin: 0px;
+	font-family: "ProximaNova",Helvetica,Arial,sans-serif;
+	color:rgb(80,80,80);
+	min-width: 900px;
+	max-width: 1600px;
+	margin: auto;
+}
+
+/****** ZUNE VIEW STYLING **********/
+#ZuneView{
+	position: relative;
+	width: 99%;
+	height: 70%;
+	overflow: hidden;
+	padding-right: 7px;
+}
+#ZuneView .flip-container{
+	position: absolute;
+}
+.flip-container{
+	-webkit-perspective: 1000;
+	-moz-perspective: 1000;
+	perspective: 1000;
+}
+.flip-container.flip .flipper {
+	-webkit-transform: rotateY(180deg);
+	-moz-transform: rotateY(180deg);
+	transform: rotateY(180deg);
+	filter: FlipH;
+	-ms-filter: "FlipH";
+}
+.flipper {
+	-webkit-transition: 0.6s;
+	-webkit-transform-style: preserve-3d;
+	
+
+	-moz-transition: 0.6s;
+	-moz-transform-style: preserve-3d;
+
+	transition: 0.6s;
+	transform-style: preserve-3d;
+}
+.front, .back {
+	-webkit-backface-visibility: hidden;
+	-moz-backface-visibility: hidden;
+	backface-visibility: hidden;
+
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+/* front pane, placed above back */
+.front {
+	z-index: 2;
+}
+
+/* back, initially hidden pane */
+.back {
+	-webkit-transform: rotateY(180deg);
+	-webkit-transform-origin:50% 100% 0; /* Safari and Chrome */
+	-moz-transform: rotateY(180deg);
+	transform: rotateY(180deg);
+}
+
+.zuneImg{
+	margin-top: 5px;
+	margin-left: 5px;
+}
+
+/********** MAIN PAGE STYLING ************/
+.absolute-center{
+	margin: auto;
+	position: absolute;
+	top: 0; left: 0; bottom: 0; right: 0;
+}
+.ZuneView-spacer{
+	height: 15%;
+	position: relative;
+}
+#title{
+	position: absolute;
+	left: 0px;
+	bottom: 0px;
+	padding: 0px 0px 10px 5px;
+	font-weight: 700;
+	font-size: 1.3em;
+}
+#navigation{
+	list-style: none;
+	position: absolute;
+	right: 0px;
+	bottom: 0px;
+	margin: 0px;
+	padding: 0px;
+}
+#navigation li{
+	float: left;
+	font-weight: 500;
+	padding: 10px;
+}
+#navigation li a{
+	text-decoration: none;
+	color: rgb(80,80,80);
+}
+#navigation li a:hover{
+	color: rgb(204,40,40);
+}
+#footer{
+	height: 20%;
+	position: relative;
+	/*background: rgb(223,227,226);*/
+	background: rgb(245,245,245);
+	border-top: 2px solid #d5d5d5;
+}
+#legal{
+	position: absolute;
+	right: 20px;
+	top: 50%;
+	font-size: 0.75em;
+	color: rgb(150,150,150);
+}
