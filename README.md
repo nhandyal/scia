@@ -1,4 +1,4 @@
-Southern California Indo Americans (SCIA)
+Southern California Indo Americans
 ====
 
 #Rest API
