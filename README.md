@@ -123,27 +123,27 @@ Southern California Indo Americans
 ##Forms
 
 ###Buy Event Tickets
-* First Name : String
-* Last Name : String
-* Email : String
-* Member ID : Int (blank for non-members)
-* Stripe Token : String
+* first_name : String
+* last_name : String
+* email : String
+* member_ID : Int (blank for non-members)
+* stripe_token : String
 
 
 ###Stage Membership
-* First Name : String
-* Last Name : String
+* first_name : String
+* last_name : String
 * email : String
-* phone number : Int (in the format xxxxxxxxxx)
+* phone_number : Int (in the format xxxxxxxxxx)
 * major : String
-* year - freshman, sophomore, junior, senior, graduate : String
+* year : {freshman, sophomore, junior, senior, graduate} - String
 * password : String
-* Stripe Token : String
+* stripe_token : String
 
 
 ###Commit Membership
 * email : String
-* vrf code : String (5 chars)
+* vrf_code : String (5 chars)
 
 
 ###Login
