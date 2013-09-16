@@ -15,6 +15,7 @@ app.enable('trust proxy');
 // set render engine to jade
 app.set('views', config.root + '/application/views');
 app.set('view engine', 'jade');
+app.register('.html', require('jade'));
 
 // parsing the http header contents for POST requests
 app.use(express.bodyParser());

@@ -10,7 +10,7 @@ module.exports = function(app){
 
 		var path = (req.url).split("/");
 		if(path[0]=="" && path[1] == ""){
-			res.render("index")
+			res.render("index.html")
 		}
 		else if( isNumber(path[1]) ) {
 			user.queryUser(req, res, path[1]);

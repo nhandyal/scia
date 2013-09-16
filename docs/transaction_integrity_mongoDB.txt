@@ -1,0 +1,5 @@
+Unlike SQL databases that have capabilities for transactions, mongodb does not. Transactions were designed so that a series of operations could be performed on the DB but if any of the operations failed, the state of the DB could be reverted to how it was at the begining of the transaction. If all the operations were successfull, you could commit the transaction to the DB.Basically git version control for a database. 
+
+To get around this problem in mongo, mongo guarantees atomic reads and writes for all documents. So in a sql DB you would start a series of operations on the DB and manage integrity with the transaction feature. In Mongo, create the updated document, then do a single write to the DB.
+
+This is a work in progress and as we develop more with mongo, we can probably figure out a more sophisticated method to manage DB transactions.
