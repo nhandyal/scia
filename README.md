@@ -57,12 +57,7 @@ Southern California Indo Americans (SCIA)
       buyEventTickets
     </td>
     <td>
-      Form Data <br/>
-      First Name <br/>
-      Last Name <br/>
-      Email <br/>
-      Member ID (empty for non-members)<br/>
-      Stripe Token<br/>
+      <a href="#buyEventTicketsForm">Form Data</a><br/>
       Return ticketID on success or failure on error
     </td>
     <td>
@@ -121,3 +116,33 @@ Southern California Indo Americans (SCIA)
     </td>
   </tr>
 </table>
+
+###Forms
+<div id="buyEventTicketsForm"></div>
+**Buy Event Tickets**
+* First Name
+* Last Name
+* Email
+* Member ID - blank for non_members
+* Stripe Token
+
+<div id="stageMembershipForm"></div>
+**Stage Membership**
+* First Name
+* Last Name
+* email
+* phone number
+* major
+* year - freshman, sophomore, junior, senior, graduate
+* password
+* Stripe Token
+
+<div id="commitMembershipForm"></div>
+**Commit Membership**
+* email
+* vrf code
+
+<div id="loginForm"></div>
+**Login**
+* email
+* password
