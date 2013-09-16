@@ -57,7 +57,7 @@ Southern California Indo Americans (SCIA)
       buyEventTickets
     </td>
     <td>
-      <a href="#buyEventTicketsForm">Form Data</a><br/>
+      <a href="#buy-event-tickets">Form Data</a><br/>
       Return ticketID on success or failure on error
     </td>
     <td>
@@ -70,6 +70,7 @@ Southern California Indo Americans (SCIA)
       stageMembership
     </td>
     <td>
+      <a href="#stage-membership">Form Data</a><br/>
       Process membership request - create unverified stub in DB and sends verification email.
       Does not bill credit card. Returns success state to client.
     </td>
@@ -83,11 +84,12 @@ Southern California Indo Americans (SCIA)
       commitMembership
     </td>
     <td>
+      <a href="#commit-membership">Form Data</a><br/>
       Verify stub in DB. Bill Credit Card. Send auth cookie.
     </td>
     <td>
-      /d1/register?action=vrf&email&vrf_code<br/>
-      [[post]]
+      /d1/register?action=vrf<br/>
+      form-data [[post]]
     </td>
   </tr>
   <tr>
@@ -95,12 +97,13 @@ Southern California Indo Americans (SCIA)
       login
     </td>
     <td>
+      <a href="#login">Form Data</a><br/>
       Authenticates the login request.
       Return auth cookie on success, error message on failure.
     </td>
     <td>
       /d1/login <br/>
-      form-details [[post]]
+      form-data [[post]]
     </td>
   </tr>
   <tr>
@@ -117,32 +120,32 @@ Southern California Indo Americans (SCIA)
   </tr>
 </table>
 
-###Forms
-<div id="buyEventTicketsForm"></div>
-**Buy Event Tickets**
-* First Name
-* Last Name
-* Email
-* Member ID - blank for non_members
-* Stripe Token
+##Forms
 
-<div id="stageMembershipForm"></div>
-**Stage Membership**
-* First Name
-* Last Name
-* email
-* phone number
-* major
-* year - freshman, sophomore, junior, senior, graduate
-* password
-* Stripe Token
+###Buy Event Tickets
+* First Name : String
+* Last Name : String
+* Email : String
+* Member ID : Int (blank for non-members)
+* Stripe Token : String
 
-<div id="commitMembershipForm"></div>
-**Commit Membership**
-* email
-* vrf code
 
-<div id="loginForm"></div>
-**Login**
-* email
-* password
+###Stage Membership
+* First Name : String
+* Last Name : String
+* email : String
+* phone number : Int (in the format xxxxxxxxxx)
+* major : String
+* year - freshman, sophomore, junior, senior, graduate : String
+* password : String
+* Stripe Token : String
+
+
+###Commit Membership
+* email : String
+* vrf code : String (5 chars)
+
+
+###Login
+* email : String
+* password : String
