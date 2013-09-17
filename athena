@@ -1,17 +1,10 @@
 #!/bin/bash
 
-read -a m_files <<< $(find . -type f -newer .ld)
-
-for element in "${m_files[@]}"
-do
-    server_path=$(echo $element | sed 's%./%/www/scia/%')
-    echo $server_path
-    scp $element scia:$server_path
-    if [ $? -ne 0 ]; then
-    	exit 1
-    fi
-done
-
-touch .ld
-
-exit 0
+case "$1" in
+	deploy )
+		rsync -rtvz * scia:/www/scia -C --delete
+		exit $?
+		;;
+	syncdb )
+		;;
+esac

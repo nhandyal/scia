@@ -1,0 +1,14 @@
+# Monit control file
+
+set daemon 120 								# Poll in 2-minute intervals
+set logfile syslog facility LOG_daemon 		# Default facility is LOG_USER
+# set mailserver mail.foo.bar 				# Default smtp server is localhost
+# set alert sysadm@foo.bar 					# Alert system admin on any event
+set httpd port 2812
+	allow localhost
+	allow admin:monit
+
+check process nginx with pidfile "/opt/nginx/logs/nginx.pid"
+	start = "/etc/init.d/nginx start"
+	stop = "/etc/init.d/nginx stop"
+	if failed port 443 and protocol https
