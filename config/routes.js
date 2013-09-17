@@ -1,4 +1,5 @@
-var user = require("../application/controllers/user");
+var user = require("../application/controllers/user"),
+	nodemailer = require("nodemailer");
 
 module.exports = function(app){
 	
@@ -23,4 +24,33 @@ module.exports = function(app){
 		res.send("d1 logout: "+req.url);
 	});
 
+	app.get("/d1/email", function(req, res){
+		var transport = nodemailer.createTransport("SMTP", {
+			host : "smtp-mail.outlook.com",
+			port : 25,
+			auth : {
+				user : "admin@uscscia.com",
+				pass : "Sci@2013"
+			},
+			debug : true,
+			tls: {ciphers:'TLSv1'}
+		});
+
+		transport.sendMail(
+			{
+			 	from : "admin@uscscia.com",
+			 	to : "nhandyal@gmail.com",
+			 	subject : "test node email",
+			 	text : "This is a test email from the scia node server"
+			},
+			function(error, response){
+			   if(error){
+			       console.log(error);
+			   }else{
+			       console.log("Message sent: " + response.message);
+			   }
+			}
+		);
+		res.send("Email potentially sent");
+	});
 }
