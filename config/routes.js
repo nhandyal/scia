@@ -1,26 +1,26 @@
 var user = require("../application/controllers/user");
 
 module.exports = function(app){
-
-
-	app.get("/*", function(req, res){
-		function isNumber(n) {
-		  	return !isNaN(parseFloat(n)) && isFinite(n);
-		}
-
-		var path = (req.url).split("/");
-		if(path[0]=="" && path[1] == ""){
-			res.render("index.html")
-		}
-		else if( isNumber(path[1]) ) {
-			user.queryUser(req, res, path[1]);
-		} else {
-			res.redirect(301, 'https://www.uscscia.com');
-		}
+	
+	app.get("^/[A-Za-z]{3}[0-9]{3}|^/[0-9]{6}", function(req, res){
+		// member id
+		res.send("member id: "+req.url);
 	});
 
-
-	app.post("/addUser", function(req, res){
-		user.create(req, res);
+	app.get('/d1/events*', function(req, res){
+		res.send("d1 events: "+req.url);
 	});
+
+	app.get('/d1/register*', function(req, res){
+		res.send("d1 register: "+req.url);
+	});
+
+	app.get('/d1/login*', function(req, res){
+		res.send("d1 login: "+req.url);
+	});
+
+	app.get('/d1/logout*', function(req, res){
+		res.send("d1 logout: "+req.url);
+	});
+
 }
