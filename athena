@@ -18,11 +18,9 @@ case "$1" in
 		mongo < .dbsync.js
 		sudo kill $mongodPID
 		;;
-	test )
-		sudo mongod &
-		mongodPID=$!
+	run )
+		sudo mongod &		
 		sleep 2s
 		node server.js
-		echo "continue"
 		;;
 esac
