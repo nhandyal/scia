@@ -134,7 +134,7 @@ Southern California Indo Americans
 * first_name : String
 * last_name : String
 * email : String
-* phone_number : Int (in the format xxxxxxxxxx)
+* mobile_number : Int (in the format xxxxxxxxxx)
 * major : String
 * year : {freshman, sophomore, junior, senior, graduate} - String
 * password : String
