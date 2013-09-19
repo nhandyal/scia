@@ -1,10 +1,28 @@
 #!/bin/bash
 
+
+
+# trap ctrl-c and call ctrl_c()
+
+
+
 case "$1" in
 	deploy )
-		rsync -rtvz * scia:/www/scia -C --delete
+		rsync -rtvz * scia:/www/scia -C --delete --exclude "node_modules/"
 		exit $?
 		;;
-	syncdb )
+	dbsync )
+		sudo mongod &
+		mongodPID=$!
+		sleep 2s
+		mongo < .dbsync.js
+		sudo kill $mongodPID
+		;;
+	test )
+		sudo mongod &
+		mongodPID=$!
+		sleep 2s
+		node server.js
+		echo "continue"
 		;;
 esac
