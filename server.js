@@ -5,8 +5,9 @@
 var env = "production",
 	port = 8000,
 	fs = require("fs"),
-	app = require("./config/express"),
-	mongoose = require("./config/mongoose")(env);
+	app = require("./application/config/express"),
+	mongoose = require("./application/config/mongoose")(env),
+	transport = require("./application/config/nodemailer");
 
 
 // load modules into mongoose
@@ -18,7 +19,7 @@ model_files.forEach(function (file) {
 });
 
 
-require("./config/routes")(app);
+require("./application/config/routes")(app, transport);
 
 
 app.listen(port);

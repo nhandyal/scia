@@ -1,0 +1,22 @@
+stageMembership
+{
+	status : int,
+	short_message : String,
+	long_message : String
+}
+
+
+
+
+
+
+
+
+
+
+
+Status Codes		Short Message 					Long Message
+0 					Success							Success
+
+Registration Errors
+10001				Internal Error					Unable to stage new user to database

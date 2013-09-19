@@ -1,23 +1,31 @@
 var mongoose = require("mongoose"),
-	counter = mongoose.model("counter"),
-	user = mongoose.model("user");
+	CIC = mongoose.model("CIC"),
+	user = mongoose.model("user"),
 
-exports.create = function(req, res){
+	getNextCICIndex = function(callback){
+		CIC.findOneAndUpdate({}, {$inc: { CICIndex: 1 }}, {}, callback);
+	};
+
+
+
+module.exports.create = function(req, res){
 	
-	var userData = {
-		f_name : req.body.firstName,
-		l_name : req.body.lastName,
-		email : req.body.email,
-		mobile : req.body.phoneNumber,
-		major : req.body.major,
-		year : req.body.year,
-		card_id : req.body.cardid,
-		board : false ,
-		created : new Date(),
-		last_login : new Date()
-	},
+	var response = {},
+		
+		userData = {
+			f_name : req.body.firstName,
+			l_name : req.body.lastName,
+			email : req.body.email,
+			mobile : req.body.phoneNumber,
+			major : req.body.major,
+			year : req.body.year,
+			card_id : req.body.cardid,
+			board : false ,
+			created : new Date(),
+			last_login : new Date()
+		},
 
-	newUser = new user(userData);
+		newUser = new user(userData);
 
 	newUser.save(function(err, newUser){
 		if(err) {
@@ -30,7 +38,7 @@ exports.create = function(req, res){
 
 }
 
-exports.queryUser = function(req, res, cardIDString){
+module.exports.queryUser = function(req, res, cardIDString){
 
 	var cardid = parseInt(cardIDString, 10);
 
@@ -48,5 +56,21 @@ exports.queryUser = function(req, res, cardIDString){
 				res.send("Invalid user id");
 			}
 		}
+	});
+}
+
+module.exports.commitCardId = function(req, res){
+	var cardData = {
+		CICIndex	: 100044
+	},
+
+	cicindex = new CIC(cardData);
+	cicindex.save();
+	res.send("Something might have happend?");
+}
+
+module.exports.testcard = function(req, res){
+	getNextSequence(function(dbErr, dbRes){
+		
 	});
 }
