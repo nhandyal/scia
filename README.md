@@ -123,21 +123,21 @@ Southern California Indo Americans
 ##Forms
 
 ###Buy Event Tickets
-* first_name : String
-* last_name : String
+* f_name : String
+* l_name : String
 * email : String
-* member_ID : Int (blank for non-members)
+* card_id : Int (blank for non-members)
 * stripe_token : String
 
 
 ###Stage Membership
-* first_name : String
-* last_name : String
+* f_name : String
+* l_name : String
 * email : String
-* phone_number : Int (in the format xxxxxxxxxx)
+* mobile : Int (in the format xxxxxxxxxx)
 * major : String
 * year : {freshman, sophomore, junior, senior, graduate} - String
-* password : String
+* pwd : String (password - no encryption)
 * stripe_token : String
 
 
@@ -148,4 +148,4 @@ Southern California Indo Americans
 
 ###Login
 * email : String
-* password : String
+* pwd : String (password - no encryption)
