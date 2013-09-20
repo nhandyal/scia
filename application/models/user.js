@@ -14,7 +14,8 @@ var userSchema = mongoose.Schema(
 		board : 		Boolean,
 		verified : 		Boolean,
 		created : 		Date,
-		last_login : 	Date
+		last_login : 	Date,
+		vrf_token : 	String
 	},
 	{
 		collection: "users"

@@ -1,4 +1,5 @@
-var user = require("../controllers/user"),
+var url = require("url"),
+	user = require("../controllers/user"),
 	register = require("../controllers/register");
 
 module.exports = function(app, transport){
@@ -21,10 +22,27 @@ module.exports = function(app, transport){
 		res.send("d1 events: "+req.url);
 	});
 
-	app.get('/d1/register*', function(req, res){
+	app.post('/d1/register*', function(req, res){
+		/* expected query options
+			--
+			action=vrf
+		*/
+		var query = url.parse(req.url, true).query;
 		
+		if(Object.keys(query).length === 0) {
+			// /d1/register
+			register.stageMembership(req, res);
+		}
+		else if(query.action == "vrf") {
+			// /d1/register?action=vrf
+			res.send("d1 register: "+req.url);
+		}
+		else{
+			// doesn't match any valid route, return nothing
+			res.send("");
+		}
 
-		res.send("d1 register: "+req.url);
+		return;
 	});
 
 	app.get('/d1/login*', function(req, res){
