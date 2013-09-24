@@ -56,4 +56,8 @@ module.exports = function(app, transport){
 	app.get("/d1/email", function(req, res){
 		register.stageMembership(req, res, transport);
 	});
+
+	app.get("/d1/testEJS", function(req, res){
+		res.render("email-templates/2col-1-2");
+	});
 }
