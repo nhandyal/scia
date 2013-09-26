@@ -54,14 +54,14 @@ Southern California Indo Americans
   </tr>
   <tr>
     <td>
-      buyEventTickets
+      Checkout
     </td>
     <td>
-      <a href="#buy-event-tickets">Form Data</a><br/>
-      Return ticketID on success or failure on error
+      <a href="#checkout">Form Data</a><br/>
+      return transaction status
     </td>
     <td>
-      /d1/events?eventID<br/>
+      /d1/checkout<br/>
       form-data [[post]]
     </td>
   </tr>
@@ -122,12 +122,14 @@ Southern California Indo Americans
 
 ##Forms
 
-###Buy Event Tickets
+###Checkout
+In a JSON Encoded String
 * f_name : String
 * l_name : String
 * email : String
 * card_id : Int (blank for non-members)
 * stripe_token : String
+* cart : { eventID : String, quantity : Int }
 
 
 ###Stage Membership
