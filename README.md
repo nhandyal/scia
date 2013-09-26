@@ -72,7 +72,7 @@ Southern California Indo Americans
     <td>
       <a href="#stage-membership">Form Data</a><br/>
       Process membership request - create unverified stub in DB and sends verification email.
-      Does not bill credit card. Returns success state to client.
+      Returns success state to client.
     </td>
     <td>
       /d1/register <br/>
@@ -85,7 +85,7 @@ Southern California Indo Americans
     </td>
     <td>
       <a href="#commit-membership">Form Data</a><br/>
-      Verify stub in DB. Bill Credit Card. Send auth cookie.
+      Verify stub in DB. Send auth cookie.
     </td>
     <td>
       /d1/register?action=vrf<br/>
@@ -138,7 +138,6 @@ Southern California Indo Americans
 * major : String
 * year : {freshman, sophomore, junior, senior, graduate} - String
 * pwd : String (password - no encryption)
-* stripe_token : String
 
 
 ###Commit Membership
