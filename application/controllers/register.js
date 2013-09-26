@@ -3,10 +3,8 @@ var mongoose = require("mongoose"),
 	VRF = mongoose.model("vrf_token"),
 	CIC = mongoose.model("CIC"),
 	md5 = require("crypto").createHash("md5"),
-
-	sendResponse = function(res, response){
-		res.send(JSON.stringify(response));
-	},
+	async = require("async"),
+	utils = require("./utils")
 
 	getNextCICIndex = function(callback){
 		CIC.findOneAndUpdate({}, {$inc: { CICIndex: 1 }}, {}, callback);
@@ -51,24 +49,35 @@ module.exports.stageMembership = function(req, res, transport){
 		user = new User(userData),
 		vrf = new VRF(vrfData);
 
-		user.save(function(err, user){
-			if(err){
-				// there was an error saving the stub to the database
+
+		async.parallel({
+			user : function(callback){
+				user.save(function(err, user){
+					if(err) 
+						return callback(null, false);
+					else
+						return callback(null, user);
+				});
+			},
+			vrf : function(callback){
+				vrf.save(function(err, vrf){
+					if(err) 
+						return callback(null, false);
+					else
+						return callback(null, vrf);
+				});
+			}
+		}, function(err, result){
+			// ensure there were no failures in the db transactions
+			if(!utils.verifyDbTransactions(result)) {
 				response = {
 					status : 10001,
 					short_message : "Internal error",
 					long_message : "Unable to stage new user to database"
 				};
-				sendResponse(res, response);
-				return;
-			}else {
-				// at this point the user stub was successfully saved in the database
-				// prepare the verification email and send it on its way
-
-				res.render('email-templates/vrf_email', {
-					title : "Welcome to USC SCIA",
-					vrf_token : vrf_array
-				});
+				utils.sendResponse(res, response);
+			} else {
+				res.send("done");
 			}
 		});
 	});
