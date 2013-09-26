@@ -1,5 +1,6 @@
 var mongoose = require("mongoose"),
 	User = mongoose.model("user"),
+	VRF = mongoose.model("vrf_token"),
 	CIC = mongoose.model("CIC"),
 	md5 = require("crypto").createHash("md5"),
 
@@ -19,7 +20,7 @@ module.exports.stageMembership = function(req, res, transport){
 		var vrf_token = "",
 			vrf_array = [];
 
-		for(i = 0; i < 5; i++){
+		for(i = 0; i < 6; i++){
 			var element = String.fromCharCode(Math.floor(Math.random() * 25) + 65);
 			vrf_token += element;
 			vrf_array.push(element);
@@ -40,13 +41,17 @@ module.exports.stageMembership = function(req, res, transport){
 			verified : false,
 			created : new Date(),
 			last_login : new Date(),
+		},
+
+		vrfData = {
+			email : req.body.email,
 			vrf_token : vrf_token
 		},
 
-		user = new User(userData);
+		user = new User(userData),
+		vrf = new VRF(vrfData);
 
 		user.save(function(err, user){
-			err = true;
 			if(err){
 				// there was an error saving the stub to the database
 				response = {
