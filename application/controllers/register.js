@@ -45,8 +45,9 @@ module.exports.stageMembership = function(req, res, transport){
 
 		user = new User(userData);
 
-		user.save(function(err, user) {
-			if(err) {
+		user.save(function(err, user){
+			err = true;
+			if(err){
 				// there was an error saving the stub to the database
 				response = {
 					status : 10001,
@@ -58,14 +59,13 @@ module.exports.stageMembership = function(req, res, transport){
 			}else {
 				// at this point the user stub was successfully saved in the database
 				// prepare the verification email and send it on its way
-				
-				res.render('templates/2col-1-2.ejs', function(err, html) {
-					emailHtml = html;
-  				});
+
+				res.render('email-templates/vrf_email', {
+					title : "Welcome to USC SCIA",
+					vrf_token : vrf_array
+				});
 			}
 		});
-
-		res.send(JSON.stringify(userData));
 	});
 }
 

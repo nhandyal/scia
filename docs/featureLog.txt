@@ -1,0 +1,33 @@
+/*
+ *	In an effort to simplify the process flow for users
+ */
+
+9/25/13
+	requires : API UPDATE
+	Seperate account registration from buying membership
+		This opens the possibility to have non-member accounts
+		| why ?
+			- someone may be frequent events but not want to be a member
+			- stored preferences (credit card details, notification settings)
+			- alumni
+			- simplifies renewal process*
+
+
+	The registration flow now proceeds the same as previously outlined except we don't request payment details. After a user
+	registers and logs into their account, they can go to account settings --> purchase membership, and then buy membership.
+
+	* Since a user has to buy membership each year, instead of having a sepearte flow for new users and one for continuing users,
+	we can now have every user (new/returning) by membership (renewal or not) through the same process flow.
+
+9/25/13
+	requires : API UPDATE
+	Include a shopping cart for user convenience
+		| why ?
+			- allow a user to buy multiple tickets or services within a single transaction
+			- convenience
+
+	When a user says buy ticket (or service), the ticket is added to a shopping cart (client side). Once the user clicks checkout
+	the transaction is posted to the server where we will issue the requested tickets. There will have to be stringent client side
+	checks to only allow one member ticket to be bought per account per event.
+
+	use : http://simplecartjs.org/ to implement the shopping cart.
