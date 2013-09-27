@@ -20,3 +20,4 @@ Status Codes		Short Message 					Long Message
 
 Registration Errors
 10001				Internal Error					Unable to stage new user to database
+10002				Internal Error 					Account created, Unable to send verification email

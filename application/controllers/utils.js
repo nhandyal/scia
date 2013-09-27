@@ -2,9 +2,11 @@
  * Utility functions widely used across many controllers
  */
 
+var development = true,
+	response_codes = require('./response_codes');
 
 /*
- * JSON encodes the response object and sends it with the response associated with this call
+ * JSON encodes the response parameter and sends it with the response associated with this call
  * 
  * Parameters
  * 		res - node response object for this request
@@ -12,7 +14,33 @@
  */
 module.exports.sendResponse = function(res, response){
 	res.send(JSON.stringify(response));
-},
+};
+
+
+/*
+ * Returns the error messge associated with error_code
+ * 
+ * Parameters
+ * 		res - node response object for this request
+ *		error_code - error code to send to client
+ */
+module.exports.sendError = function(res, error_code){
+	var error_key = "_"+error_code,
+		error_object = response_codes[error_key];
+	
+	res.send(error_object);
+};
+
+
+/*
+ * Returns a success message
+ * 
+ * Parameters
+ * 		res - node response object for this request
+ */
+module.exports.sendSuccess = function(res){
+	res.send(response_codes["_0"]);
+};
 
 
 /* 
@@ -40,3 +68,14 @@ module.exports.verifyDbTransactions = function(results){
 	}
 	return true;
 };
+
+/*
+ * Utiity function that wraps system logging. In a development enviornment, surpresses log statements
+ * 
+ * Parameters
+ * 		msg - message to log
+ */
+ module.exports.log = function(msg){
+ 	if(development)
+ 		console.log(msg);
+ }
