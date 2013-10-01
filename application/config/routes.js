@@ -33,7 +33,7 @@ module.exports = function(app, transport){
 		
 		if(Object.keys(query).length === 0) {
 			// /d1/register
-			register.stageMembership(req, res);
+			register.stageMembership(req, res, transport);
 		}
 		else if(query.action == "vrf") {
 			// /d1/register?action=vrf
