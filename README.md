@@ -54,14 +54,14 @@ Southern California Indo Americans
   </tr>
   <tr>
     <td>
-      buyEventTickets
+      Checkout
     </td>
     <td>
-      <a href="#buy-event-tickets">Form Data</a><br/>
-      Return ticketID on success or failure on error
+      <a href="#checkout">Form Data</a><br/>
+      return transaction status
     </td>
     <td>
-      /d1/events?eventID<br/>
+      /d1/checkout<br/>
       form-data [[post]]
     </td>
   </tr>
@@ -72,7 +72,7 @@ Southern California Indo Americans
     <td>
       <a href="#stage-membership">Form Data</a><br/>
       Process membership request - create unverified stub in DB and sends verification email.
-      Does not bill credit card. Returns success state to client.
+      Returns success state to client.
     </td>
     <td>
       /d1/register <br/>
@@ -85,7 +85,7 @@ Southern California Indo Americans
     </td>
     <td>
       <a href="#commit-membership">Form Data</a><br/>
-      Verify stub in DB. Bill Credit Card. Send auth cookie.
+      Verify stub in DB. Send auth cookie.
     </td>
     <td>
       /d1/register?action=vrf<br/>
@@ -122,12 +122,14 @@ Southern California Indo Americans
 
 ##Forms
 
-###Buy Event Tickets
+###Checkout
+In a JSON Encoded String
 * f_name : String
 * l_name : String
 * email : String
 * card_id : Int (blank for non-members)
 * stripe_token : String
+* cart : { eventID : String, quantity : Int }
 
 
 ###Stage Membership
@@ -138,7 +140,6 @@ Southern California Indo Americans
 * major : String
 * year : {freshman, sophomore, junior, senior, graduate} - String
 * pwd : String (password - no encryption)
-* stripe_token : String
 
 
 ###Commit Membership

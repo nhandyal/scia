@@ -5,6 +5,7 @@
 var env = "production",
 	port = 8000,
 	fs = require("fs"),
+	express = require("express"),
 	app = require("./application/config/express"),
 	mongoose = require("./application/config/mongoose")(env),
 	transport = require("./application/config/nodemailer");
@@ -19,8 +20,8 @@ model_files.forEach(function (file) {
 });
 
 
+app.use(express.cookieParser("Secret")); //Need to update the cookie parser to use a secret key, but for now this works
 require("./application/config/routes")(app, transport);
-
 
 app.listen(port);
 console.log('Listening on port 8000');
