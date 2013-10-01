@@ -1,6 +1,8 @@
 var url = require("url"),
 	user = require("../controllers/user"),
-	register = require("../controllers/register");
+	register = require("../controllers/register"),
+	login = require("../controllers/login"),
+	logout = require("../controllers/logout");
 
 module.exports = function(app, transport){
 	
@@ -45,12 +47,13 @@ module.exports = function(app, transport){
 		return;
 	});
 
-	app.get('/d1/login*', function(req, res){
-		res.send("d1 login: "+req.url);
+	app.post('/d1/login*', function(req, res){
+		// /d1/register
+		login.loginUser(req, res);
 	});
 
-	app.get('/d1/logout*', function(req, res){
-		res.send("d1 logout: "+req.url);
+	app.post('/d1/logout*', function(req, res){
+		logout.logoutUser(req, res);
 	});
 
 	app.get("/d1/testEJS", function(req, res){
