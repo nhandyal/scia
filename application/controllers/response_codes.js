@@ -14,11 +14,11 @@ module.exports._0 = {
 module.exports._10001 = {
  	status : 10001,
  	short_message : "Internal Error",
- 	long_message : "Unable to stage new user to database"
+ 	long_message : "Unable to stage new user to database. DB Error"
 };
 
 module.exports._10002 = {
  	status : 10002,
- 	short_message : "Internal Error",
- 	long_message : "Account created, Unable to send verification email"
+ 	short_message : "Duplicate entry",
+ 	long_message : "Email is already registered"
 };

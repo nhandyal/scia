@@ -12,6 +12,7 @@ case "$1" in
 		mongodPID=$!
 		sleep 2s
 		mongo < .dbsync.js
+		mongo < .dbconfig.js
 		sudo kill $mongodPID
 		;;
 	run )

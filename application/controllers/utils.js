@@ -55,18 +55,19 @@ module.exports.sendSuccess = function(res){
  */
 module.exports.verifyDbTransactions = function(results){
 	for(var key in results){
-		if(!results[key]){
-			// failed element
+		if(results[key].err){
+			// first failed transaction
 			for(var innerKey in results){
-				if(results[innerKey]){
-					results[innerKey].remove();
+				if(!results[innerKey].err){
+					// successfull transaction
+					results[innerKey].dbRes.remove();
 					console.log("removing "+innerKey+" from the db");
 				}
 			}
-			return false;
+			return results[key].err.code;
 		}
 	}
-	return true;
+	return 0;
 };
 
 /*

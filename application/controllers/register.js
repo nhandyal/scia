@@ -8,7 +8,15 @@ var mongoose = require("mongoose"),
 
 	getNextCICIndex = function(callback){
 		CIC.findOneAndUpdate({}, {$inc: { CICIndex: 1 }}, {}, callback);
-	};
+	},
+
+	dbSaveTransactionCallback = function(err, dbRes, callback){
+		var transactionSummary = {
+			err : err,
+			dbRes : dbRes
+		};
+		return callback(null, transactionSummary);
+	}
 
 module.exports.stageMembership = function(req, res, transport){
 
@@ -53,50 +61,49 @@ module.exports.stageMembership = function(req, res, transport){
 
 		async.parallel({
 			user : function(callback){
-				user.save(function(err, user){
-					if(err) 
-						return callback(null, false);
-					else
-						return callback(null, user);
+				user.save(function(err, dbRes){
+					dbSaveTransactionCallback(err, dbRes, callback);
 				});
 			},
 			vrf : function(callback){
-				vrf.save(function(err, vrf){
-					if(err) 
-						return callback(null, false);
-					else
-						return callback(null, vrf);
+				vrf.save(function(err, dbRes){
+					dbSaveTransactionCallback(err, dbRes, callback);
 				});
 			}
 		}, function(err, result){
 			// ensure there were no failures in the db transactions
-			if(!utils.verifyDbTransactions(result)) {
+			var transactionResult = utils.verifyDbTransactions(result);
+			if (transactionResult == 11000) {
+				utils.sendError(res, 10002);
+				return;
+			}
+			else if(transactionResult != 0){
 				utils.sendError(res, 10001);
 				return;
 			}
-			else {
-				var vrf_email_data = {
-					title : "USC SCIA verification email",
-					vrf_token : vrf_array,
-					email : req.body.email
-				};
-				res.render('email-templates/vrf_email', vrf_email_data, function(err, renderedHtml) {
-					transport.sendMail({
-						from : "no_reply@uscscia.com",
-						to : vrf_email_data.email,
-						subject : vrf_email_data.title,
-						html : renderedHtml,
-						charset : "UTF-8"
-					}, function(error, response){
-						if(error){
-							utils.log("Error delivering message to " + vrf_email_data.email);
-				   		}else{
-				       		utils.log("Message sent: " + response.message);
-				   		}
-					}); // end transport.sendMail
-				}); // end res.render
-				utils.sendSuccess(res);
-			} // end else
-		});
-	});
-}
+			
+			var vrf_email_data = {
+				title : "USC SCIA verification email",
+				vrf_token : vrf_array,
+				email : req.body.email
+			};
+			res.render('email-templates/vrf_email', vrf_email_data, function(err, renderedHtml) {
+				transport.sendMail({
+					from : "no_reply@uscscia.com",
+					to : vrf_email_data.email,
+					subject : vrf_email_data.title,
+					html : renderedHtml,
+					charset : "UTF-8"
+				}, function(error, response){
+					if(error){
+						utils.log("Error delivering message to " + vrf_email_data.email);
+			   		}else{
+			       		utils.log("Message sent: " + response.message);
+			   		}
+				}); // end transport.sendMail
+			}); // end res.render
+			utils.sendSuccess(res);
+
+		}); // end async parallel
+	}); // end getCICIndex
+} // end module stageMembership
