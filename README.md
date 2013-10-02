@@ -12,7 +12,8 @@ Southern California Indo Americans
   <tr>
     <td>
       getUserData.<br/>
-      Event verification for board
+      Event verification for board. <br/>
+      login required
     </td>
     <td>
       if(auth memberID == URL ID || board){
@@ -67,11 +68,12 @@ Southern California Indo Americans
   </tr>
   <tr>
     <td>
-      stageMembership
+      createAccount
     </td>
     <td>
       <a href="#stage-membership">Form Data</a><br/>
-      Process membership request - create unverified stub in DB and sends verification email.
+      Process membership request - create unverified account in DB and sends verification email.
+      User account has been created at this point and they can login to the site.
       Returns success state to client.
     </td>
     <td>
@@ -81,11 +83,12 @@ Southern California Indo Americans
   </tr>
   <tr>
     <td>
-      commitMembership
+      verifyAccount <br/>
+      login required
     </td>
     <td>
       <a href="#commit-membership">Form Data</a><br/>
-      Verify stub in DB. Send auth cookie.
+      Verify user account. Returns success state to client.
     </td>
     <td>
       /d1/register?action=vrf<br/>
@@ -143,8 +146,8 @@ In a JSON Encoded String
 
 
 ###Commit Membership
-* email : String
-* vrf_code : String (5 chars)
+* vrf_token : String (6 chars) <br/>
+account email is automatically parsed from authToken
 
 
 ###Login
