@@ -1,10 +1,9 @@
 var url = require("url"),
 	user = require("../controllers/user"),
 	register = require("../controllers/register"),
-	login = require("../controllers/login"),
-	logout = require("../controllers/logout");
+	auth = require("../controllers/auth");
 
-module.exports = function(app, transport){
+module.exports = function(app, transport, env){
 	
 
 	app.get("/d1/testCardCommit", function(req, res){
@@ -49,11 +48,11 @@ module.exports = function(app, transport){
 
 	app.post('/d1/login*', function(req, res){
 		// /d1/register
-		login.loginUser(req, res);
+		auth.login(req, res, env);
 	});
 
 	app.post('/d1/logout*', function(req, res){
-		logout.logoutUser(req, res);
+		auth.logout(req, res);
 	});
 
 	app.get("/d1/testEJS", function(req, res){
