@@ -10,7 +10,7 @@ var mongoose = require("mongoose"),
 		CIC.findOneAndUpdate({}, {$inc: { CICIndex: 1 }}, {}, callback);
 	},
 
-	dbSaveTransactionCallback = function(err, dbRes, callback){
+	dbTransactionCallback = function(err, dbRes, callback){
 		var transactionSummary = {
 			err : err,
 			dbRes : dbRes
@@ -18,7 +18,7 @@ var mongoose = require("mongoose"),
 		return callback(null, transactionSummary);
 	}
 
-module.exports.stageMembership = function(req, res, transport){
+module.exports.create = function(req, res, transport){
 
 	getNextCICIndex(function(dbErr, dbResp){
 
@@ -62,17 +62,17 @@ module.exports.stageMembership = function(req, res, transport){
 		async.parallel({
 			user : function(callback){
 				user.save(function(err, dbRes){
-					dbSaveTransactionCallback(err, dbRes, callback);
+					dbTransactionCallback(err, dbRes, callback);
 				});
 			},
 			vrf : function(callback){
 				vrf.save(function(err, dbRes){
-					dbSaveTransactionCallback(err, dbRes, callback);
+					dbTransactionCallback(err, dbRes, callback);
 				});
 			}
 		}, function(err, result){
 			// ensure there were no failures in the db transactions
-			var transactionResult = utils.verifyDbTransactions(result);
+			var transactionResult = utils.verifyDbWrites(result);
 			if (transactionResult == 11000) {
 				utils.sendError(res, 10002);
 				return;
@@ -106,4 +106,71 @@ module.exports.stageMembership = function(req, res, transport){
 
 		}); // end async parallel
 	}); // end getCICIndex
-} // end module stageMembership
+} // end module create
+
+module.exports.verify = function(req, res){
+	var accountEmail = req.cookies.sem;
+	var verified = req.cookies.svrf
+	
+	/*
+	 * verify user login by ensuring the server cookie you are expecting exists
+	 * This code should be refactored into a global Utils function, but that can be done later
+	 */
+	if(!accountEmail){
+		utils.sendError(res, 10403);
+		return;
+	}
+	if(verified){
+		utils.sendError(res, 10004);
+		return;
+	}
+
+	// retrieve both the user data, and the associated vrf_token
+	async.parallel({
+		user : function(callback){
+			User.find({email : accountEmail}, function(err, dbRes){
+				dbTransactionCallback(err, dbRes, callback);
+			});
+		},
+		vrf : function(callback){
+			VRF.find({email : accountEmail}, function(err, dbRes){
+				dbTransactionCallback(err, dbRes, callback);
+			});
+		}
+	}, function(err, result){
+		var user = result.user,
+			vrf = result.vrf;
+
+		// ensure both operations completed successfully
+		if(user.err || vrf.err){
+			utils.sendError(res, 10500);
+			utils.log(user.err);
+			utils.log(vrf.err);
+			return;
+		}
+
+		user = new User(result.user.dbRes[0]);
+		vrf = new VRF(result.vrf.dbRes[0]);
+
+		// check if submitted vrf_code matches vrf code in db
+		if((vrf.vrf_token).toLowerCase() != (req.body.vrf_token).toLowerCase()){
+			// invalid token
+			utils.sendError(res, 10003);
+			return;
+		}
+
+		// tokens match, update user object to a verified state and delete the vrf_token entry
+		utils.sendSuccess(res);
+		user.update({verified : true}, function (err, numberAffected, raw){
+			if(err){
+				utils.log(err);
+				utils.log(raw);
+			}
+		});
+		vrf.remove(function(err){
+			if(err){
+				utils.log(err);
+			}
+		});
+	}); // end async parallel
+} // end module verify

@@ -32,11 +32,11 @@ module.exports = function(app, transport, env){
 		
 		if(Object.keys(query).length === 0) {
 			// /d1/register
-			register.stageMembership(req, res, transport);
+			register.create(req, res, transport);
 		}
 		else if(query.action == "vrf") {
 			// /d1/register?action=vrf
-			res.send("d1 register: "+req.url);
+			register.verify(req, res);
 		}
 		else{
 			// doesn't match any valid route, return nothing

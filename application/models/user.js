@@ -15,7 +15,6 @@ var userSchema = mongoose.Schema(
 		verified : 		Boolean,
 		created : 		Date,
 		last_login : 	Date,
-		vrf_token : 	String
 	},
 	{
 		collection: "users"

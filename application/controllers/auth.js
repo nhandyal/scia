@@ -43,6 +43,11 @@ var mongoose = require("mongoose"),
 			options : clientOptions
 		};
 
+		this.vrf = {
+			value : userDbObject.verified,
+			options : clientOptions
+		};
+
 		/*
 		 * Server Accesible Values 
 		 *
@@ -71,7 +76,12 @@ var mongoose = require("mongoose"),
 		this.sem = {
 			value : userDbObject.email,
 			options : serverOptions
-		}
+		};
+
+		this.svrf = {
+			value : userDbObject.verified,
+			options : serverOptions
+		};
 
 		return this;
 	};

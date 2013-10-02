@@ -53,7 +53,7 @@ module.exports.sendSuccess = function(res){
  * Returns 
  *		Boolean - true is all transactions successfull, false otherwise
  */
-module.exports.verifyDbTransactions = function(results){
+module.exports.verifyDbWrites = function(results){
 	for(var key in results){
 		if(results[key].err){
 			// first failed transaction
