@@ -146,7 +146,7 @@ In a JSON Encoded String
 
 
 ###Commit Membership
-* vrf_code : String (6 chars) <br/>
+* vrf_token : String (6 chars) <br/>
 account email is automatically parsed from authToken
 
 
