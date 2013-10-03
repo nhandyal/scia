@@ -1,6 +1,7 @@
 var mongoose = require("mongoose"),
 	user = mongoose.model("user"),
 	crypto = require("crypto"),
+	utils = require("./utils"),
 
 	authTokenKeys = ["f_name", "l_name", "board", "card_id", "vrf", "ssid", "sb", "scid", "sem", "svrf"],
 
@@ -112,38 +113,26 @@ module.exports.updateAuthToken = function(res, key, value){
 module.exports.login = function(req, res, env){
 
 	user.find({email : req.body.email}, function(dbErr, dbRes){
-		if(dbErr){
-			res.redirect(301, 'https://www.uscscia.com');
-		}
-		else{
-			//try{
-				//here is how to access a cookie: 
-				//console.log(req.cookies.l_name);
-			//} catch (err) {
-				//console.log(err);
-			//}
-
-			try{
-				var md5 = crypto.createHash("md5");
-				var pwd_hash = md5.update(req.body.pwd).digest("hex");
-				for(var i=0;i<dbRes.length;i++) {
-					var newUser = dbRes[i];
-					if(pwd_hash == newUser.pwd) {
-						var userAuthToken = new authToken(newUser, env);
-						for(var key in userAuthToken){
-							res.cookie(key, userAuthToken[key].value, userAuthToken[key].options);	
-						}						
-						//res.cookie("membership_status", newUser.membership_status,{httpOnly: false});
-						res.send("Success");
-						return;
-					}
+		try{
+			var md5 = crypto.createHash("md5");
+			var pwd_hash = md5.update(req.body.pwd).digest("hex");
+			for(var i=0;i<dbRes.length;i++) {
+				var newUser = dbRes[i];
+				if(pwd_hash == newUser.pwd) {
+					var userAuthToken = new authToken(newUser, env);
+					for(var key in userAuthToken){
+						res.cookie(key, userAuthToken[key].value, userAuthToken[key].options);	
+					}						
+					utils.sendSuccess(res);
+					return;
 				}
-				res.send("Email/Password combination incorrect");
-			} catch (err) {
-				console.log("caught error trying to login");
-				console.log(err);
-				res.send("Login error");
 			}
+			
+	console.log("stuff");
+			utils.sendError(res,10050);
+		} catch (err) {
+			utils.log("caught error trying to login" + err);
+			utils.sendError(res, 10500);
 		}
 	});
 };
@@ -153,9 +142,11 @@ module.exports.logout = function(req, res){
 		for(var i = 0; i < authTokenKeys.length; i++){
 			res.clearCookie(authTokenKeys[i]);
 		}
-		res.send("Success");
+		utils.sendSuccess(res);
+
 	} catch(err) {
-		console.log(err);
+		utils.log("Caught error trying to logout" + err);
+		utils.sendError(res, 10500);
 	}
 };
 
