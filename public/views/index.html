@@ -2,6 +2,10 @@
 	<head>
 		<title>USC SCIA</title>
 		<link rel="stylesheet" type="text/css" href="../css/index.css">
+        <link rel="stylesheet" type="text/css" href="../css/global/site.css" />
+        <script type="text/javascript" src="../js/dist/jquery/1.7.1/jquery.min.js"></script>
+        <script type="text/javascript" src="../js/dist/global/site.js"></script>
+        <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 	</head>
 	<body>
 	<!-- 
@@ -12,12 +16,12 @@
 	-->		
 		<div id="wrapper">
 			<div id="header">
-				<div id="title">Southern California Indo Americans</div>
+				<a id="header-logo" href="index.html"><img src="../assets/scia-logo.png" height="50" width="218" border="0" alt="Southern California Indio Americans" /></a>
 				<ul id="navigation">
 					<li><a href="">About</a></li>
 					<li><a href="">Events</a></li>
-					<li><a href="">Register</a></li>
-					<li><a href="">Login</a></li>
+					<li><a href="javascript:modal.registration()">Register</a></li>
+					<li><a href="javascript:modal.login()">Login</a></li>
 				</ul>
 			</div>
 			<div id="ZuneView"></div>
@@ -28,9 +32,18 @@
 				&copy 2008-2013 USC SCIA
 			</div>
 		</div>
+
 		<script type="text/javascript" src="../js/dist/SCIA.js"></script>
 		<script type="text/javascript">
 			SC.ZuneView.init({height:4},"ZuneView");
 		</script>
+
+        <div id="modal-overlay"></div>
+        <div id="modal-container">
+	        <div id="modal">
+		        <div id="modal-loading"></div>
+		        <div id="modal-content"></div>
+	        </div>
+        </div>
 	</body>
 </html>
