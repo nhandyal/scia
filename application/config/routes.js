@@ -26,6 +26,7 @@ module.exports = function(app, transport){
 		/* expected query options
 			--
 			action=vrf
+			action=resendVrf
 		*/
 		var query = url.parse(req.url, true).query;
 		
@@ -36,6 +37,10 @@ module.exports = function(app, transport){
 		else if(query.action == "vrf") {
 			// /d1/register?action=vrf
 			register.verify(req, res);
+		}
+		else if(query.action == "resendVrf") {
+			// /d1/register?action=resendVrf
+			register.resendVerificationEmail(req, res, transport);
 		}
 		else{
 			// doesn't match any valid route, return nothing

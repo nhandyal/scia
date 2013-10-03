@@ -107,7 +107,7 @@ module.exports.create = function(req, res, transport){
 
 		}); // end async parallel
 	}); // end getCICIndex
-} // end module create
+}; // end module create
 
 module.exports.verify = function(req, res){
 	var accountEmail = req.cookies.sem;
@@ -175,4 +175,52 @@ module.exports.verify = function(req, res){
 		});
 		
 	}); // end VRF.find
-} // end module verify
+}; // end module verify
+
+module.exports.resendVerificationEmail = function(req, res){
+	var accountEmail = req.cookies.sem;
+	
+	// verify user is logged it
+	if(!accountEmail){
+		utils.sendError(res, 10403);
+		return;
+	}
+
+	var vrf_token = "",
+		vrf_array = [];
+
+	for(i = 0; i < 6; i++){
+		var element = String.fromCharCode(Math.floor(Math.random() * 25) + 65);
+		vrf_token += element;
+		vrf_array.push(element);
+	}
+
+	// update the vrf token in the db
+	VRF.update({email : accountEmail}, {vrf_token : vrf_token}, null, function (err, numberAffected){
+		if(err)
+			utils.log(err);
+	});
+
+	var vrf_email_data = {
+		title : "USC SCIA verification email",
+		vrf_token : vrf_array,
+		email : accountEmail
+	};
+	res.render('email-templates/vrf_email', vrf_email_data, function(err, renderedHtml) {
+		transport.sendMail({
+			from : "no_reply@uscscia.com",
+			to : vrf_email_data.email,
+			subject : vrf_email_data.title,
+			html : renderedHtml,
+			charset : "UTF-8"
+		}, function(error, response){
+			if(error) {
+				utils.log("Error delivering message to " + vrf_email_data.email);
+	   		} else{
+	       		utils.log("Message sent: " + response.message);
+	   		}
+		}); // end transport.sendMail
+	}); // end res.render
+	utils.sendSuccess(res);
+
+}; // resendVerificationEmail
