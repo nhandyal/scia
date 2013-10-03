@@ -1,0 +1,95 @@
+﻿<script type="text/javascript">
+    var loginEmail;
+    // Verify Form
+    function verify(x) {
+        switch (x.filter) {
+            default:
+                var simplyExist = [
+                    'LoginEmail',
+                    'LoginPassword',
+                    'VerifyConfirmationCode'
+                ];
+                if (simplyExist.indexOf(x.filter) > -1) {
+                    field.pass(x);
+                } else {
+                    x.val;
+                }
+                break;
+        }
+    }
+
+    $(document).ready(function () {
+        $('#modal-login-userinfo').show();
+        $('#modal-login-verify').hide();
+        $('#modal-login-thankyou').hide();
+
+        $('#btn-login').click(function (event) {
+            event.preventDefault();
+            allPass = field.checkAll('form#login');
+            registerEmail = $('input[name=LoginEmail]').val().toLowerCase();
+            if (allPass) {
+                //TODO
+                $('#modal-login-userinfo').hide();
+                $('#modal-login-verify').show();
+                $('#modal-login-thankyou').hide();
+            }
+        });
+
+        $('#btn-verify').click(function (event) {
+            var alertString = '';
+            event.preventDefault();
+            allPass = field.checkAll('form#verify');
+            if (allPass) {
+                //TODO
+                $('#modal-login-userinfo').hide();
+                $('#modal-login-verify').hide();
+                $('#modal-login-thankyou').show();
+            }
+        });
+    });
+</script>
+
+<a class="modal-close" href="javascript:modal.close()">X</a>
+
+<div id="modal-login-userinfo" class="modal-screen">
+    <h1>Login</h1>
+    <form action="#" id="login" method="post">
+        <div class="col col2">
+            <label for="LoginEmail">Email:</label>
+            <input type="text" name="LoginEmail" id="LoginEmail" value="jackkwan@usc.edu" tabindex="1" onblur="field.check(this)" />
+            <label for="LoginPassword">Password:</label>
+            <input type="password" name="LoginPassword" id="LoginPassword" value="123456Mn" tabindex="2" onblur="field.check(this)" />
+        </div>
+        <div class="action-buttons">
+            <a id="btn-login" class="go" href="#" tabindex="3">Login &nbsp; &gt;</a>
+        </div>
+    </form>
+</div>
+
+<div id="modal-login-thankyou" class="modal-screen">
+    <h1>Welcome!</h1>
+    <div class="col col2">
+        <div id="welcome">
+            Thank you!  Your SCIA account is verified.<br /><br />
+        </div>
+        <div id="user-info">
+        </div>
+    </div>
+    <div class="action-buttons">
+        <a id="btn-close" class="go" href="javascript:modal.close()" tabindex="1">X &nbsp; Close</a>
+    </div>
+</div>
+
+<div id="modal-login-verify" class="modal-screen">
+    <h1>Verification</h1>
+    <form action="#" id="verify" method="post">
+        <div class="col col2">
+            <label>Enter the confirmation code generated from the verification email.</label>
+            <label for="VerifyConfirmationCode">Confirmation Code:</label>
+            <input type="text" name="VerifyConfirmationCode" id="VerifyConfirmationCode" value="" tabindex="1" onblur="field.check(this)" />
+        </div>
+        <div class="action-buttons">
+            <a id="btn-verify" class="go" href="#" tabindex="5">Verify &nbsp; &gt;</a>
+        </div>
+    </form>
+</div>
