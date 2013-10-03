@@ -5,10 +5,10 @@
  * Mongoose Configuaration Module, does not define mongoose models which are located in application/models
  */
 
-module.exports = function(env){
+module.exports = function(){
 	var mongoose = require("mongoose"),
- 	dbInstance = require("./config")[env].db;
-	
+ 	dbInstance = require("./config")[global.env].db;
+
 	mongoose.connect(dbInstance);
 	var db = mongoose.connection;
 

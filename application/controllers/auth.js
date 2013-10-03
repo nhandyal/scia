@@ -2,19 +2,19 @@ var mongoose = require("mongoose"),
 	user = mongoose.model("user"),
 	crypto = require("crypto"),
 
-	authTokenKeys = ["f_name", "l_name", "board", "card_id", "ssid", "sb", "scid", "sem"],
+	authTokenKeys = ["f_name", "l_name", "board", "card_id", "vrf", "ssid", "sb", "scid", "sem", "svrf"],
 
-	authToken = function(userDbObject, env){
+	clientOptions = {
+		httpOnly : false,
+		secure : false
+	},
 
-		var clientOptions = {
-				httpOnly : false,
-				secure : false
-			},
-			
-			serverOptions = {
-				httpOnly : true,
-				secure : (env == "test" ? false : true)
-			};
+	serverOptions = {
+		httpOnly : true,
+		secure : (global.env == "test" ? false : true)
+	},
+
+	authToken = function(userDbObject){
 
 		/* 
 		 * Client Accesible Values
@@ -54,6 +54,8 @@ var mongoose = require("mongoose"),
 		 * Some of the server specific values are duplicates of client facing values.
 		 * However since the client facing values can be altered, they are to be treated as read_only values.
 		 * For all validations and db-transactions, server processes will be using the server facing values.
+		 *
+		 * All Server cookies must start with a lowercase 's'
 		 */
 
 		// server sesion id
@@ -62,6 +64,7 @@ var mongoose = require("mongoose"),
 			options : serverOptions
 		};
 
+		// server board flag
 		this.sb = {
 			value : userDbObject.board,
 			options : serverOptions	
@@ -73,11 +76,13 @@ var mongoose = require("mongoose"),
 			options : serverOptions
 		};
 
+		// server email
 		this.sem = {
 			value : userDbObject.email,
 			options : serverOptions
 		};
 
+		// server vrf flag
 		this.svrf = {
 			value : userDbObject.verified,
 			options : serverOptions
@@ -86,6 +91,23 @@ var mongoose = require("mongoose"),
 		return this;
 	};
 
+
+module.exports.updateAuthToken = function(res, key, value){
+	
+	if(authTokenKeys.indexOf(key) < 0)
+		return false;
+
+	if(key.charAt(0) == 's'){
+		// this is a server cookie
+		res.cookie(key, value, serverOptions);	
+	}
+	else{
+		// this is a general cookie
+		res.cookie(key, value, clientOptions);	
+	}
+
+	return true;
+};
 
 module.exports.login = function(req, res, env){
 

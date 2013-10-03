@@ -4,7 +4,8 @@ var mongoose = require("mongoose"),
 	CIC = mongoose.model("CIC"),
 	crypto = require("crypto"),
 	async = require("async"),
-	utils = require("./utils")
+	utils = require("./utils"),
+	auth = require("./auth"),
 
 	getNextCICIndex = function(callback){
 		CIC.findOneAndUpdate({}, {$inc: { CICIndex: 1 }}, {}, callback);
@@ -112,6 +113,7 @@ module.exports.verify = function(req, res){
 	var accountEmail = req.cookies.sem;
 	var verified = req.cookies.svrf
 	
+
 	/*
 	 * verify user login by ensuring the server cookie you are expecting exists
 	 * This code should be refactored into a global Utils function, but that can be done later
@@ -120,37 +122,23 @@ module.exports.verify = function(req, res){
 		utils.sendError(res, 10403);
 		return;
 	}
-	if(verified){
+
+	if(verified === true){
 		utils.sendError(res, 10004);
 		return;
 	}
 
-	// retrieve both the user data, and the associated vrf_token
-	async.parallel({
-		user : function(callback){
-			User.find({email : accountEmail}, function(err, dbRes){
-				dbTransactionCallback(err, dbRes, callback);
-			});
-		},
-		vrf : function(callback){
-			VRF.find({email : accountEmail}, function(err, dbRes){
-				dbTransactionCallback(err, dbRes, callback);
-			});
-		}
-	}, function(err, result){
-		var user = result.user,
-			vrf = result.vrf;
-
-		// ensure both operations completed successfully
-		if(user.err || vrf.err){
+	// retrieve the associated vrf_token
+	VRF.find({email : accountEmail}, function(err, dbRes){
+		
+		if(err){
 			utils.sendError(res, 10500);
 			utils.log(user.err);
 			utils.log(vrf.err);
 			return;
 		}
-
-		user = new User(result.user.dbRes[0]);
-		vrf = new VRF(result.vrf.dbRes[0]);
+		
+		var vrf = dbRes[0];
 
 		// check if submitted vrf_code matches vrf code in db
 		if((vrf.vrf_token).toLowerCase() != (req.body.vrf_token).toLowerCase()){
@@ -159,18 +147,32 @@ module.exports.verify = function(req, res){
 			return;
 		}
 
-		// tokens match, update user object to a verified state and delete the vrf_token entry
+		/*
+		 * At this point the tokens match so we need to do a series of things. (in this order)
+		 * 1.) Push updated authCookie values down to the client
+		 * 2.) Send json response string to client
+		 * 3.) Update the user document and delete the vrf_token document in the db
+		 */
+		
+		var svrfUpdate = auth.updateAuthToken(res, "svrf", true),
+			vrfUpdate = auth.updateAuthToken(res, "vrf", true);
+
+		if(!(svrfUpdate && vrfUpdate)){
+			utils.log("Error Pushing Cookies");
+		}
+
 		utils.sendSuccess(res);
-		user.update({verified : true}, function (err, numberAffected, raw){
-			if(err){
+
+		
+		User.update({email : accountEmail}, {verified : true}, null, function (err, numberAffected){
+			if(err)
 				utils.log(err);
-				utils.log(raw);
-			}
 		});
-		vrf.remove(function(err){
-			if(err){
+
+		VRF.remove({email : accountEmail}, function(err){
+			if(err)
 				utils.log(err);
-			}
 		});
-	}); // end async parallel
+		
+	}); // end VRF.find
 } // end module verify

@@ -1,17 +1,16 @@
 var url = require("url"),
-	user = require("../controllers/user"),
 	register = require("../controllers/register"),
 	auth = require("../controllers/auth");
 
-module.exports = function(app, transport, env){
+module.exports = function(app, transport){
 	
 
 	app.get("/d1/testCardCommit", function(req, res){
-		user.commitCardId(req, res);
+		
 	});
 
 	app.get("/d1/testCardRet", function(req, res){
-		user.testcard(req, res);
+		
 	});
 
 	app.get("^/[A-Za-z]{3}[0-9]{3}|^/[0-9]{6}", function(req, res){
@@ -48,7 +47,7 @@ module.exports = function(app, transport, env){
 
 	app.post('/d1/login*', function(req, res){
 		// /d1/register
-		auth.login(req, res, env);
+		auth.login(req, res);
 	});
 
 	app.post('/d1/logout*', function(req, res){
