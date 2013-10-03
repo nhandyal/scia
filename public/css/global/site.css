@@ -1,0 +1,329 @@
+/*
+Table of Contents
+------------------
+[01] GENERAL
+[02] HEADER / FOOTER
+[03] MODAL
+[04] GRADIENTS
+*/
+
+/* ================================ */
+/* [01] GENERAL                     */
+
+html, body, div, span, a, em, img,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+small, strike, strong, sup, center,
+b, u, i, dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend, caption,
+table, tbody, tfoot, thead, tr, th, td,
+header, footer {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font-weight: normal;
+	font-family: Verdana;
+	vertical-align: baseline;
+}
+header, footer {
+    display : block;
+}
+div, label, span {
+	font-size: 11px;
+	position: relative;
+	top: 0;
+	left: 0;
+}
+b, strong {
+	font-weight: bold;
+}
+i, em {
+	font-style: italic;
+}
+
+div.col {
+    vertical-align: top;
+    display: inline-block;
+    margin-left: 20px;
+	width: 724px;
+}
+div.col2 {
+	width: 352px;
+}
+div.col h3 {
+    color: #990000;
+	font-weight: bold;
+	font-size: 16px;
+	padding: 15px 0 5px;
+}
+
+.clear {clear: both}
+        
+label,
+div.radio-q,
+div.checkbox-q {
+	display: block;
+	font-size: 11px;
+	padding: 6px 2px 3px;
+}
+        
+input[type="text"],
+input[type="password"] {
+    display: block;
+	width: 340px;
+	color: #333333;
+	font-size: 12px;
+	line-height: 15px;
+	padding: 9px 5px 8px;
+	margin: 0;
+	background-color: #fefefe;
+	border: 1px solid #717174;
+}
+input[type="radio"] {
+	display: none;
+}
+input[type="radio"] + label span.radio {
+	display: inline-block;
+	float: left;
+	width: 14px;
+	height: 14px;
+	cursor: pointer;
+	margin-right: 6px;
+	background-image: url(../../assets/sprite-map.png);
+	background-position: -16px 0px;
+}
+input[type="radio"]:checked + label span.radio {
+	background-position: 0px 0px;
+}
+input[type="checkbox"] {
+	display: none;
+}
+input[type="checkbox"] + label span.checkbox {
+	display: inline-block;
+	float: left;
+	width: 11px;
+	height: 11px;
+	cursor: pointer;
+	margin-right: 6px;
+	margin-left: 1px;
+	background-image: url(../../assets/sprite-map.png);
+	background-position: -16px -16px;
+}
+input[type="checkbox"]:checked + label span.checkbox {
+	background-position: 0px -16px;
+}
+textarea {
+    display: block;
+    width: 350px;
+    color: #333333;
+    font-size: 12px;
+    font-family: Verdana;
+    line-height: 15px;
+    padding: 9px, 5px, 8px;
+    margin: 0;
+    background-color: #fefefe;
+    border: 1px solid #717174;
+}
+textarea#ContactAddress {
+    height: 70px;
+}
+        
+span.dropdown {
+	display: inline-block;
+	overflow: hidden;
+	width: 350px;
+	background-color: #fefefe;
+	background-image: url(../../assets/dark-arrow-down.png);
+	background-position: 328px 12px;
+	background-repeat: no-repeat;
+	border: 1px solid #717174;
+}
+html.ie7 span.dropdown {margin: 3px 0 10px}
+span.dropdown select {
+	width: 378px;
+	color: #333333;
+	font-size: 12px;
+	padding: 8px 2px 7px;
+	margin: 0;
+	border: 0;
+	background: transparent;
+	-webkit-appearance: none;
+}
+html.ie7 span.dropdown select {width:350px; background:#fefefe;}
+        
+div.year-major {
+}
+div.year-major label {
+	width: 209px;
+	float: left;
+}
+div.year-major label:first-child {
+	margin-right: 7px;
+}
+div.year-major span.dropdown {
+	float: left;
+	margin-right: 10px;
+	background-position: 106px 12px;
+}
+div.year-major label:first-child,
+div.year-major span.dropdown {
+	width: 128px;
+}
+div.year-major span.dropdown select {
+	width: 156px;
+}
+html.ie7 div.year-major span.dropdown select {width: 128px}
+div.year-major input[type="text"] {
+	float: left;
+	width: 200px !important;
+}
+        
+ul.radio-buttons {
+    overflow: hidden;
+    list-style-type: none;
+	margin: 7px 5px 7px;
+}
+ul.radio-buttons li {
+	float: left;
+	clear: both;
+}
+ul.radio-buttons label {
+	display: block;
+	font-size: 12px;
+	padding: 0;
+}
+ul.radio-inline li {
+	clear: none;
+	margin-right: 20px;
+}
+
+span.error {
+	color: #D1202A;
+	float: right;
+}
+       
+div.action-buttons {
+	text-align: right;
+	padding: 10px 0;
+	margin-top: 20px;
+	border-top: 1px dotted #b8b8b9;
+}
+div.action-buttons a {
+	display: inline-block;
+	color: #ffffff;
+	font-size: 11px;
+	font-weight: bold;
+	text-decoration: none;
+	padding: 8px 9px;
+	margin-left: 2px;
+	background-color: #666666;
+}
+
+/* ================================ */
+/* [02] HEADER / FOOTER             */
+
+div#header {
+	position: relative;
+	height: 90px;
+}
+a#header-logo {
+	display: block;
+	width: 218px;
+	height: 50px;
+	float: left;
+	margin: 20px 25px;
+}
+
+
+/* ================================ */
+/* [03] MODAL                       */
+
+div#modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	background-color: rgba(0,0,0,0.65);
+	width: 100%;
+	height: 100%;
+	z-index: 998;
+	display: none;
+}
+div#modal-container {
+	position: absolute;
+	top: 45px;
+	left: 0;
+	z-index: 999;
+	width: 100%;
+	text-align: center;
+	display: none;
+}
+div#modal {
+	width: 500px;
+	height: 275px;
+	text-align: left;
+	overflow-y: auto;
+	border: 1px solid #000000;
+	background-color: #ffffff;
+	margin: 45px auto 0;
+}
+div.modal-screen div.action-buttons {
+    margin: 20px 20px 0 20px;
+}
+div.modal-screen div#welcome {
+	padding: 6px 2px 3px;
+}
+div#modal-loading {
+	width: 100px;
+	height: 100px;
+	background: url(../../assets/spinner-large.gif) center no-repeat;
+	margin: 80px auto 0;
+}
+div#modal-content {
+	display: none;
+}
+div#modal a.modal-close {
+	display: inline-block;
+	float: right;
+	color: #ffffff;
+	font-size: 15px;
+	font-weight: bold;
+	text-decoration: none;
+	padding: 7px 10px 6px;
+	margin: 1px;
+	background: #8f8f91;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#969698', endColorstr='#8f8f91'); /* for IE */
+	background: -webkit-gradient(linear, left top, left bottom, from(#969698), to(#8f8f91)); /* for webkit browsers */
+	background: -moz-linear-gradient(top,  #969698,  #8f8f91); /* for firefox 3.6+ */
+	background: -ms-linear-gradient(top, #969698 0%,#8f8f91 100%); /* IE10+ */
+}
+div#modal h1 {
+	font-size: 15px;
+	font-family: Verdana;
+	font-weight: bolder;
+	padding: 6px 11px;
+	margin: 1px;
+	border: 1px solid #d4d4d5;
+	background: #d4d4d5;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#d4d4d5'); /* for IE */
+	background: -webkit-gradient(linear, left top, left bottom, from(#eeeeee), to(#d4d4d5)); /* for webkit browsers */
+	background: -moz-linear-gradient(top,  #eeeeee,  #d4d4d5); /* for firefox 3.6+ */
+	background: -ms-linear-gradient(top, #eeeeee 0%,#d4d4d5 100%); /* IE10+ */
+}
+
+/* ================================ */
+/* [04] GRADIENTS                   */
+
+div.action-buttons a.go:link,
+div.action-buttons a.go:visited {
+	background: #990000;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#990000', endColorstr='#440000'); /* for IE */
+	background: -webkit-gradient(linear, left top, left bottom, from(#990000), to(#440000)); /* for webkit browsers */
+	background: -moz-linear-gradient(top,  #990000,  #440000); /* for firefox 3.6+ */
+}
+div.action-buttons a.go:hover,
+div.action-buttons a.go:active {
+	background: #aa5555;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#aa5555', endColorstr='#990000'); /* for IE */
+	background: -webkit-gradient(linear, left top, left bottom, from(#aa5555), to(#990000)); /* for webkit browsers */
+	background: -moz-linear-gradient(top,  #aa5555,  #990000); /* for firefox 3.6+ */
+}
