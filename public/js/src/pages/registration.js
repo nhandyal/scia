@@ -1,3 +1,6 @@
+// ======================================================================== //
+//   REGISTRATION MODAL                                                     //
+
 var registerFirstName, registerLastName, registerEmail, registerMobile, registerYear, registerMajor, registerPassword;
 // Verify Form
 function verify(x) {
@@ -93,9 +96,11 @@ $(document).ready(function () {
         if (allPass) {
             $('#modal-registration-userinfo').hide();
             $('#modal-registration-payment').hide();
-            $('#modal-registration-thankyou').show();
-            alertString = '<label>' + alertString + '</label>';
-            $('div#user-info').html(alertString);
+            $('div#modal-loading').fadeIn(250);
+            //$('#modal-registration-thankyou').show();
+            //TODO add AJAX
+            //alertString = '<label>' + alertString + '</label>';
+            //$('div#user-info').html(alertString);
         }
     });
 

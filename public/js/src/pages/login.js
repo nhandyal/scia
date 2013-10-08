@@ -1,3 +1,6 @@
+// ======================================================================== //
+//   LOGIN MODAL                                                            //
+
 var loginEmail;
 // Verify Form
 function verify(x) {
@@ -17,7 +20,10 @@ function verify(x) {
     }
 }
 
+alert("Testing Out");
+
 $(document).ready(function () {
+    alert("Testing In");
     $('#modal-login-userinfo').show();
     $('#modal-login-verify').hide();
     $('#modal-login-thankyou').hide();
