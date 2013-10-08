@@ -9,5 +9,12 @@ module.exports = {
 		app : {
 			name: 'uscscia.com'
 		}
+	},
+	
+	test : {
+		db : 'mongodb://localhost/test',
+		app: {
+			name : 'uscscia.com'
+		}
 	}
 }

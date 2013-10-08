@@ -31,3 +31,15 @@
 	checks to only allow one member ticket to be bought per account per event.
 
 	use : http://simplecartjs.org/ to implement the shopping cart.
+
+
+9/27/13
+	requires : nothing
+	Allow vrf_tokens to persist till used (no automatic expiration)
+		| why ?
+			 - why not?
+
+	What bennefit does it serve to automatically delete a vrf token after a certain time. In addition to annoying the shit out of
+	a user, it adds unnescesary clutter and bloat to the code base. Since a vrf token is unique (in its randomness and email binding),
+	there shouldn't be any reason to delete the vrf token. To remove bloat from the user table, we may consider deleting unverified
+	user accounts after some time, but that's a different story.

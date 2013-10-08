@@ -12,7 +12,8 @@ Southern California Indo Americans
   <tr>
     <td>
       getUserData.<br/>
-      Event verification for board
+      Event verification for board. <br/>
+      login required
     </td>
     <td>
       if(auth memberID == URL ID || board){
@@ -33,7 +34,8 @@ Southern California Indo Americans
       getEvents
     </td>
     <td>
-      return events within the specified start and end parameters. If date params are ommitted, return all future events.
+      return events within the specified start and end parameters.
+      If date params are ommitted, return all future events.
     </td>
     <td>
       /d1/events?start&end<br/>
@@ -54,25 +56,26 @@ Southern California Indo Americans
   </tr>
   <tr>
     <td>
-      buyEventTickets
+      Checkout
     </td>
     <td>
-      <a href="#buy-event-tickets">Form Data</a><br/>
-      Return ticketID on success or failure on error
+      <a href="#checkout">Form Data</a><br/>
+      return transaction status
     </td>
     <td>
-      /d1/events?eventID<br/>
+      /d1/checkout<br/>
       form-data [[post]]
     </td>
   </tr>
   <tr>
     <td>
-      stageMembership
+      createAccount
     </td>
     <td>
       <a href="#stage-membership">Form Data</a><br/>
-      Process membership request - create unverified stub in DB and sends verification email.
-      Does not bill credit card. Returns success state to client.
+      Process membership request - create unverified account in DB and sends verification email.
+      User account has been created at this point and they can login to the site.
+      Returns success state.
     </td>
     <td>
       /d1/register <br/>
@@ -81,11 +84,26 @@ Southern California Indo Americans
   </tr>
   <tr>
     <td>
-      commitMembership
+      resendVrfEmail <br/>
+      login required
+    </td>
+    <td>
+      Resend verification email to user. Uses authToken to determine
+      email. Returns success state.
+    </td>
+    <td>
+      /d1/register?action=resendVrf<br/>
+      [[post]]
+    </td>
+  </tr>
+  <tr>
+    <td>
+      verifyAccount <br/>
+      login required
     </td>
     <td>
       <a href="#commit-membership">Form Data</a><br/>
-      Verify stub in DB. Bill Credit Card. Send auth cookie.
+      Verify user account. Returns success state.
     </td>
     <td>
       /d1/register?action=vrf<br/>
@@ -99,7 +117,7 @@ Southern California Indo Americans
     <td>
       <a href="#login">Form Data</a><br/>
       Authenticates the login request.
-      Return auth cookie on success, error message on failure.
+      Returns authToken and success state.
     </td>
     <td>
       /d1/login <br/>
@@ -111,7 +129,7 @@ Southern California Indo Americans
       logout
     </td>
     <td>
-      delete auth cookie
+      delete authToken
     </td>
     <td>
       /d1/logout <br/>
@@ -122,12 +140,14 @@ Southern California Indo Americans
 
 ##Forms
 
-###Buy Event Tickets
+###Checkout
+In a JSON Encoded String
 * f_name : String
 * l_name : String
 * email : String
 * card_id : Int (blank for non-members)
 * stripe_token : String
+* cart : [ { eventID : String, quantity : Int } ]
 
 
 ###Stage Membership
@@ -137,15 +157,14 @@ Southern California Indo Americans
 * mobile : Int (in the format xxxxxxxxxx)
 * major : String
 * year : {freshman, sophomore, junior, senior, graduate} - String
-* pwd : String (password - no encryption)
-* stripe_token : String
+* pwd : String (plain-text, no client side hash)
 
 
 ###Commit Membership
-* email : String
-* vrf_code : String (5 chars)
+* vrf_token : String (6 chars) <br/>
+account email is automatically parsed from authToken
 
 
 ###Login
 * email : String
-* pwd : String (password - no encryption)
+* pwd : String (plain-text, no client side hash)

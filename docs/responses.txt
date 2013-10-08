@@ -1,4 +1,3 @@
-stageMembership
 {
 	status : int,
 	short_message : String,
@@ -17,6 +16,12 @@ stageMembership
 
 Status Codes		Short Message 					Long Message
 0 					Success							Success
+10403				Service restricted				Must be logged in to access this service
+10500				Internal error 					Internal error
+
 
 Registration Errors
-10001				Internal Error					Unable to stage new user to database
+10001				DB error 						Unable to stage new user to database
+10002				Duplicate entry					Email is already registered
+10003				Verify failed					Supplied vrf_token does not match token on file
+10004				Account already verified		Account already verified
