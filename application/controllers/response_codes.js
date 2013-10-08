@@ -47,3 +47,10 @@ module.exports._10004 = {
  	short_message : "Account already verified",
  	long_message : "Account already verified"
 };
+
+/***************** Login Response Codes *****************/
+module.exports._10050 = {
+	status : 10050,
+	short_message : "Login failed",
+	long_message : "Email/password combination was not correct"
+};
