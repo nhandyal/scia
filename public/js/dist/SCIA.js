@@ -90,7 +90,7 @@
 
 
             /* Used to ensure proper logo placement and size */
-            var firstIteration = true;
+            var firstIteration = false;
 
             // iterate over the entire grid
             for (r = 0; r < viewportTiles.height; r++) {

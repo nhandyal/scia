@@ -10,11 +10,11 @@ module.exports = function(grunt) {
             },
             dist : {
                 src     : [
-					"src/globals.js",
                     "src/header.js",
                     "src/core.js",
                     "src/modules/**/*.js",
-                    "src/footer.js"
+                    "src/footer.js",
+					"src/globals.js"
                         ],
                 
                 dest    : 'dist/<%= pkg.name %>.js'
