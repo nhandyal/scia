@@ -1,12 +1,13 @@
 /*
  * Nikhil Handyal
  */
+
+global.env = "test";
  
-var env = "production",
-	port = 8000,
+var port = 8000,
 	fs = require("fs"),
 	app = require("./application/config/express"),
-	mongoose = require("./application/config/mongoose")(env),
+	mongoose = require("./application/config/mongoose")(),
 	transport = require("./application/config/nodemailer");
 
 
@@ -24,4 +25,3 @@ require("./application/config/routes")(app, transport);
 
 app.listen(port);
 console.log('Listening on port 8000');
-
