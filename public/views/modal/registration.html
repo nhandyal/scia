@@ -90,7 +90,7 @@ $(document).ready(function () {
         registerMajor = $('input[name=RegisterMajor]').val().toUpperCase();
         registerPassword = $('input[name=RegisterPassword]').val();
         if (allPass) {
-            svc('d1test/register/test.html', {
+            svc('/d1/register', {
                 'f_name': registerFirstName,
                 'l_name': registerLastName,
                 'email': registerEmail,
@@ -99,9 +99,19 @@ $(document).ready(function () {
                 'year': registerYear,
                 'pwd': registerPassword
             }, function (data) {
-                $('#modal-registration-userinfo').hide();
-                $('#modal-registration-payment').hide();
-                $('#modal-registration-thankyou').show();
+                if (data.status == 0) {
+                    $('#modal-registration-userinfo').hide();
+                    $('#modal-registration-payment').hide();
+                    $('#modal-registration-thankyou').show();
+                }
+                else if (data.status == 10002) {
+                    alert('Duplicate entry\nEmail is already registered');
+                    //error short_message : "Duplicate entry", long_message : "Email is already registered"
+                }
+                else {
+                    alert('Login failed');
+                    //all other error
+                }
             }, true);
             //TODO add AJAX
             //alertString = '<label>' + alertString + '</label>';

@@ -20,5 +20,6 @@ app.set('view engine', 'ejs');
 // parsing the http header contents for POST requests
 app.use(express.compress());
 app.use(express.bodyParser());
+app.use(express.cookieParser("Secret")); 	//Need to update the cookie parser to use a secret key, but for now this works
 
 module.exports = app;

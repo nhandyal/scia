@@ -198,12 +198,7 @@ function svc(serviceMethod, jsonRequest, callback, modal) {
         contentType: 'application/json',
         success: function (data) {
             if (data != null) {
-                if (data.state == 'success') {
-                    callback(data);
-                }
-                else {
-                    alert('Failed');
-                }
+                callback(data);
             }
             else {
                 alert('Error with null data');

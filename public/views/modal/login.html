@@ -2,7 +2,7 @@
     // ======================================================================== //
     //   LOGIN MODAL                                                            //
 
-    var loginEmail;
+    var loginEmail, loginPassword;
     // Verify Form
     function verify(x) {
         switch (x.filter) {
@@ -29,12 +29,30 @@
         $('#btn-login').click(function (event) {
             event.preventDefault();
             allPass = field.checkAll('form#login');
-            registerEmail = $('input[name=LoginEmail]').val().toLowerCase();
+            loginEmail = $('input[name=LoginEmail]').val();
+            loginPassword = $('input[name=LoginPassword]').val();
             if (allPass) {
-                //TODO
-                $('#modal-login-userinfo').hide();
-                $('#modal-login-verify').show();
-                $('#modal-login-thankyou').hide();
+                svc('/d1/login', {
+                    'email': loginEmail,
+                    'password': loginPassword
+                }, function (data) {
+                    if (data.status == 0) {
+                        $('#modal-login-userinfo').hide();
+                        $('#modal-login-verify').show();
+                        $('#modal-login-thankyou').hide();
+                    }
+                    else if (data.status == 10050) {
+                        alert('Login failed\nEmail/password combination was not correct');
+                        //error short_message : "Login failed", long_message : "Email/password combination was not correct"
+                    }
+                    else {
+                        alert('Login failed');
+                        //all other error
+                    }
+                }, true);
+                //TODO add AJAX
+                //alertString = '<label>' + alertString + '</label>';
+                //$('div#user-info').html(alertString);
             }
         });
 
@@ -43,10 +61,31 @@
             event.preventDefault();
             allPass = field.checkAll('form#verify');
             if (allPass) {
-                //TODO
-                $('#modal-login-userinfo').hide();
-                $('#modal-login-verify').hide();
-                $('#modal-login-thankyou').show();
+                svc('/d1/register?action=vrf', {
+                    'email': loginEmail,
+                    'password': loginPassword
+                }, function (data) {
+                    if (data.status == 0) {
+                        $('#modal-login-userinfo').hide();
+                        $('#modal-login-verify').hide();
+                        $('#modal-login-thankyou').show();
+                    }
+                    else if (data.status == 10003) {
+                        alert('Verify failed\nSupplied vrf_token does not match token on file');
+                        //error short_message : "Verify failed", long_message : "Supplied vrf_token does not match token on file"
+                    }
+                    else if (data.status == 10004) {
+                        alert('Account already verified\nAccount already verified');
+                        //error short_message : "Account already verified", long_message : "Account already verified"
+                    }
+                    else {
+                        alert('Verify failed');
+                        //all other error
+                    }
+                }, true);
+                //TODO add AJAX
+                //alertString = '<label>' + alertString + '</label>';
+                //$('div#user-info').html(alertString);
             }
         });
     });
