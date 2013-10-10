@@ -1,5 +1,6 @@
 var mongoose = require("mongoose"),
 	user = mongoose.model("user"),
+	PwdReset_model = mongoose.model("pwdReset_token"),
 	crypto = require("crypto"),
 	utils = require("./utils"),
 
@@ -90,7 +91,7 @@ var mongoose = require("mongoose"),
 		};
 
 		return this;
-	};
+	}; // end object authToken
 
 
 module.exports.updateAuthToken = function(res, key, value){
@@ -108,7 +109,7 @@ module.exports.updateAuthToken = function(res, key, value){
 	}
 
 	return true;
-};
+}; // end module updateAuthToken
 
 module.exports.login = function(req, res, env){
 
@@ -133,9 +134,10 @@ module.exports.login = function(req, res, env){
 		} catch (err) {
 			utils.log("caught error trying to login" + err);
 			utils.sendError(res, 10500);
+			return;
 		}
 	});
-};
+}; // end module login
 
 module.exports.logout = function(req, res){
 	try{
@@ -143,12 +145,12 @@ module.exports.logout = function(req, res){
 			res.clearCookie(authTokenKeys[i]);
 		}
 		utils.sendSuccess(res);
+		return;
 
 	} catch(err) {
 		utils.log("Caught error trying to logout" + err);
 		utils.sendError(res, 10500);
+		return;
 	}
-};
 
-
-
+}; // end module logout

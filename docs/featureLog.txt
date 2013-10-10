@@ -43,3 +43,18 @@
 	a user, it adds unnescesary clutter and bloat to the code base. Since a vrf token is unique (in its randomness and email binding),
 	there shouldn't be any reason to delete the vrf token. To remove bloat from the user table, we may consider deleting unverified
 	user accounts after some time, but that's a different story.
+
+10/8/13
+	requires : update to user model
+	Updated registration model
+		| why ?
+			- simplicity of user registration, buying membership, and joinging and leaving board
+
+	When a user registers on the site they are automatically given a card_id number. This value is sequentially updated and is handled
+	by the system. Once a user buys membership on the site, the member flag is toggled on in the user entry and signifies that this user
+	is a member. This means we can now have non-sequential card_ids for members (an issue for the physical member cards). When new cards
+	are ordered, a print out of member card_ids can be obtained and those cards can be ordered. 
+
+	Now when a user joins board the board flag will be toggled true and the board_id field will be set to valid 900 series board card_id.
+	Their old card_id is still present so once they leave board, they can continue to use their old member cards (less waste and code overhead).
+

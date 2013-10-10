@@ -36,6 +36,7 @@ module.exports.create = function(req, res, transport){
 		var response = {},
 			md5 = crypto.createHash("md5"),
 
+			// 10/8/13 USER MODEL HAS CHANGED, UPDATE ACCORDINGLY
 			userData = {
 				f_name : req.body.f_name,
 				l_name : req.body.l_name,
