@@ -1,7 +1,8 @@
 var graph = require('fbgraph'),
 	mongoose = require("mongoose"),
 	user = mongoose.model("user"),
-	event = mongoose.model("event");
+	event = mongoose.model("event"),
+	utils = require("../controllers/utils");
 
 var conf = {
     client_id:      '203560153159167'
@@ -12,10 +13,6 @@ var conf = {
 
 
 module.exports.queryFacebook = function() {
-	//graph.get("", function(err,res) {
-//		console.log(res);
-//		graph.setAccessToken(res);
-//	});
 	graph.get("209821105726515?fields=events.fields(name,description,start_time,end_time,location)&access_token="+conf.client_id+"|"+conf.client_secret, function(err, res) {
 	    for(var i=0;i<res.events.data.length;i++) {
 		var description = res.events.data[i].description;
@@ -64,20 +61,17 @@ module.exports.queryFacebook = function() {
                 	transportation_cost :   transportation_price
        		},
 
-		console.log(eventData);
-
 		newEvent = new event(eventData);
+		newEvent = newEvent.toObject();
+		delete newEvent._id;
 
-        	newEvent.save(function(err, newEvent){
+        	event.update({fb_id:newEvent.fb_id},newEvent,{upsert: true, new: true},function(err, newEvent){
+		//newEvent.save(function(err,newEvent){
                 	if(err) {
-                        	console.log("There was an error processing the request");
-                	}else {
-                        	var confString = newEvent.name; 
-                        	console.log(confString);
+                        	utils.log("There was an error processing the request "+err);
                 	}
         	});
 	    }
-	    //console.log(res.events.data);
 	});
 
 
