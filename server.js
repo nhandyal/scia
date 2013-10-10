@@ -21,6 +21,9 @@ model_files.forEach(function (file) {
 
 require("./application/config/routes")(app, transport);
 
+fb = require("./application/lib/fbEventQuery");
+
+fb.queryFacebook();
 
 app.listen(port);
 console.log('Listening on port 8000');
