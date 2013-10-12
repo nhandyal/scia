@@ -11,7 +11,8 @@ var eventSchema = mongoose.Schema(
 		member_price :		String,
 		non_member_price :	String,
 		transportation :	Boolean,
-		transportation_cost :	String		
+		transportation_cost :	String,
+		event_img_url :		String
 	},
 	{
 		collection: "events"

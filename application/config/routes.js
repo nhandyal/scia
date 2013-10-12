@@ -1,6 +1,7 @@
 var url = require("url"),
 	register = require("../controllers/register"),
-	auth = require("../controllers/auth");
+	auth = require("../controllers/auth"),
+	events = require("../controllers/events");
 
 module.exports = function(app, transport){
 	
@@ -19,7 +20,8 @@ module.exports = function(app, transport){
 	});
 
 	app.get('/d1/events*', function(req, res){
-		res.send("d1 events: "+req.url);
+		var query = url.parse(req.url, true).query;
+		events.getEvents(req,res,query);
 	});
 
 	app.post('/d1/register*', function(req, res){
