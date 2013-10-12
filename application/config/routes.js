@@ -21,7 +21,12 @@ module.exports = function(app, transport){
 
 	app.get('/d1/events*', function(req, res){
 		var query = url.parse(req.url, true).query;
-		events.getEvents(req,res,query);
+		if(query.eventID) {
+			events.getEventDetails(req,res,query);
+		}
+		else {
+			events.getEvents(req,res,query);
+		}
 	});
 
 	app.post('/d1/register*', function(req, res){

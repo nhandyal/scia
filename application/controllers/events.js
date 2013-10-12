@@ -38,8 +38,28 @@ module.exports.getEvents = function(req,res,query) {
 		for(var i=0;i<numberToReturn;i++) {
 			var entry = dbRes[i].toObject();
 			delete entry._id;
+			entry.id = entry.fb_id;
+			delete entry.fb_id;
 			response.push(entry);
 		}
 		utils.sendResponse(res,response);
 	}); 
+}
+
+module.exports.getEventDetails = function(req,res,query) {
+	var event_id = query.eventID;
+
+	var event = event.find({fb_id: event_id}, function(dbErr,dbRes){
+		if(dbErr){
+                        utils.sendError(res,10500);
+                }
+
+                var response = dbRes[i].toObject();
+                delete entry._id;
+                entry.id = entry.fb_id;
+                delete entry.fb_id;
+                response.push(entry);
+
+                utils.sendResponse(res,response);
+	});
 }
