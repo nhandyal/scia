@@ -35,10 +35,11 @@ Southern California Indo Americans
     </td>
     <td>
       return events within the specified start and end parameters.
-      If date params are ommitted, return all future events.
+      If date params are ommitted, return all events for the next year. 
+      If count is included, limits return to that many events, otherwise it defaults to all.
     </td>
     <td>
-      /d1/events?start&end<br/>
+      /d1/events?start&end&count<br/>
       [[get]]
     </td>
   </tr>
@@ -47,10 +48,10 @@ Southern California Indo Americans
       getEventDetails
     </td>
     <td>
-      return details for event = eventID
+      return details for event = eventID, and whether member (cardID) has purchased a ticket
     </td>
     <td>
-      /d1/events?eventID<br/>
+      /d1/events?eventID&cardID<br/>
       [[get]]
     </td>
   </tr>
@@ -145,9 +146,10 @@ In a JSON Encoded String
 * f_name : String
 * l_name : String
 * email : String
-* card_id : Int (blank for non-members)
 * stripe_token : String
-* cart : [ { eventID : String, quantity : Int } ]
+* cart : [ { eventID : String, quantity : Int, card_id : Int (blank for non-members), transportation : Boolean } ]
+
+// eventID = 100 for buying membership, card_id is passed, rest of the cart empty/null
 
 
 ###Stage Membership
