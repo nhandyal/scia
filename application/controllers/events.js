@@ -1,12 +1,7 @@
 
 var mongoose = require("mongoose"),
 	event = mongoose.model("event"),
-	VRF = mongoose.model("vrf_token"),
-	CIC = mongoose.model("CIC"),
-	crypto = require("crypto"),
-	async = require("async"),
-	utils = require("./utils"),
-	auth = require("./auth");
+	utils = require("./utils");
 
 
 module.exports.getEvents = function(req,res,query) {

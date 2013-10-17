@@ -1,7 +1,8 @@
 var url = require("url"),
 	register = require("../controllers/register"),
 	auth = require("../controllers/auth"),
-	events = require("../controllers/events");
+	events = require("../controllers/events"),
+	checkout = require("../controllers/checkout");
 
 module.exports = function(app, transport){
 	
@@ -68,5 +69,9 @@ module.exports = function(app, transport){
 
 	app.get("/d1/testEJS", function(req, res){
 		res.render("email-templates/2col-1-2");
+	});
+
+	app.post('/d1/checkout*', function(req, res){
+		checkout.submitPayment(req,res,transport);
 	});
 }
