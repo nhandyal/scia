@@ -148,6 +148,7 @@ In a JSON Encoded String
 * email : String
 * stripe_token : String
 * cart : [ { eventID : String, quantity : Int, card_id : Int (blank for non-members), transportation : Boolean } ]
+* total : Int
 
 // eventID = 100 for buying membership, card_id is passed, rest of the cart empty/null
 
