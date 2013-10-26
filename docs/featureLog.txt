@@ -2,6 +2,7 @@
  *	In an effort to simplify the process flow for users
  */
 
+
 9/25/13
 	requires : API UPDATE
 	Seperate account registration from buying membership
@@ -18,6 +19,7 @@
 
 	* Since a user has to buy membership each year, instead of having a sepearte flow for new users and one for continuing users,
 	we can now have every user (new/returning) by membership (renewal or not) through the same process flow.
+
 
 9/25/13
 	requires : API UPDATE
@@ -43,3 +45,19 @@
 	a user, it adds unnescesary clutter and bloat to the code base. Since a vrf token is unique (in its randomness and email binding),
 	there shouldn't be any reason to delete the vrf token. To remove bloat from the user table, we may consider deleting unverified
 	user accounts after some time, but that's a different story.
+
+
+10/25/13
+	requires : NODE controller updates
+	Perform static page writebacks from node so that we take "dyncamic" pages and convert them to static pages.
+		| why ?
+			- we can reduce the load on node and allow nginx to handle a much larger amount of web traffic.
+
+	Currently the schema with nginx acting as our static server and node the app server, we have seperated the data layer and the view layer.
+	We chose to do this so that we can 
+			1. reduce the load on node
+			2. provide an easy to use api for 3rd party applications
+	The seperation has so far provided us with a solid platform for point 2, but since we need to query node for any page with data, we haven't
+	really reduced load on node, we've just added layers of complexity and extra network overhead. Therefore if we perform an html writeback to disk
+	on the server, we can have a request for a dynamic page hadnled entirely ocne through nginx.
+	(This description needs be clarified, but hopefully you get the point).
