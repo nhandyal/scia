@@ -14,7 +14,8 @@ var mongoose = require("mongoose"),
 	dbTransactionCallback = function(err, dbRes, callback){
 		var transactionSummary = {
 			err : err,
-			dbRes : dbRes
+			dbRes : dbRes,
+			save : false
 		};
 		return callback(null, transactionSummary);
 	}

@@ -2,7 +2,7 @@ var nodemailer = require("nodemailer");
 
 var transport = nodemailer.createTransport("SMTP", {
 	host : "smtp-mail.outlook.com",
-	port : 25,
+	port : 587,
 	auth : {
 		user : "no_reply@uscscia.com",
 		pass : "UePKxUp9zGXdeYaf"

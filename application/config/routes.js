@@ -1,6 +1,8 @@
 var url = require("url"),
 	register = require("../controllers/register"),
-	auth = require("../controllers/auth");
+	auth = require("../controllers/auth"),
+	events = require("../controllers/events"),
+	checkout = require("../controllers/checkout");
 
 module.exports = function(app, transport){
 	
@@ -19,7 +21,13 @@ module.exports = function(app, transport){
 	});
 
 	app.get('/d1/events*', function(req, res){
-		res.send("d1 events: "+req.url);
+		var query = url.parse(req.url, true).query;
+		if(query.eventID) {
+			events.getEventDetails(req,res,query);
+		}
+		else {
+			events.getEvents(req,res,query);
+		}
 	});
 
 	app.post('/d1/register*', function(req, res){
@@ -61,5 +69,9 @@ module.exports = function(app, transport){
 
 	app.get("/d1/testEJS", function(req, res){
 		res.render("email-templates/2col-1-2");
+	});
+
+	app.post('/d1/checkout*', function(req, res){
+		checkout.submitPayment(req,res,transport);
 	});
 }

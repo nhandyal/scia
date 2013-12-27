@@ -59,8 +59,10 @@ module.exports.verifyDbWrites = function(results){
 			for(var innerKey in results){
 				if(!results[innerKey].err){
 					// successfull transaction
-					results[innerKey].dbRes.remove();
-					console.log("removing "+innerKey+" from the db");
+					if(!results[innerKey].save){
+						results[innerKey].dbRes.remove();
+						console.log("removing "+innerKey+" from the db");
+					}
 				}
 			}
 			return results[key].err.code;

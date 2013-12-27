@@ -54,3 +54,24 @@ module.exports._10050 = {
 	short_message : "Login failed",
 	long_message : "Email/password combination was not correct"
 };
+/***************** Checkout Response Codes *****************/
+module.exports._10100 = {
+	status : 10100,
+	short_message : "Invalid cart",
+	long_message : "A user attempted to purchase multiple tickets for the same event"
+};
+module.exports._10101 = {
+	status : 10101,
+	short_message : "Invalid user",
+	long_message : "The user information did not match the card number"
+};
+module.exports._10102 = {
+	status : 10102,
+	short_message : "Invalid credit card",
+	long_message : "The credit card failed Stripe's authentication"
+};
+module.exports._10103 = {
+	status : 10103,
+	short_message : "Incorrect total",
+	long_message : "The total does not match the total calculated from the database"
+};
