@@ -61,3 +61,18 @@
 	really reduced load on node, we've just added layers of complexity and extra network overhead. Therefore if we perform an html writeback to disk
 	on the server, we can have a request for a dynamic page hadnled entirely ocne through nginx.
 	(This description needs be clarified, but hopefully you get the point).
+
+
+10/8/13
+	requires : update to user model
+	Updated registration model
+		| why ?
+			- simplicity of user registration, buying membership, and joinging and leaving board
+
+	When a user registers on the site they are automatically given a card_id number. This value is sequentially updated and is handled
+	by the system. Once a user buys membership on the site, the member flag is toggled on in the user entry and signifies that this user
+	is a member. This means we can now have non-sequential card_ids for members (an issue for the physical member cards). When new cards
+	are ordered, a print out of member card_ids can be obtained and those cards can be ordered. 
+
+	Now when a user joins board the board flag will be toggled true and the board_id field will be set to valid 900 series board card_id.
+	Their old card_id is still present so once they leave board, they can continue to use their old member cards (less waste and code overhead).

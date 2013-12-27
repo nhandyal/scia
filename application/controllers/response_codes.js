@@ -48,12 +48,20 @@ module.exports._10004 = {
  	long_message : "Account already verified"
 };
 
-/***************** Login Response Codes *****************/
+
+/***************** Auth Response Codes *****************/
 module.exports._10050 = {
 	status : 10050,
 	short_message : "Login failed",
 	long_message : "Email/password combination was not correct"
 };
+module.exports._10051 = {
+	status : 10051,
+	short_message : "Invalid password",
+	long_message : "Current password does not match current password on file"
+};
+
+
 /***************** Checkout Response Codes *****************/
 module.exports._10100 = {
 	status : 10100,
