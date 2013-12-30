@@ -1,8 +1,7 @@
 /*
  * Nikhil Handyal
  * 9/5/13
- * Copyright: uscscia
- * Mongoose Configuaration Module, does not define mongoose models which are located in application/models
+ * Mongoose Configuaration Module. Does not define mongoose schemas which are located in application/schemas
  */
 
 module.exports = function(){
