@@ -12,7 +12,7 @@ var response_codes = require('./response_codes');
  *		response - response data for this request
  */
 module.exports.sendResponse = function(res, response){
-	res.send(JSON.stringify(response));
+	res.json(response);
 };
 
 
@@ -27,7 +27,8 @@ module.exports.sendError = function(res, error_code){
 	var error_key = "_"+error_code,
 		error_object = response_codes[error_key];
 	
-	res.send(error_object);
+
+	res.json(error_object);
 };
 
 
@@ -37,7 +38,8 @@ module.exports.sendError = function(res, error_code){
  * @param res - node response object for this request
  */
 module.exports.sendSuccess = function(res){
-	res.send(response_codes["_0"]);
+	
+	res.json(response_codes["_0"]);
 };
 
 /**

@@ -7,7 +7,6 @@
 
 var	express = require("express"),
  	config = require("./config"),
- 	passport = require('passport'),
 
  	
  	app = express();
@@ -25,7 +24,5 @@ app.use(express.compress());
 app.use(express.bodyParser());
 app.use(express.cookieParser());
 app.use(express.session({ secret: 'gandalf the white' }));
-app.use(passport.initialize());
-app.use(passport.session());
 
 module.exports = app;
