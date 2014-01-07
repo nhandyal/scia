@@ -9,12 +9,23 @@ var mongoose = require("mongoose"),
 	User = mongoose.model("user"),
 	CIC = mongoose.model("CIC"),
 	Url = require("url"),
-	Utils = require("./utils"),
+	Utils = require(global.application_root + "utils/utils"),
+	AuthToken = require(global.application_root + "utils/authToken");
 
 	getNextCICIndex = function(callback) {
 		CIC.findOneAndUpdate({}, {$inc: { CICIndex: 1 }}, {}, callback);
 	};
 
+
+module.exports.login = function(req, res) {
+
+	User.findOne({email : "nhandyal@gmail.com"}, function(err, user) {
+		//var authToken = AuthToken.getNewAuthToken(res, user);
+
+		Utils.sendSuccess(res);
+	});
+
+}
 
 
 /**
@@ -45,11 +56,11 @@ module.exports.create = function(req, res, transport) {
 			return Utils.processMongooseError(err, res);
 		}
 
-		Utils.log("new user created: " + user.f_name + " " + user.l_name + " - " + user._id);
+		Utils.log("new user created: " + user.f_name + " " + user.l_name + " - " + user.id);
 
 		var vrf_email_data = {
 			title : "USC SCIA verification email",
-			vrf_link : "https://www.uscscia.com/d1/user/verify/"+user._id,
+			vrf_link : "https://www.uscscia.com/d1/user/verify/"+user.id,
 			email : req.body.email
 		};
 
@@ -70,7 +81,7 @@ module.exports.create = function(req, res, transport) {
 		});
 
 		var responseData = {
-			id 		: user._id
+			id 		: user.id
 		};
 
 		Utils.sendSuccess(res, responseData);
@@ -113,7 +124,7 @@ module.exports.resendVerificationEmail = function(req, res, transport) {
 
 		var vrf_email_data = {
 			title : "USC SCIA verification email",
-			vrf_link : "https://www.uscscia.com/d1/user/verify?"+user._id,
+			vrf_link : "https://www.uscscia.com/d1/user/verify?"+user.id,
 			email : req.body.email
 		};
 

@@ -54,15 +54,14 @@ module.exports = function(app, transport){
 		user.verifyUser(req, res);
 	});
 
-	app.post('d1/user/resendVerificationEmail', function(req, res) {
+	app.post('/d1/user/resendVerificationEmail', function(req, res) {
 		user.resendVerificationEmail(req, res, transport);
 	});
-	
-	app.post('/d1/login*', function(req, res){
-		// /d1/register
-		auth.login(req, res);
-	});
 
+	app.get('/d1/d2/test', function(req, res) {
+		user.login(req, res);
+	});
+	
 	app.post('/d1/logout*', function(req, res){
 		auth.logout(req, res);
 	});
@@ -73,9 +72,5 @@ module.exports = function(app, transport){
 
 	app.post('/d1/checkout*', function(req, res){
 		checkout.submitPayment(req,res,transport);
-	});
-
-	app.get('/d1/test', function(req, res){
-		user.test(req, res);
 	});
 }

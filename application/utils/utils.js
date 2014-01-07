@@ -2,7 +2,7 @@
  * Utility functions widely used across many controllers
  */
 
-var response_codes = {};
+var response_codes = require('./response_codes');
 
 /**
  * JSON encodes the response parameter and sends it with the response associated with this call
@@ -79,6 +79,6 @@ module.exports.processMongooseError = function(err, res) {
  * 
  * @param msg - message to log
  */
- module.exports.log = function(msg){
- 		console.log(msg);
- }
+module.exports.log = function(msg){
+ 	console.log(msg);
+}

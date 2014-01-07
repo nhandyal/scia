@@ -16,7 +16,7 @@
 
 
 global.env = "test";
-global.root = __dirname + "/";
+global.application_root = __dirname + "/application/";
 
 require("./application/config/mongoose")();
 

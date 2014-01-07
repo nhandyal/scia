@@ -19,7 +19,7 @@ module.exports = function() {
 	});
 
 	// load all the mongoose schemas
-	var schama_path =  root + 'application/schemas',
+	var schama_path =  application_root + 'schemas',
 		schema_files = fs.readdirSync(schama_path);
 
 
