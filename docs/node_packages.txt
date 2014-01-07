@@ -11,5 +11,3 @@
 "fbgraph" : "0.2.7",		// facebook
 "async" : "0.2.9",			// https://github.com/caolan/async
 "stripe" : "1.3.0",			// payments
-"passport" : "0.1.17",		// authentication : https://github.com/jaredhanson/passport
-"passport-local" : "0.1.6"	// authentication : https://github.com/jaredhanson/passport-local

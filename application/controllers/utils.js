@@ -7,9 +7,8 @@ var response_codes = require('./response_codes');
 /**
  * JSON encodes the response parameter and sends it with the response associated with this call
  * 
- * Parameters
- * 		res - node response object for this request
- *		response - response data for this request
+ * @param res - node response object for this request
+ * @param response - response data for this request
  */
 module.exports.sendResponse = function(res, response){
 	res.json(response);
@@ -19,9 +18,8 @@ module.exports.sendResponse = function(res, response){
 /**
  * Returns the error messge associated with error_code
  * 
- * Parameters
- * 		res - node response object for this request
- *		error_code - error code to send to client
+ * @res - node response object for this request
+ * @error_code - error code to send to client
  */
 module.exports.sendError = function(res, error_code){
 	var error_key = "_"+error_code,
@@ -33,13 +31,18 @@ module.exports.sendError = function(res, error_code){
 
 
 /**
- * Send a success message to the client
+ * Send a success message to the client. Adds the response data under the data section of the response.
+ * The data field is optional and can be omitted.
  * 
- * @param res - node response object for this request
+ * @param res - node response object for this request.
+ * @param data - data to be returned to the client.
  */
-module.exports.sendSuccess = function(res){
+module.exports.sendSuccess = function(res, data){
 	
-	res.json(response_codes["_0"]);
+	var response = response_codes["_0"];
+	response.data = data;
+
+	res.json(response);
 };
 
 /**
@@ -50,16 +53,24 @@ module.exports.sendSuccess = function(res){
  */
 module.exports.processMongooseError = function(err, res) {
     if(err.name == "MongoError") {
+		
 		if(err.code == 11000) {
 			return this.sendError(res, 10001);
 		}
 		else {
-			// something else happend
 			this.log(err);
 			return this.sendError(res, 10501);
 		}
+
     } else if(err.name == "ValidationError") {
+
         return this.sendError(res, 10400);
+
+    } else {
+
+    	this.log(err);
+		return this.sendError(res, 10500);
+
     }
 }
 

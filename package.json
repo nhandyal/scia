@@ -15,5 +15,8 @@
 		"superagent"		: "0.15.7",
 		"expect.js"			: "0.2.0",
 		"async" 			: "0.2.9"
+	},
+	"scripts": {
+		"test"		: "make test"
 	}
 }

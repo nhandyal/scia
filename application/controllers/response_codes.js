@@ -10,11 +10,23 @@ module.exports._0 = {
 
 
 /**************** General API Errors ***************************/
+module.exports._10400 = {
+ 	status : 10400,
+ 	short_message : "Bad Request",
+ 	long_message : "The request cannot be fulfilled due to bad syntax"
+};
+
 module.exports._10401 = {
 	status : 10401,
 	short_message : "Service Denied",
 	long_message : "The request needs user authentication"
 };
+
+module.exports._10402 = {
+	status : 10402,
+ 	short_message : "No matching records",
+ 	long_message : "No matching records were found with the given details"
+}
 
 module.exports._10500 = {
 	status : 10500,
@@ -26,18 +38,6 @@ module.exports._10501 = {
 	status : 10501,
  	short_message : "Internal Error",
  	long_message : "DB Error"
-}
-
-module.exports._10400 = {
- 	status : 10400,
- 	short_message : "Bad Request",
- 	long_message : "The request cannot be fulfilled due to bad syntax"
-};
-
-module.exports._10401 = {
-	status : 10401,
- 	short_message : "No matching records",
- 	long_message : "No matching records were found with the given details"
 }
 
 /**************** Registration Response Codes ******************/

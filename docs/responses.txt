@@ -1,14 +1,11 @@
 {
 	status : int,
 	short_message : String,
-	long_message : String
+	long_message : String,
+	[data] : [object] 
 }
 
-
-
-
-
-
+*the data field may or may not exist depending on the request
 
 
 
