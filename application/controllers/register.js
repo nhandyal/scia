@@ -6,7 +6,7 @@ var mongoose = require("mongoose"),
 	utils = require("./utils"),
 	auth = require("./auth"),
 
-	getNextCICIndex = function(callback){
+	getNextCICIndex = function(callback) {
 		CIC.findOneAndUpdate({}, {$inc: { CICIndex: 1 }}, {}, callback);
 	},
 

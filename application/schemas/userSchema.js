@@ -28,8 +28,10 @@ var userSchema = mongoose.Schema(
 			required			: '{PATH} is required'
 		},
 
-		member_id 				: String 
-		vrf_code 				: String,
+		member_id 			: {
+			type				: Number,
+			default				: 000000
+		},
 		
 		is_verified 		: {
 			type				: Boolean,
@@ -58,19 +60,32 @@ var userSchema = mongoose.Schema(
 
 
 		// profile elements
-		major 					: String,
-		year 					: String,
+		major 				: {
+			type				: String,
+			default				: "n/a"
+		},
+		
+		year 				: {
+			type				: String,
+			default				: "n/a"
+		},
 		
 		
 		// mobile elements
-		mobile_number 			: Number,
+		mobile_number 		: {
+			type				: Number,
+			default				: "0000000000"
+		},
 
 		text_notify			: {
 			type				: Boolean,
 			default				: false
 		},
 
-		carrier : 				String,
+		carrier  			: {
+			type				: String,
+			default				: "n/a"
+		},
 
 		is_phone_verified 	: {
 			type				: Boolean,
@@ -86,7 +101,7 @@ var userSchema = mongoose.Schema(
 );
 
 /**
- * Sets the password for this user model instance. If the input password is null or
+ * Asynchronously sets the password for this user model instance. If the input password is null or
  * an empty string an invalid password error is thrown. If there is an existing
  * password, it will be overwritten.
  * 
@@ -103,18 +118,40 @@ userSchema.methods.setPassword = function(password) {
 
 	bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
 		if(err) {
-			throw new Error("Error generating bcrypt salt value");
+			throw new Error("Error generating salt");
 		} 
 
-		bcrypt.hash(user.password, salt, function(err, hash) {
+		bcrypt.hash(password, salt, function(err, hash) {
 			if(err) {
-				throw new Error("Error generating bcrypt hash");
+				throw new Error("Error generating pwd hash");
 			}
 			
+			console.log(hash);
 			user.password = hash;
 			return;
 		});
 	});
+};
+
+/**
+ * Synchronously sets the password for this user model instance. If the input password is null or
+ * an empty string an invalid password error is thrown. If there is an existing
+ * password, it will be overwritten.
+ * 
+ * @param password - new password to store for this user.
+ */
+userSchema.methods.setPasswordSync = function(password) {
+	
+	// ensure we have a valid input
+	if(password == null || password == "") {
+		throw new Error("Invalid password");
+	}
+
+	var user = this,
+		salt = bcrypt.genSaltSync(SALT_WORK_FACTOR),
+		hash = bcrypt.hashSync(password, salt);
+
+		user.pwd = hash;
 };
 
 /**
@@ -123,7 +160,7 @@ userSchema.methods.setPassword = function(password) {
  * @param candidatePassword - the password that is to be verified against the current password.
  * @param callback - must accept (err, isMatch).
  */
-userSchema.methods.comparePassword = function(candidatePassword, callback) {
+userSchema.methods.verifyPassword = function(candidatePassword, callback) {
 	bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
 		if(err) {
 			return callback(err);	

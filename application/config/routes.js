@@ -3,6 +3,7 @@ var url = require("url"),
 	auth = require("../controllers/auth"),
 	events = require("../controllers/events"),
 	checkout = require("../controllers/checkout");
+	user = require("../controllers/user");
 
 module.exports = function(app, transport){
 	
@@ -28,6 +29,18 @@ module.exports = function(app, transport){
 		else {
 			events.getEvents(req,res,query);
 		}
+	});
+
+	app.post('/d1/user/create', function(req, res) {
+		user.create(req, res, transport);
+	});
+
+	app.get('/d1/user/verify*', function(req, res) {
+		user.verifyUser(req, res);
+	});
+
+	app.post('d1/user/resendVerificationEmail', function(req, res) {
+		user.resendVerificationEmail(req, res, transport);
 	});
 
 	app.post('/d1/register*', function(req, res){
@@ -73,5 +86,9 @@ module.exports = function(app, transport){
 
 	app.post('/d1/checkout*', function(req, res){
 		checkout.submitPayment(req,res,transport);
+	});
+
+	app.get('/d1/test', function(req, res){
+		user.test(req, res);
 	});
 }

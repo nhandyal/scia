@@ -30,7 +30,6 @@
 				width: 600px;
 				margin: auto;
 			}
-
 			.main-content{
 				margin:0px;
 				padding:30px 15px 30px 15px;
@@ -38,20 +37,19 @@
 				font-size:0.85em;
 				color: rgb(130,60,60);
 			}
-			#conf-code-container{
-				width: 400px;
-				margin: auto;
-				padding: 0px 15px 15px 15px;
+			#conf_link{
+				text-decoration: none;
 			}
-			.conf-element{
-				padding: 20px 15px 20px 15px;
-				margin: 0px 5px 0px 5px;
-				float: left;
-				font:12px/18px "Courier";
-				font-size: 2em;
-				border: 2px solid rgb(220, 220, 240);
+			#conf-code-container{
+				width: 200px;
+				margin: auto;
+				padding: 15px;
 				border-radius: 13px;
-				color: rgb(255,100,100);
+				text-align: center;
+				letter-spacing: 2px;
+				color: white;
+				background: rgb(255,100,100);
+
 			}
 			.board-signature{
 				color: rgb(232, 92, 65);
@@ -88,21 +86,13 @@
 	            <br/>
 	            <br/>
 	            We're very excited that you decided to become a part of the south indian community here at USC and we can't wait to begin showing you what SCIA is all about.
-	            Before we can get started we need to verify your account. Simply log into your scia account at <a href="https://www.uscscia.com">uscscia.com</a> and enter the
-	            conformation code provided below.
+	            Before we can get started we need you to verify your account. Simply click the confirm account icon below or right click the icon, and select open link.
         	</div>
-        	<div id="conf-code-container">
-        		<% 
-        			for(var i=0; i<vrf_token.length; i++) { 
-        		%>
-   						<div class="conf-element">
-   							<%= vrf_token[i] %>
-   						</div>
-   				<% 
-   					}
-   				%>
-        		<div class="clear"></div>
-        	</div>
+        	<a id="conf_link" href="'"<% vrf_link %>"'">
+        		<div id="conf-code-container">
+        			Confirm Account
+        		</div>
+        	</a>
         	<div class="main-content">
         		Cheers, <br/>
         		<span class="board-signature">SCIA Executive Board</span>

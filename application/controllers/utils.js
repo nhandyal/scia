@@ -4,7 +4,7 @@
 
 var response_codes = require('./response_codes');
 
-/*
+/**
  * JSON encodes the response parameter and sends it with the response associated with this call
  * 
  * Parameters
@@ -16,7 +16,7 @@ module.exports.sendResponse = function(res, response){
 };
 
 
-/*
+/**
  * Returns the error messge associated with error_code
  * 
  * Parameters
@@ -31,53 +31,41 @@ module.exports.sendError = function(res, error_code){
 };
 
 
-/*
- * Returns a success message
+/**
+ * Send a success message to the client
  * 
- * Parameters
- * 		res - node response object for this request
+ * @param res - node response object for this request
  */
 module.exports.sendSuccess = function(res){
 	res.send(response_codes["_0"]);
 };
 
-
-/* 
- * Given a set of db transactions verifies that all transactions were committed successfully.
- * If a transaction failed, removes the successfull transactions from the db.
+/**
+ * Given a mongoose error, process the error and sends the appropriate error message to the client.
  * 
- * Parameters
- * 		results - object containing the transaction key and db result (if failed, db result must = false)
- *
- * Returns 
- *		Boolean - true is all transactions successfull, false otherwise
+ * @param err - the mongoose error to be processed
+ * @param res - an express response object
  */
-module.exports.verifyDbWrites = function(results){
-	for(var key in results){
-		if(results[key].err){
-			// first failed transaction
-			for(var innerKey in results){
-				if(!results[innerKey].err){
-					// successfull transaction
-					if(!results[innerKey].save){
-						results[innerKey].dbRes.remove();
-						console.log("removing "+innerKey+" from the db");
-					}
-				}
-			}
-			return results[key].err.code;
+module.exports.processMongooseError = function(err, res) {
+    if(err.name == "MongoError") {
+		if(err.code == 11000) {
+			return this.sendError(res, 10001);
 		}
-	}
-	return 0;
-};
+		else {
+			// something else happend
+			this.log(err);
+			return this.sendError(res, 10501);
+		}
+    } else if(err.name == "ValidationError") {
+        return this.sendError(res, 10400);
+    }
+}
 
-/*
- * Utiity function that wraps system logging. In a development enviornment, surpresses log statements
+/**
+ * Utiity function that wraps system logging.
  * 
- * Parameters
- * 		msg - message to log
+ * @param msg - message to log
  */
  module.exports.log = function(msg){
- 	if(global.env == "test")
  		console.log(msg);
  }
