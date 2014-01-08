@@ -52,13 +52,14 @@ module.exports._10001 = {
 module.exports._10050 = {
 	status : 10050,
 	short_message : "Login failed",
-	long_message : "Email/password combination was not correct"
+	long_message : "Supplied password is incorrect"
 };
+
 module.exports._10051 = {
 	status : 10051,
-	short_message : "Invalid password",
-	long_message : "Current password does not match current password on file"
-};
+	short_message : "Unverified Account",
+	long_message : "This account must be verified first. Check your email for further instructions"
+}
 
 
 /***************** Checkout Response Codes *****************/

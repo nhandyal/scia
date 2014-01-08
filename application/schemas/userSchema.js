@@ -161,7 +161,7 @@ userSchema.methods.setPasswordSync = function(password) {
  * @param callback - must accept (err, isMatch).
  */
 userSchema.methods.verifyPassword = function(candidatePassword, callback) {
-	bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
+	bcrypt.compare(candidatePassword, this.pwd, function(err, isMatch) {
 		if(err) {
 			return callback(err);	
 		}

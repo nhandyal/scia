@@ -5,25 +5,42 @@
  * Express Configuaration Module
  */
 
-var	express = require("express"),
- 	config = require("./config"),
- 	AuthToken = require(global.application_root + 'utils/authToken'),
+module.exports = function(transport) {
 
+	var	fs = require("fs"),
+		express = require("express"),
+	 	config = require("./config"),
+	 	AuthToken = require(global.application_root + 'utils/authToken'),
+
+	 	
+	 	app = express();
  	
- 	app = express();
- 	
 
-app.enable('trust proxy');
+	app.enable('trust proxy');
 
-// set render engine to ejs
-// we are using ejs to render html emails only
-app.set('views', config.root + '/views/');
-app.set('view engine', 'ejs');
+	// set render engine to ejs
+	// we are using ejs to render html emails only
+	app.set('views', config.root + '/views/');
+	app.set('view engine', 'ejs');
 
-// parsing the http header contents for POST requests
-app.use(express.compress());
-app.use(express.bodyParser());
-app.use(express.cookieParser("gandalf the white"));
-app.use(AuthToken.parseAuthToken);
+	// parsing the http header contents for POST requests
+	app.use(express.compress());
+	app.use(express.bodyParser());
+	app.use(express.cookieParser("gandalf the white"));
+	app.use(AuthToken.parseAuthToken);
 
-module.exports = app;
+
+	// load the routes
+	var route_path =  global.application_root + 'routes',
+		route_files = fs.readdirSync(route_path);
+
+
+	route_files.forEach(function (file) {
+	    require(route_path+'/'+file)(app, transport);
+	});
+	console.log("Express routes loaded");
+
+	
+	return app;
+
+};

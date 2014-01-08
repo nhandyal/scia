@@ -16,15 +16,51 @@ var mongoose = require("mongoose"),
 		CIC.findOneAndUpdate({}, {$inc: { CICIndex: 1 }}, {}, callback);
 	};
 
-
+/**
+ * Login a user.
+ */
 module.exports.login = function(req, res) {
 
-	User.findOne({email : "nhandyal@gmail.com"}, function(err, user) {
-		//var authToken = AuthToken.getNewAuthToken(res, user);
+	var email = req.body.email,
+		pwd = req.body.pwd;
 
-		Utils.sendSuccess(res);
+	User.findOne({email : email}, function(err, user) {
+		
+		if(err) {
+			return Utils.processMongooseError(err, res);
+		}
+
+		// ensure the user is verified
+		if(!user.is_verified) {
+			return Utils.sendError(res, 10051);
+		}
+
+		user.verifyPassword(pwd, function(err, authenticated) { 
+			if(err) {
+				console.log(err);
+				return Utils.sendError(res, 10500);
+			}
+
+			if(!authenticated) {
+				return Utils.sendError(res, 10050);
+			}
+
+			AuthToken.getNewAuthToken(res, user);
+			return Utils.sendSuccess(res);
+
+		});
+
 	});
 
+}; // end module login
+
+
+/**
+ * log a user out
+ */
+module.exports.logout = function(req, res) {
+	AuthToken.clearAuthToken(res);
+	return Utils.sendSuccess(res);
 }
 
 

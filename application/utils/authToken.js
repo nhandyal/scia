@@ -108,12 +108,12 @@ module.exports.getNewAuthToken = function(res, user) {
  * req.id = sid, otherwise req.loggedIn = false, req.id = null.
  */
 module.exports.parseAuthToken = function(req, res, next) {
-
+	
 	for(var index in serverKeys) {
 		var key = serverKeys[index];
 		if(req.cookies[key] === undefined) {
 			clearToken(res);
-			next();
+			return next();
 		}
 	}
 

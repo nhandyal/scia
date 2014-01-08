@@ -1,10 +1,10 @@
 var url = require("url"),
-	auth = require("../controllers/auth"),
-	events = require("../controllers/events"),
-	checkout = require("../controllers/checkout");
-	user = require("../controllers/user");
+	auth = require(global.application_root + "controllers/auth"),
+	events = require(global.application_root + "controllers/events"),
+	checkout = require(global.application_root + "controllers/checkout");
+	
 
-module.exports = function(app, transport){
+module.exports = function(app, transport) {
 	
 
 	app.get("/d1/testCardCommit", function(req, res){
@@ -14,7 +14,6 @@ module.exports = function(app, transport){
 	app.get("/d1/testCardRet", function(req, res){
 		
 	});
-
 
 	/**
 	 * User details can be queried using a user id or member id. A user id is a 24 character alphanumeric
@@ -41,29 +40,6 @@ module.exports = function(app, transport){
 		else {
 			events.getEvents(req,res,query);
 		}
-	});
-
-	/****** USER ******/
-	//app.get('/d1/user/*',)
-
-	app.post('/d1/user/create', function(req, res) {
-		user.create(req, res, transport);
-	});
-
-	app.get('^/d1/user/verify/[A-Za-z0-9]{24}', function(req, res) {
-		user.verifyUser(req, res);
-	});
-
-	app.post('/d1/user/resendVerificationEmail', function(req, res) {
-		user.resendVerificationEmail(req, res, transport);
-	});
-
-	app.get('/d1/d2/test', function(req, res) {
-		user.login(req, res);
-	});
-	
-	app.post('/d1/logout*', function(req, res){
-		auth.logout(req, res);
 	});
 
 	app.get("/d1/testEJS", function(req, res){
