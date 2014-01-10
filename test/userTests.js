@@ -5,56 +5,69 @@
  * Test suite for the user controller
  */
 
+
+
 var request = require('superagent'),
 	expect = require('expect.js'),
-	userID = "";
+	Utils = require(__dirname + "/utils/utils"),
 
+	test_user = {
+		f_name : "Test",
+		l_name : "User",
+		email : "nhandyal@gmail.com",
+		pwd : "test_password"
+	};
 
 describe('Create a new user', function() {
+
 	it("should return status 0", function(done) {
 		request.post('http://127.0.0.1:8000/d1/user/create')
-		.send("f_name=Nikhil")
-		.send("l_name=Handyal")
-		.send("email=nhandyal@gmail.com")
-		.send("pwd=abcdefg")
-		.end(function(res){
+		.send("f_name=" + test_user.f_name)
+		.send("l_name=" + test_user.l_name)
+		.send("email=" + test_user.email)
+		.send("pwd=" + test_user.pwd)
+		.end(function(res) {
 
 			expect(res).to.exist;
 			expect(res.body.status).to.be(0);
 			expect(res.body.data.id).to.exist;
 
-			userID = res.body.data.id;
+			test_user.id = res.body.data.id;
 
 			done();
 
 		});
 	});
+
 });
 
+
 describe('Create a user with a duplicate email', function() {
+	
 	it("should return status 10001", function(done) {
 		request.post('http://127.0.0.1:8000/d1/user/create')
-		.send("f_name=Nikhil")
-		.send("l_name=Handyal")
-		.send("email=nhandyal@gmail.com")
-		.send("pwd=abcdefg")
+		.send("f_name=" + test_user.f_name)
+		.send("l_name=" + test_user.l_name)
+		.send("email=" + test_user.email)
+		.send("pwd=" + test_user.pwd)
 		.end(function(res){
 
 			expect(res).to.exist;
 			expect(res.body.status).to.be(10001);
 			
 			done();
-
 		});
-	})
+
+	});
 });
+
 
 describe('Create a user with an invalid password', function() {
 	it("should return status 10400", function(done) {
 		request.post('http://127.0.0.1:8000/d1/user/create')
-		.send("f_name=Nikhil")
-		.send("l_name=Handyal")
-		.send("email=nhandyal@gmail.com")
+		.send("f_name=" + test_user.f_name)
+		.send("l_name=" + test_user.l_name)
+		.send("email=" + test_user.email)
 		.send("pwd=")
 		.end(function(res){
 
@@ -67,9 +80,10 @@ describe('Create a user with an invalid password', function() {
 	})
 });
 
-describe('Attempt to verify a user ', function() {
+
+describe('Verify a user with an invlid vrf_link', function() {
 	
-	it("with an invalid vrf_link should return status 10402", function(done) {
+	it("should return a status 10402", function(done) {
 		request.get('http://127.0.0.1:8000/d1/user/verify/52cb919cj37151770e000001').end(function(res) {
 
 			expect(res).to.exist;
@@ -79,16 +93,74 @@ describe('Attempt to verify a user ', function() {
 
 		});
 	});
+});
 
-	it("with a valid vrf_link should return status 0", function(done) {
-		request.get('http://127.0.0.1:8000/d1/user/verify/'+userID).end(function(res) {
+
+describe("login a user with an UNVERIFIED account", function() {
+
+	it("should return a status 10051", function(done) {
+		request.post('http://127.0.0.1:8000/d1/user/login')
+		.send("email=" + test_user.email)
+		.send("pwd=" + test_user.pwd)
+		.end(function(res) {
 
 			expect(res).to.exist;
-			expect(res.body.status).to.be(10402);
+			expect(res.body.status).to.be(10051);
+			
+			done();
+
+		});
+	});
+});
+
+
+describe('Verify a user with a valid vrf_link', function() {
+
+	it("should return a status 0", function(done) {
+		request.get('http://127.0.0.1:8000/d1/user/verify/' + test_user.id).end(function(res) {
+
+			expect(res).to.exist;
+			expect(res.body.status).to.be(0);
+			
+			done();
+
+		});
+	});
+});
+
+
+describe("login a user with a VERIFIED account", function() {
+
+	it("should return a status 10050 with a wrong pwd", function(done) {
+		request.post('http://127.0.0.1:8000/d1/user/login')
+		.send("email=" + test_user.email)
+		.send("pwd=wrong_pwd")
+		.end(function(res) {
+
+			expect(res).to.exist;
+			expect(res.body.status).to.be(10050);
+
 			
 			done();
 
 		});
 	});
 
+	it("should return a status 0 with the right pwd and an auth token", function(done) {
+		request.post('http://127.0.0.1:8000/d1/user/login')
+		.send("email=" + test_user.email)
+		.send("pwd=" + test_user.pwd)
+		.end(function(res) {
+
+			expect(res).to.exist;
+			expect(res.body.status).to.be(0);
+			var cookies = Utils.parseCookie(res.headers['set-cookie']);
+
+			expect(cookies.sid.value == test_user.id);
+			
+			done();
+
+		});
+	});
 });
+

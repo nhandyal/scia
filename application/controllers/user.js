@@ -21,6 +21,7 @@ var mongoose = require("mongoose"),
  */
 module.exports.login = function(req, res) {
 
+	
 	var email = req.body.email,
 		pwd = req.body.pwd;
 
@@ -88,6 +89,7 @@ module.exports.create = function(req, res, transport) {
 	}
 	
 	user.save(function(err, user) {
+		
 		if(err) {
 			return Utils.processMongooseError(err, res);
 		}
@@ -120,7 +122,7 @@ module.exports.create = function(req, res, transport) {
 			id 		: user.id
 		};
 
-		Utils.sendSuccess(res, responseData);
+		Utils.sendSuccess(res, responseData, true);
 
 	}); // end user.save
 }; // end module create

@@ -25,7 +25,6 @@ module.exports.sendError = function(res, error_code){
 	var error_key = "_"+error_code,
 		error_object = response_codes[error_key];
 	
-
 	res.json(error_object);
 };
 
@@ -37,7 +36,7 @@ module.exports.sendError = function(res, error_code){
  * @param res - node response object for this request.
  * @param data - data to be returned to the client.
  */
-module.exports.sendSuccess = function(res, data){
+module.exports.sendSuccess = function(res, data, print){
 	
 	var response = response_codes["_0"];
 	response.data = data;
@@ -52,6 +51,7 @@ module.exports.sendSuccess = function(res, data){
  * @param res - an express response object
  */
 module.exports.processMongooseError = function(err, res) {
+
     if(err.name == "MongoError") {
 		
 		if(err.code == 11000) {
@@ -70,7 +70,6 @@ module.exports.processMongooseError = function(err, res) {
 
     	this.log(err);
 		return this.sendError(res, 10500);
-
     }
 }
 

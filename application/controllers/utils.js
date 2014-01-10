@@ -37,7 +37,7 @@ module.exports.sendError = function(res, error_code){
  * @param res - node response object for this request.
  * @param data - data to be returned to the client.
  */
-module.exports.sendSuccess = function(res, data){
+module.exports.sendSuccess = function(res, data, msg){
 	
 	var response = response_codes["_0"];
 	response.data = data;

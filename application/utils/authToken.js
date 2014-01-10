@@ -5,16 +5,16 @@ var Crypto = require("crypto"),
 
 	clientOptions = {
 		httpOnly : false,
-		secure : false,
+		secure : false
 	},
 
 	serverOptions = {
 		httpOnly : true,
-		secure : (global.env == "test" ? false : true)
+		secure : (global.env == "test" ? false : true),
 	},
 
 	authToken = function(res, user) {
-
+		
 		/* 
 		 * Client Accesible Values
 		 *
