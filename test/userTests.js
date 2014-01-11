@@ -164,3 +164,90 @@ describe("login a user with a VERIFIED account", function() {
 	});
 });
 
+describe("Reset a user password", function() {
+
+	var reset_token = null;
+
+	describe("Request a recover link", function() {
+		it("should return a status 0 with the reset token", function(done) {
+			request.get("http://127.0.0.1:8000/d1/user/recover")
+			.query({
+				email : test_user.email,
+				cb : "http://www.google.com"
+			})
+			.end(function(res) {
+
+				expect(res.body.status).to.be(0);
+				expect(res.body.data.token).to.be.a('number');
+
+				reset_token = res.body.data.token;
+
+
+				done();
+
+			});
+		});
+	});
+
+	describe("Set a new password using a broken recover token", function() {
+		it("should return a status of 10052", function(done) {
+			request.post("http://127.0.0.1:8000/d1/user/reset")
+			.type("form")
+			.send({
+				id : test_user.id,
+				token : Date.now(),
+				new_pwd : "broken_pwd"
+			})
+			.end(function(res) {
+
+				expect(res.body.status).to.be(10052);
+
+				done();
+			});
+		});
+	});
+
+	test_user.pwd = "new_pwd";
+
+	describe("Set a new password using a valid recover token", function() {
+		it("should return a status of 0", function(done) {
+			request.post("http://127.0.0.1:8000/d1/user/reset")
+			.type("form")
+			.send({
+				id : test_user.id,
+				token : reset_token,
+				new_pwd : test_user.pwd
+			})
+			.end(function(res) {
+
+				expect(res.body.status).to.be(0);
+
+				done();
+			});
+		});
+	});
+
+
+
+	describe("Login with a new password", function() {
+		it("should return a status 0 and an auth token", function(done) {
+		request.post('http://127.0.0.1:8000/d1/user/login')
+		.type("form")
+		.send({
+			email : test_user.email,
+			pwd : test_user.pwd
+		})
+		.end(function(res) {
+
+			expect(res).to.exist;
+			expect(res.body.status).to.be(0);
+			var cookies = Utils.parseCookie(res.headers['set-cookie']);
+
+			expect(cookies.sid.value == test_user.id);
+						
+			done();
+
+		});
+	});
+	});
+});

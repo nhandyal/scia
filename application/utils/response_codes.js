@@ -61,6 +61,12 @@ module.exports._10051 = {
 	long_message : "This account must be verified first. Check your email for further instructions"
 }
 
+module.exports._10052 = {
+	status : 10052,
+	short_message : "Invalid reset token",
+	long_message : "The supplied reset token is invalid, request another."
+}
+
 
 /***************** Checkout Response Codes *****************/
 module.exports._10100 = {

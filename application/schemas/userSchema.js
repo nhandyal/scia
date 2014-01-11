@@ -92,6 +92,8 @@ var userSchema = mongoose.Schema(
 			default				: false
 		},
 
+		//  password reset elements
+		pwd_reset_token			: Number
 		
 	},
 
