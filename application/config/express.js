@@ -1,25 +1,46 @@
 /*
  * Nikhil Handyal
  * 9/5/13
- * Copyright: uscscia
+ *
  * Express Configuaration Module
  */
 
-var	express = require("express"),
- 	config = require("./config"),
- 	app = express();
+module.exports = function(transport) {
+
+	var	fs = require("fs"),
+		express = require("express"),
+	 	config = require("./config"),
+	 	AuthToken = require(global.application_root + 'utils/authToken'),
+
+	 	
+	 	app = express();
+ 	
+
+	app.enable('trust proxy');
+
+	// set render engine to ejs
+	// we are using ejs to render html emails only
+	app.set('views', config.root + '/views/');
+	app.set('view engine', 'ejs');
+
+	// parsing the http header contents for POST requests
+	app.use(express.compress());
+	app.use(express.bodyParser());
+	app.use(express.cookieParser("gandalf the white"));
+	app.use(AuthToken.parseAuthToken);
 
 
-app.enable('trust proxy');
+	// load the routes
+	var route_path =  global.application_root + 'routes',
+		route_files = fs.readdirSync(route_path);
 
-// set render engine to ejs
-// we are using ejs to render html emails only
-app.set('views', config.root + '/views/');
-app.set('view engine', 'ejs');
 
-// parsing the http header contents for POST requests
-app.use(express.compress());
-app.use(express.bodyParser());
-app.use(express.cookieParser("Secret")); 	//Need to update the cookie parser to use a secret key, but for now this works
+	route_files.forEach(function (file) {
+	    require(route_path+'/'+file)(app, transport);
+	});
+	console.log("Express routes loaded");
 
-module.exports = app;
+	
+	return app;
+
+};

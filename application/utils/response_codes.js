@@ -10,42 +10,41 @@ module.exports._0 = {
 
 
 /**************** General API Errors ***************************/
-module.exports._10403 = {
-	status : 10403,
-	short_message : "Service restricted",
-	long_message : "Must be logged in to access this service"
+module.exports._10400 = {
+ 	status : 10400,
+ 	short_message : "Bad Request",
+ 	long_message : "The request cannot be fulfilled due to bad syntax"
 };
+
+module.exports._10401 = {
+	status : 10401,
+	short_message : "Service Denied",
+	long_message : "The request needs user authentication"
+};
+
+module.exports._10402 = {
+	status : 10402,
+ 	short_message : "No matching records",
+ 	long_message : "No matching records were found with the given details"
+}
 
 module.exports._10500 = {
 	status : 10500,
 	short_message : "Internal Error",
-	long_message : "Internal Error"
+	long_message : "The request was unsuccessful due to an unexpected condition encountered by the server"
 };
 
+module.exports._10501 = {
+	status : 10501,
+ 	short_message : "Internal Error",
+ 	long_message : "DB Error"
+}
 
 /**************** Registration Response Codes ******************/
 module.exports._10001 = {
  	status : 10001,
- 	short_message : "DB error",
- 	long_message : "Unable to stage new user to database. DB Error"
-};
-
-module.exports._10002 = {
- 	status : 10002,
  	short_message : "Duplicate entry",
  	long_message : "Email is already registered"
-};
-
-module.exports._10003 = {
- 	status : 10003,
- 	short_message : "Verify failed",
- 	long_message : "Supplied vrf_token does not match token on file"
-};
-
-module.exports._10004 = {
- 	status : 10004,
- 	short_message : "Account already verified",
- 	long_message : "Account already verified"
 };
 
 
@@ -53,13 +52,20 @@ module.exports._10004 = {
 module.exports._10050 = {
 	status : 10050,
 	short_message : "Login failed",
-	long_message : "Email/password combination was not correct"
+	long_message : "Supplied password is incorrect"
 };
+
 module.exports._10051 = {
 	status : 10051,
-	short_message : "Invalid password",
-	long_message : "Current password does not match current password on file"
-};
+	short_message : "Unverified Account",
+	long_message : "This account must be verified first. Check your email for further instructions"
+}
+
+module.exports._10052 = {
+	status : 10052,
+	short_message : "Invalid reset token",
+	long_message : "The supplied reset token is invalid, request another."
+}
 
 
 /***************** Checkout Response Codes *****************/

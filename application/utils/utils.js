@@ -2,7 +2,7 @@
  * Utility functions widely used across many controllers
  */
 
-var response_codes = {};
+var response_codes = require('./response_codes');
 
 /**
  * JSON encodes the response parameter and sends it with the response associated with this call
@@ -25,7 +25,6 @@ module.exports.sendError = function(res, error_code){
 	var error_key = "_"+error_code,
 		error_object = response_codes[error_key];
 	
-
 	res.json(error_object);
 };
 
@@ -37,7 +36,7 @@ module.exports.sendError = function(res, error_code){
  * @param res - node response object for this request.
  * @param data - data to be returned to the client.
  */
-module.exports.sendSuccess = function(res, data, msg){
+module.exports.sendSuccess = function(res, data) {
 	
 	var response = response_codes["_0"];
 	response.data = data;
@@ -52,6 +51,7 @@ module.exports.sendSuccess = function(res, data, msg){
  * @param res - an express response object
  */
 module.exports.processMongooseError = function(err, res) {
+
     if(err.name == "MongoError") {
 		
 		if(err.code == 11000) {
@@ -70,7 +70,6 @@ module.exports.processMongooseError = function(err, res) {
 
     	this.log(err);
 		return this.sendError(res, 10500);
-
     }
 }
 
@@ -79,6 +78,6 @@ module.exports.processMongooseError = function(err, res) {
  * 
  * @param msg - message to log
  */
- module.exports.log = function(msg){
- 		console.log(msg);
- }
+module.exports.log = function(msg){
+ 	console.log(msg);
+}

@@ -1,13 +1,14 @@
 /*
  * Nikhil Handyal
  * 9/5/13
- * Copyright: uscscia
- * Mongoose Configuaration Module, does not define mongoose models which are located in application/models
+ * Mongoose Configuaration Module. Loads all schemas located in application/schemas
  */
 
-module.exports = function(){
-	var mongoose = require("mongoose"),
- 	dbInstance = require("./config")[global.env].db;
+module.exports = function() {
+	
+	var fs = require("fs"),
+		mongoose = require("mongoose"),
+ 		dbInstance = require("./config")[global.env].db;
 
 	mongoose.connect(dbInstance);
 	var db = mongoose.connection;
@@ -16,8 +17,16 @@ module.exports = function(){
 	db.once("open", function callback() {
 		console.log("Connected to: " + dbInstance);
 	});
-}
+
+	// load all the mongoose schemas
+	var schama_path =  global.application_root + 'schemas',
+		schema_files = fs.readdirSync(schama_path);
 
 
+	schema_files.forEach(function (file) {
+	    require(schama_path+'/'+file);
+	});
+	
+	console.log("mongoose schemas loaded")
 
-
+};
