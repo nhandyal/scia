@@ -1,5 +1,4 @@
 var url = require("url"),
-	auth = require(global.application_root + "controllers/auth"),
 	events = require(global.application_root + "controllers/events"),
 	checkout = require(global.application_root + "controllers/checkout");
 	
