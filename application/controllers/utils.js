@@ -4,6 +4,7 @@
 
 var response_codes = {};
 
+
 /**
  * JSON encodes the response parameter and sends it with the response associated with this call
  * 

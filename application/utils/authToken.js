@@ -1,4 +1,5 @@
 var Crypto = require("crypto"),
+	Utils = require(global.application_root + "utils/utils"),
 	signatureKeys = ["id", "f_name", "l_name"],
 	serverKeys = 	["sid", "sig"],
 	authTokenKeys = ["id", "f_name", "l_name", "sid", "sig"],
@@ -123,5 +124,15 @@ module.exports.parseAuthToken = function(req, res, next) {
 
 	return next();
 };
+
+module.exports.authorizeRequest = function(req, res, next) {
+	
+	if(!req.loggedIn) {
+		return Utils.sendError(res, 10401);
+	}
+
+	return next();
+
+}
 
 

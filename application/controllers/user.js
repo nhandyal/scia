@@ -194,64 +194,6 @@ module.exports.resendVerificationEmail = function(req, res, transport) {
 
 
 /*
- * Reset the password for a user.
- *
- * @param req.body.id 		- id of user that needs a password reset
- * @param req.body.token 	- credential token authenticating this reset request
- * @param req.body.new_pwd 	- new user password
- */
-module.exports.reset = function(req, res) {
-
-	var userDbID = req.body.id,
-		token = req.body.token,
-		new_pwd = req.body.new_pwd;
-
-	User.findById(userDbID, function(err, user) {
-
-		if(err) {
-			return Utils.processMongooseError(err, res);
-		}
-
-		if(!user) {
-			return Utils.sendError(res, 10402);
-		}
-
-		// check that the link is legitamte
-		if(token != user.pwd_reset_token) {
-			return Utils.sendError(res, 10052);	
-		}
-
-		// check that the link is still valid
-		var expirationDate = parseInt(token) + (1000 * 60 * 60);
-		if(Date.now() >= expirationDate) {
-			// this link has expired
-			console.log("link has expired");
-			return Utils.sendError(res, 10052);
-		}
-
-		// all clear, set the password to new_pwd
-		try {
-			user.setPasswordSync(new_pwd);
-		} catch(err){
-			// password cannot be used
-			return Utils.sendError(res, 10400);
-		}
-
-		user.save(function(err) {
-			if(err) {
-				console.log(err);
-				console.trace();
-				return Utils.sendError(res, 10501);
-			}
-
-			return Utils.sendSuccess(res);
-		});
-
-	});
-	
-};
-
-/*
  * Initiate an account recovery process for a user. This is used if the user
  * has forgotten their login credentials and needs to change their password.
  * 
@@ -315,6 +257,65 @@ module.exports.recover = function(req, res, transport, queryParams) {
 };
 
 
+/*
+ * Reset the password for a user.
+ *
+ * @param req.body.id 		- id of user that needs a password reset
+ * @param req.body.token 	- credential token authenticating this reset request
+ * @param req.body.new_pwd 	- new user password
+ */
+module.exports.reset = function(req, res) {
+
+	var userDbID = req.body.id,
+		token = req.body.token,
+		new_pwd = req.body.new_pwd;
+
+	User.findById(userDbID, function(err, user) {
+
+		if(err) {
+			return Utils.processMongooseError(err, res);
+		}
+
+		if(!user) {
+			return Utils.sendError(res, 10402);
+		}
+
+		// check that the link is legitamte
+		if(token != user.pwd_reset_token) {
+			return Utils.sendError(res, 10052);	
+		}
+
+		// check that the link is still valid
+		var expirationDate = parseInt(token) + (1000 * 60 * 60);
+		if(Date.now() >= expirationDate) {
+			// this link has expired
+			console.log("link has expired");
+			return Utils.sendError(res, 10052);
+		}
+
+		// all clear, set the password to new_pwd
+		try {
+			user.setPasswordSync(new_pwd);
+		} catch(err){
+			// password cannot be used
+			return Utils.sendError(res, 10400);
+		}
+
+		user.save(function(err) {
+			if(err) {
+				console.log(err);
+				console.trace();
+				return Utils.sendError(res, 10501);
+			}
+
+			return Utils.sendSuccess(res);
+		});
+
+	});
+	
+};
+
+
 /**
  * Verify an already created user
  * 
@@ -329,7 +330,6 @@ module.exports.verifyUser = function(req, res, userDbID) {
 			return Utils.processMongooseError(err, res);
 		}
 
-		
 		if(!user) {
 			return Utils.sendError(res, 10402);
 		}
@@ -342,5 +342,6 @@ module.exports.verifyUser = function(req, res, userDbID) {
 
 			return Utils.sendSuccess(res);
 		})
+		
 	});
 }
