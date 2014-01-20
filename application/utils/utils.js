@@ -2,7 +2,8 @@
  * Utility functions widely used across many controllers
  */
 
-var response_codes = require('./response_codes');
+var assert = require('assert'),
+	response_codes = require('./response_codes');
 
 /**
  * JSON encodes the response parameter and sends it with the response associated with this call
@@ -80,4 +81,14 @@ module.exports.processMongooseError = function(err, res) {
  */
 module.exports.log = function(msg){
  	console.log(msg);
+}
+
+/**
+ * Assert that the input is numeric
+ */
+module.exports.assertIsNumeric = function(res, data) {
+	
+	if ( !(typeof data === 'number' && data%1 == 0) ) {
+		return this.sendError(res, 10400);
+	}
 }
