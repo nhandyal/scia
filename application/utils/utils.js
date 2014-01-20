@@ -86,9 +86,6 @@ module.exports.log = function(msg){
 /**
  * Assert that the input is numeric
  */
-module.exports.assertIsNumeric = function(res, data) {
-	
-	if ( !(typeof data === 'number' && data%1 == 0) ) {
-		return this.sendError(res, 10400);
-	}
+module.exports.isNumeric = function(data) {
+	return (typeof data === 'number' && data%1 == 0);
 }

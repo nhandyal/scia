@@ -1,6 +1,8 @@
 var mongoose = require("mongoose"),
 	bcrypt = require("bcrypt"),
-	SALT_WORK_FACTOR = 10;
+	SALT_WORK_FACTOR = 10,
+	StripeWrapper = require(global.application_root + "utils/stripeWrapper"),
+	Utils = require(global.application_root + "utils/utils");
 
 // create user schema
 var userSchema = mongoose.Schema(
@@ -92,8 +94,11 @@ var userSchema = mongoose.Schema(
 			default				: false
 		},
 
-		//  password reset elements
-		pwd_reset_token			: Number
+		// password reset elements
+		pwd_reset_token			: Number,
+
+		// stripe customer profile
+		stripe_customer_profile : {},
 		
 	},
 
@@ -169,6 +174,38 @@ userSchema.methods.verifyPassword = function(candidatePassword, callback) {
 		}
 
         callback(null, isMatch);
+	});
+};
+
+
+userSchema.methods.addCard = function(res, stripeToken, onCompleteCallback) {
+	
+	var user = this;
+	StripeWrapper.addCard(res, user.stripe_customer_profile.id, stripeToken, function(customerProfile) {
+		user.stripe_customer_profile = customerProfile;
+		user.markModified('stripe_customer_profile');
+
+		return onCompleteCallback(user);
+	});
+
+};
+
+
+userSchema.statics.createNewUser = function(res, userData, onCompleteCallback) {
+	var user = new this(userData);
+	
+	try {
+		user.setPasswordSync(userData.pwd);
+	}catch(err) {
+		// password cannot be used
+		return Utils.sendError(res, 10400);
+	}
+
+	StripeWrapper.createCustomerProfile(res, "Customer profile for " + user.email, function(customerProfile){
+		user.stripe_customer_profile = customerProfile;
+		user.markModified('stripe_customer_profile');
+
+		return onCompleteCallback(user);
 	});
 }
 

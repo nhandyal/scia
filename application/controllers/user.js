@@ -9,11 +9,33 @@ var mongoose = require("mongoose"),
 	User = mongoose.model("user"),
 	CIC = mongoose.model("CIC"),
 	Utils = require(global.application_root + "utils/utils"),
-	AuthToken = require(global.application_root + "utils/authToken");
+	AuthToken = require(global.application_root + "utils/authToken"),
 
 	getNextCICIndex = function(callback) {
 		CIC.findOneAndUpdate({}, {$inc: { CICIndex: 1 }}, {}, callback);
 	};
+
+
+module.exports.test = function(req, res) {
+
+	var user = User.findOne({email : "nhandyal@gmail.com"}, function(err, user) {
+		if(err) {
+			return Utils.processMongooseError(err, res);
+		}
+
+		user.addCard(res, req.body.stripeToken, function(user) {
+			user.save(function(err, user) {
+				if(err) {
+					console.log(err);
+					return Utils.sendError(res, 10501);
+				}
+
+				return Utils.sendSuccess(res);
+			});
+		});
+	});
+
+}
 
 
 /**
@@ -27,55 +49,49 @@ module.exports.create = function(req, res, transport) {
 	var userData = {
 			f_name : req.body.f_name,
 			l_name : req.body.l_name,
-			email : req.body.email
-		},
-
-		user = new User(userData);
-
-	try {
-		user.setPasswordSync(req.body.pwd);
-	} catch(err){
-		// password cannot be used
-		return Utils.sendError(res, 10400);
-	}
-	
-	user.save(function(err, user) {
-		
-		if(err) {
-			return Utils.processMongooseError(err, res);
-		}
-
-		Utils.log("new user created: " + user.f_name + " " + user.l_name + " - " + user.id);
-
-		var vrf_email_data = {
-			title : "USC SCIA verification email",
-			vrf_link : "https://www.uscscia.com/d1/user/verify/"+user.id,
-			email : req.body.email
+			email : req.body.email,
+			pwd : req.body.pwd
 		};
 
-		res.render('email-templates/vrf_email', vrf_email_data, function(err, renderedHtml) {
-			transport.sendMail({
-				from : "no_reply@uscscia.com",
-				to : vrf_email_data.email,
-				subject : vrf_email_data.title,
-				html : renderedHtml,
-				charset : "UTF-8"
-			}, function(error, response){
-				if(error){
-					Utils.log("Error delivering message to " + vrf_email_data.email);
-				}else{
-					Utils.log("Message sent: " + response.message);
-				}
+	User.createNewUser(res, userData, function(user) {
+
+		user.save(function(err, user) {
+			
+			if(err) {
+				return Utils.processMongooseError(err, res);
+			}
+
+			Utils.log("new user created: " + user.f_name + " " + user.l_name + " - " + user.id);
+
+			var vrf_email_data = {
+				title : "USC SCIA verification email",
+				vrf_link : "https://www.uscscia.com/d1/user/verify/"+user.id,
+				email : req.body.email
+			};
+
+			res.render('email-templates/vrf_email', vrf_email_data, function(err, renderedHtml) {
+				transport.sendMail({
+					from : "no_reply@uscscia.com",
+					to : vrf_email_data.email,
+					subject : vrf_email_data.title,
+					html : renderedHtml,
+					charset : "UTF-8"
+				}, function(error, response){
+					if(error){
+						Utils.log("Error delivering message to " + vrf_email_data.email);
+					}else{
+						Utils.log("Message sent: " + response.message);
+					}
+				});
 			});
-		});
 
-		var responseData = {
-			id 		: user.id
-		};
+			var responseData = {
+				id 		: user.id
+			};
 
-		return Utils.sendSuccess(res, responseData);
-
-	}); // end user.save
+			return Utils.sendSuccess(res, responseData);
+		}); // end user.save
+	}); // end User.createNewUser()
 }; // end module create
 
 
