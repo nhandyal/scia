@@ -1,8 +1,7 @@
 var mongoose = require("mongoose"),
 	bcrypt = require("bcrypt"),
 	SALT_WORK_FACTOR = 10,
-	StripeWrapper = require(global.application_root + "utils/stripeWrapper"),
-	Utils = require(global.application_root + "utils/utils");
+	StripeHandler = require(global.application_root + "modules/StripeHandler");
 
 // create user schema
 var userSchema = mongoose.Schema(
@@ -177,43 +176,66 @@ userSchema.methods.verifyPassword = function(candidatePassword, callback) {
 	});
 };
 
-
-userSchema.methods.addCard = function(res, stripeToken, onCompleteCallback) {
+/**
+ * onCompleteCallback must accept err, user
+ */
+userSchema.methods.addCard = function(stripeToken, onCompleteCallback) {
 
 	var user = this;
-	StripeWrapper.addCard(res, user.stripe_customer_profile.id, stripeToken, function(customerProfile) {
+	StripeHandler.addCard(user.stripe_customer_profile.id, stripeToken, function(err, customerProfile) {
 		
+		if(err) {
+			return onCompleteCallback(err, null);
+		}
+
 		user.stripe_customer_profile = customerProfile;
 		user.markModified('stripe_customer_profile');
-		user.save(function(err, user) {
-			
-			if(err) {
-				return Utils.processMongooseError(res, err);
-			}
-			
-			return onCompleteCallback(user);	
-		});
-		
+
+		return onCompleteCallback(null, user);
+
 	});
 
 };
 
-
-userSchema.statics.createNewUser = function(res, userData, onCompleteCallback) {
+/**
+ * onCompleteCallback must accept err, user
+ */
+userSchema.statics.createNewUser = function(userData, onCompleteCallback) {
+	
 	var user = new this(userData);
 	
 	try {
 		user.setPasswordSync(userData.pwd);
 	}catch(err) {
 		// password cannot be used
-		return Utils.sendError(res, 10400);
+		return onCompleteCallback({
+			scia_errcode : 10400
+		}, null);
 	}
 
-	StripeWrapper.createCustomerProfile(res, "Customer profile for " + user.email, function(customerProfile){
-		user.stripe_customer_profile = customerProfile;
-		user.markModified('stripe_customer_profile');
+	// to ensure we don't create bogus stripe accounts we need to attempt to save the account first to check for a db duplicate
+	user.save(function(err, user) {
 		
-		return onCompleteCallback(user);
+		if(err) {
+			return onCompleteCallback(err, null);
+		}
+
+		StripeHandler.createCustomerProfile({
+			email : user.email,
+			description : "Profile for " + user.email
+		}, function(err, customerProfile) {
+		
+			if(err) {
+				return onCompleteCallback(err, null);
+			}
+
+			user.stripe_customer_profile = customerProfile;
+			user.markModified('stripe_customer_profile');
+
+			return onCompleteCallback(null, user);
+
+		});
+
 	});
 }
 

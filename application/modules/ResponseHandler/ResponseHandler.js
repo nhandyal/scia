@@ -52,7 +52,7 @@ module.exports.sendSuccess = function(res, data) {
  * @param err - the mongoose error to be processed
  * @param res - an express response object
  */
-module.exports.processMongooseError = function(res, err) {
+module.exports.processError = function(res, err) {
 
     if(err.name == "MongoError") {
 		
@@ -60,7 +60,7 @@ module.exports.processMongooseError = function(res, err) {
 			return this.sendError(res, 10001);
 		}
 		else {
-			this.log(err);
+			console.log(err);
 			return this.sendError(res, 10501);
 		}
 
@@ -68,9 +68,15 @@ module.exports.processMongooseError = function(res, err) {
 
         return this.sendError(res, 10400);
 
-    } else {
+    } else if(err.scia_errcode) {
+    	
+    	return this.sendError(res, err.scia_errcode);
 
-    	this.log(err);
+    }
+    else {
+    	console.log("2");
+    	//console.log(err);
 		return this.sendError(res, 10500);
+
     }
 };

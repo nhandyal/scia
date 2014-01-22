@@ -32,11 +32,16 @@ module.exports.create = function(req, res, transport) {
 			pwd : req.body.pwd
 		};
 
-	User.createNewUser(res, userData, function(user) {
+	User.createNewUser(userData, function(err, user) {
+
+		if(err) {
+			return ResponseHandler.processError(res, err);
+		}
+
 		user.save(function(err, user) {
 			
 			if(err) {
-				return ResponseHandler.processMongooseError(res, err);
+				return ResponseHandler.processError(res, err);
 			}
 
 			console.log("new user created: " + user.f_name + " " + user.l_name + " - " + user.id);
@@ -74,7 +79,7 @@ module.exports.login = function(req, res) {
 	User.findOne({email : email}, function(err, user) {
 		
 		if(err) {
-			return ResponseHandler.processMongooseError(err, res);
+			return ResponseHandler.processError(res, err);
 		}
 
 		// ensure the user is verified
@@ -129,7 +134,7 @@ module.exports.resendVerificationEmail = function(req, res, transport) {
 	
 	User.findOne({ email : req.body.email}, function(err, user){
 		if(err) {
-			return ResponseHandler.processMongooseError(err, res);
+			return ResponseHandler.processError(res, err);
 		}
 
 		if(!user) {
@@ -164,7 +169,7 @@ module.exports.recover = function(req, res, transport, queryParams) {
 	User.findOne({email : queryParams.email}, function(err, user) {
 
 		if(err) {
-			return ResponseHandler.processMongooseError(err, res);
+			return ResponseHandler.processError(res, err);
 		}
 
 		if(!user) {
@@ -198,7 +203,7 @@ module.exports.recover = function(req, res, transport, queryParams) {
 			}
 			
 			return ResponseHandler.sendSuccess(res);
-			
+
 		});
 
 	});
@@ -221,7 +226,7 @@ module.exports.reset = function(req, res) {
 	User.findById(userDbID, function(err, user) {
 
 		if(err) {
-			return ResponseHandler.processMongooseError(err, res);
+			return ResponseHandler.processError(res, err);
 		}
 
 		if(!user) {
@@ -275,7 +280,7 @@ module.exports.verifyUser = function(req, res, userDbID) {
 	User.findById(userDbID, function(err, user) {
 
 		if(err) {
-			return ResponseHandler.processMongooseError(err, res);
+			return ResponseHandler.processError(res, err);
 		}
 
 		if(!user) {

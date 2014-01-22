@@ -1,5 +1,4 @@
 var Crypto = require("crypto"),
-	Utils = require(global.application_root + "utils/utils"),
 	signatureKeys = ["id", "f_name", "l_name"],
 	serverKeys = 	["sid", "sig"],
 	authTokenKeys = ["id", "f_name", "l_name", "sid", "sig"],
@@ -133,6 +132,6 @@ module.exports.authorizeRequest = function(req, res, next) {
 
 	return next();
 
-}
+};
 
 
