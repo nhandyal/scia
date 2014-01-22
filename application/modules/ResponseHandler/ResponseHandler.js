@@ -1,9 +1,9 @@
 /*
- * Utility functions widely used across many controllers
+ * 
  */
 
-var assert = require('assert'),
-	response_codes = require('./response_codes');
+var response_codes = require('./ResponseCodes');
+
 
 /**
  * JSON encodes the response parameter and sends it with the response associated with this call
@@ -45,6 +45,7 @@ module.exports.sendSuccess = function(res, data) {
 	res.json(response);
 };
 
+
 /**
  * Given a mongoose error, process the error and sends the appropriate error message to the client.
  * 
@@ -72,20 +73,4 @@ module.exports.processMongooseError = function(res, err) {
     	this.log(err);
 		return this.sendError(res, 10500);
     }
-}
-
-/**
- * Utiity function that wraps system logging.
- * 
- * @param msg - message to log
- */
-module.exports.log = function(msg){
- 	console.log(msg);
-}
-
-/**
- * Assert that the input is numeric
- */
-module.exports.isNumeric = function(data) {
-	return (typeof data === 'number' && data%1 == 0);
-}
+};

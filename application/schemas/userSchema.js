@@ -179,13 +179,21 @@ userSchema.methods.verifyPassword = function(candidatePassword, callback) {
 
 
 userSchema.methods.addCard = function(res, stripeToken, onCompleteCallback) {
-	
+
 	var user = this;
 	StripeWrapper.addCard(res, user.stripe_customer_profile.id, stripeToken, function(customerProfile) {
+		
 		user.stripe_customer_profile = customerProfile;
 		user.markModified('stripe_customer_profile');
-
-		return onCompleteCallback(user);
+		user.save(function(err, user) {
+			
+			if(err) {
+				return Utils.processMongooseError(res, err);
+			}
+			
+			return onCompleteCallback(user);	
+		});
+		
 	});
 
 };
@@ -204,7 +212,7 @@ userSchema.statics.createNewUser = function(res, userData, onCompleteCallback) {
 	StripeWrapper.createCustomerProfile(res, "Customer profile for " + user.email, function(customerProfile){
 		user.stripe_customer_profile = customerProfile;
 		user.markModified('stripe_customer_profile');
-
+		
 		return onCompleteCallback(user);
 	});
 }

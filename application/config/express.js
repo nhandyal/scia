@@ -5,7 +5,7 @@
  * Express Configuaration Module
  */
 
-module.exports = function(transport) {
+module.exports = function() {
 
 	var	fs = require("fs"),
 		express = require("express"),
@@ -36,11 +36,13 @@ module.exports = function(transport) {
 
 
 	route_files.forEach(function (file) {
-	    require(route_path+'/'+file)(app, transport);
+	    require(route_path+'/'+file)(app);
 	});
 	console.log("Express routes loaded");
 
-	
-	return app;
+	app.listen(8000);
+	console.log('Listening on port 8000');
+
+	//return app;
 
 };
