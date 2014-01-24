@@ -1,11 +1,7 @@
-var config = require(global.application_root + "config/config"),
-	Utils = require(application_root + "modules/Utils"),
-	Stripe = require("stripe")(config[global.env].stripe_key);
-
 /**
  * onComplete_callback must accept err, customer
  */
-module.exports.addCard = function(customerID, stripeToken, onComplete_callback) {
+var addCard = function(customerID, stripeToken, onComplete_callback) {
 	
 	Stripe.customers.createCard(
 		customerID,
@@ -32,12 +28,13 @@ module.exports.addCard = function(customerID, stripeToken, onComplete_callback) 
 			}); 
 		}
 	);
-}
+
+};
 
 /**
  * onComplete_callback must accept err, customer
  */
-module.exports.createCustomerProfile = function(profile, onComplete_callback) {
+var createCustomerProfile = function(profile, onComplete_callback) {
 	
 	Stripe.customers.create({
 		email : profile.email,
@@ -55,3 +52,25 @@ module.exports.createCustomerProfile = function(profile, onComplete_callback) {
 	});
 
 };
+
+var methods = {
+		addCard : addCard,
+		createCustomerProfile : createCustomerProfile
+	};
+
+
+
+
+module.exports.attach = function(schema, namespace) {
+
+	var functionsToAttach = {};
+
+	// attach all methods
+	if(methods) {
+		for(var method_name in methods) {
+			functionsToAttach[method_name] = methods[method_name];
+		}
+		schema.methods[namespace] = functionsToAttach;
+	}
+
+}

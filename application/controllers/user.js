@@ -7,8 +7,8 @@
 
 var mongoose = require("mongoose"),
 	User = mongoose.model("user"),
-	NodeMailer = require(application_root + "modules/NodeMailer"),
-	ResponseHandler = require(application_root + "modules/ResponseHandler/ResponseHandler"),
+	NodeMailer = Utils.loadModule("NodeMailer"),
+	ResponseHandler = Utils.loadModule("ResponseHandler"),
 	AuthToken = require(global.application_root + "utils/authToken"),
 	
 
@@ -31,7 +31,7 @@ module.exports.create = function(req, res, transport) {
 			email : req.body.email,
 			pwd : req.body.pwd
 		};
-
+	
 	User.createNewUser(userData, function(err, user) {
 
 		if(err) {

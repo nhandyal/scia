@@ -5,10 +5,12 @@
 
 global.env = "test";
 global.application_root = __dirname + "/application/";
-global.transport = require("./application/config/nodemailer");
+global.transport = require("./application/config/nodemailer.js");
+global.Utils = require("./application/utils/Utils.js");
+global.config = require("./application/config/config.js");
 
-require("./application/config/mongoose")();
-require("./application/config/express")();
+require("./application/config/mongoose.js")();
+require("./application/config/express.js")();
  
 
 //fb = require("./application/lib/fbEventQuery");
