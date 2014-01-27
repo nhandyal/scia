@@ -5,7 +5,6 @@
 
 global.env = "test";
 global.application_root = __dirname + "/application/";
-global.transport = require("./application/config/nodemailer.js");
 global.Utils = require("./application/utils/Utils.js");
 global.config = require("./application/config/config.js");
 

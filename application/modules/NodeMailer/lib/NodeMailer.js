@@ -2,8 +2,22 @@
  *	Module to automatically send emails via nodemailer
  */
 
+var nodemailer = require("nodemailer"),
+	
+	transport = nodemailer.createTransport("SMTP", {
+	
+		host : "smtp-mail.outlook.com",
+		port : 587,
+		auth : {
+			user : "no_reply@uscscia.com",
+			pass : "UePKxUp9zGXdeYaf"
+		},
 
-// the transport variable has been globally defined and is initialized in /application/config/nodemailer.js
+		tls: {ciphers:'TLSv1'}
+
+	});
+
+
 var send = function(res, email, onComplete_callback) {
 
 	res.render(email.template_path, email, function(err, renderedHtml) {
