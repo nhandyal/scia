@@ -70,7 +70,7 @@ var userSchema = mongoose.Schema(
 );
 
 
-var UserAuthPluginOptions = {
+var UserAuthOptions = {
 		paths : {
 			first_name : "f_name",
 			last_name : "l_name",
@@ -79,15 +79,15 @@ var UserAuthPluginOptions = {
 		}
 	},
 
-	StripePluginOptions = {
+	StripeOptions = {
 		stripe_key : config[env].stripe_key
 	};
 
-var UserAuthPlugin = Utils.loadMongoosePlugin("UserAuth"),
-	StripePlugin = Utils.loadMongoosePlugin("Stripe");
+var mpCore = Utils.loadMPCore();
 
-userSchema.plugin(UserAuthPlugin, UserAuthPluginOptions);
-userSchema.plugin(StripePlugin, StripePluginOptions);
+mpCore.prime(userSchema);
+mpCore.loadPlugin(userSchema, "UserAuth", UserAuthOptions);
+mpCore.loadPlugin(userSchema, "Stripe", StripeOptions);
 
 
 /**
@@ -95,46 +95,81 @@ userSchema.plugin(StripePlugin, StripePluginOptions);
  */
 userSchema.statics.createNewUser = function(userData, onCompleteCallback) {
 	
-	var user = new this(userData),
-		model = user.model(user.constructor.modelName)
+	/*
+	model = user.model(user.constructor.modelName)
 		schema = userSchema;
+		*/
 
+
+	var user = new this(userData);
+	
+	/*
+	user.invoke("UserAuth.isUnique").withArgs(userData, function(err, user){
+		console.log(lol);
+	});
+	*/
 
 	try {
-		user.UserAuth.setPasswordSync(userData.pwd);
+		user.invoke("UserAuth.set").withArgs(userData);
+	}catch(err) {
+		console.log(err);
+		return onCompleteCallback({
+			scia_errcode : 10400
+		}, null);
+	}
+
+	user.invoke("UserAuth.isUnique").withArgs(function(err, unique) {
+		if(err) {
+			return onCompleteCallback(err, null);
+		}
+
+		if(unique) {
+			user.invoke("Stripe.createCustomerProfile").withArgs({
+				email : userData.email,
+				description : "Profile for " + userData.email
+			}, function(err) {
+				if(err) {
+					return onCompleteCallback(err, null);
+				}
+
+				return onCompleteCallback(null, user);
+			});
+		}else {
+			return onCompleteCallback(null, user);
+		}
+	});
+
+	/*
+	try {
+		user.UserAuth.set(userData);
 	}catch(err) {
 		// password cannot be used
 		return onCompleteCallback({
 			scia_errcode : 10400
 		}, null);
 	}
+	
 
-	model.count({email : userData.email}, function(err, count) {
-		if(count > 0) {
-			return onCompleteCallback({
-				scia_errcode : 10001
-			}, null);
+	user.UserAuth.isUnique(function(err, unique) {
+		
+		if(err) {
+			return onCompleteCallback(err, null);
 		}
 
 		user.Stripe.createCustomerProfile({
-			email : user.email,
-			description : "Profile for " + user.email,
-			model : user
-		}, function(err, customerProfile) {
+			email : userData.email,
+			description : "Profile for " + userData.email,
+		}, function(err) {
 		
 			if(err) {
 				return onCompleteCallback(err, null);
 			}
 
-			user.stripe_customer_profile = customerProfile;
-			user.markModified('stripe_customer_profile');
-
 			return onCompleteCallback(null, user);
 
 		});
-
 	});
-
+	*/
 };
 
 mongoose.model("user", userSchema);

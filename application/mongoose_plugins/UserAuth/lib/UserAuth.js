@@ -2,9 +2,8 @@
  *
  */
 
-var bcrypt = require("bcrypt"),
-	SALT_WORK_FACTOR = 10,
-	settings = require("./settings.js");
+
+var settings = require("./settings.js");
 
 /**
  *	options : {
@@ -29,7 +28,10 @@ var bcrypt = require("bcrypt"),
  		
  		if(options.paths) { 		
 	 		if(options.paths[path]) {
-	 			paths[path].path_ref = options.paths[path];
+	 			var mappedPath_ref = options.paths[path];
+	 			paths[path].path_ref = mappedPath_ref;
+	 			paths[mappedPath_ref] = paths[path];
+	 			paths[mappedPath_ref].origin = path;
 	 		}
 	 	}
 
@@ -40,7 +42,8 @@ var bcrypt = require("bcrypt"),
 
  	};
 
+ 	
  	// attach all the plugin functions to the schema
-	require("./functions").attach(schema, namespace);
+	require("./methods").attach(schema, namespace, paths);
 	
 };

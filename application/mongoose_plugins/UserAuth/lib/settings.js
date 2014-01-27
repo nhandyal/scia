@@ -5,7 +5,8 @@ var paths = {
 		options : {
 			type 		: String,
 			required 	: '{PATH} is required'
-		}
+		},
+		origin : "first_name"
 	},
 
 	last_name : {
@@ -13,7 +14,8 @@ var paths = {
 		options : {
 			type 		: String,
 			required 	: '{PATH} is required'
-		}
+		},
+		origin : "last_name"
 	},
 
 	username : {
@@ -22,7 +24,8 @@ var paths = {
 			type 		: String,
 			required 	: '{PATH} is required',
 			unique		: true
-		}
+		},
+		origin : "username"
 	},
 
 	password : {
@@ -30,7 +33,8 @@ var paths = {
 		options : {
 			type 		: String,
 			required 	: '{PATH} is required'
-		}
+		},
+		origin : "password"
 	},
 
 	created : {
@@ -38,7 +42,8 @@ var paths = {
 		options : {
 			type			: Date,
 			default			: Date.now
-		}
+		},
+		origin : "created"
 	},
 
 	last_login : {
@@ -46,7 +51,8 @@ var paths = {
 		options : {
 			type 			: Date,
 			default			: Date.now
-		}
+		},
+		origin : "last_login"
 	}
 
 };

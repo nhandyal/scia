@@ -20,6 +20,15 @@ module.exports.loadMongoosePlugin = function(plugin_name) {
 
 
 /**
+ *
+ */
+module.exports.loadMPCore = function() {
+	var mpCore = require(application_root + "mongoose_plugins/mp_core.js");
+
+	return mpCore;
+}
+
+/**
  * Assert that the input is numeric
  */
 module.exports.isNumeric = function(data) {

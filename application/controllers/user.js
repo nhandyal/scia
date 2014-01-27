@@ -87,6 +87,28 @@ module.exports.login = function(req, res) {
 			return ResponseHandler.sendError(res, 10051);
 		}
 
+		user.invoke("UserAuth.verifyPassword").withArgs(pwd, function(err, authenticated) {
+			if(err) {
+				console.log(err);
+				return ResponseHandler.sendError(res, 10500);
+			}
+
+			if(!authenticated) {
+				return ResponseHandler.sendError(res, 10050);
+			}
+
+			user.update({'last_login' : Date.now()}, function(err) {
+				if(err) {
+					console.log(err);
+					console.trace();
+				}
+			});
+
+			AuthToken.getNewAuthToken(res, user);
+			return ResponseHandler.sendSuccess(res);
+		});
+
+		/*
 		user.verifyPassword(pwd, function(err, authenticated) { 
 			
 			if(err) {
@@ -109,6 +131,7 @@ module.exports.login = function(req, res) {
 			return ResponseHandler.sendSuccess(res);
 
 		});
+		*/
 
 	});
 
@@ -248,7 +271,8 @@ module.exports.reset = function(req, res) {
 
 		// all clear, set the password to new_pwd
 		try {
-			user.setPasswordSync(new_pwd);
+			user.invoke("UserAuth.setPassword").withArgs(new_pwd);
+			//user.setPasswordSync(new_pwd);
 		} catch(err) {
 			// password cannot be used
 			return ResponseHandler.sendError(res, 10400);

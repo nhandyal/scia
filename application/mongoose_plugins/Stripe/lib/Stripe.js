@@ -3,8 +3,7 @@
  */
 
 var Stripe = null,
-	settings = require("./settings"),
-	functions = require("./functions");
+	settings = require("./settings");
 
 
 module.exports = exports = function StripeMongoosePlugin(schema, options) {
@@ -22,7 +21,10 @@ module.exports = exports = function StripeMongoosePlugin(schema, options) {
 		
 		if(options.paths) { 		
 	 		if(options.paths[path]) {
-	 			paths[path].path_ref = options.paths[path];
+	 			var mappedPath_ref = options.paths[path];
+	 			paths[path].path_ref = mappedPath_ref;
+	 			paths[mappedPath_ref] = paths[path];
+	 			paths[mappedPath_ref].origin = path;
 	 		}
 	 	}
 
@@ -34,6 +36,6 @@ module.exports = exports = function StripeMongoosePlugin(schema, options) {
  	};
 
  	// attach all the plugin functions to the schema
-	require("./functions").attach(schema, namespace);
+	require("./methods").attach(schema, namespace);
 	
 };
