@@ -20,6 +20,8 @@ var request = require('superagent'),
 
 describe('Create a new user', function() {
 
+	this.timeout(5000);
+
 	it("should return status 0", function(done) {
 		request.post('http://127.0.0.1:8000/d1/user/create')
 		.send("f_name=" + test_user.f_name)

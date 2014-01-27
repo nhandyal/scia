@@ -124,4 +124,14 @@ module.exports.parseAuthToken = function(req, res, next) {
 	return next();
 };
 
+module.exports.authorizeRequest = function(req, res, next) {
+	
+	if(!req.loggedIn) {
+		return Utils.sendError(res, 10401);
+	}
+
+	return next();
+
+};
+
 

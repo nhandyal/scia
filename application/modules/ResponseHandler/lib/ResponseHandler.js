@@ -1,8 +1,9 @@
 /*
- * Utility functions widely used across many controllers
+ * 
  */
 
-var response_codes = require('./response_codes');
+var response_codes = require('./ResponseCodes');
+
 
 /**
  * JSON encodes the response parameter and sends it with the response associated with this call
@@ -44,13 +45,14 @@ module.exports.sendSuccess = function(res, data) {
 	res.json(response);
 };
 
+
 /**
  * Given a mongoose error, process the error and sends the appropriate error message to the client.
  * 
  * @param err - the mongoose error to be processed
  * @param res - an express response object
  */
-module.exports.processMongooseError = function(err, res) {
+module.exports.processError = function(res, err) {
 
     if(err.name == "MongoError") {
 		
@@ -58,7 +60,7 @@ module.exports.processMongooseError = function(err, res) {
 			return this.sendError(res, 10001);
 		}
 		else {
-			this.log(err);
+			console.log(err);
 			return this.sendError(res, 10501);
 		}
 
@@ -66,18 +68,15 @@ module.exports.processMongooseError = function(err, res) {
 
         return this.sendError(res, 10400);
 
-    } else {
+    } else if(err.scia_errcode) {
+    	
+    	return this.sendError(res, err.scia_errcode);
 
-    	this.log(err);
-		return this.sendError(res, 10500);
     }
-}
+    else {
+    	console.log("2");
+    	//console.log(err);
+		return this.sendError(res, 10500);
 
-/**
- * Utiity function that wraps system logging.
- * 
- * @param msg - message to log
- */
-module.exports.log = function(msg){
- 	console.log(msg);
-}
+    }
+};

@@ -71,9 +71,18 @@ module.exports._10052 = {
 /***************** Checkout Response Codes *****************/
 module.exports._10100 = {
 	status : 10100,
+	short_message : "Transaction Failed",
+	long_message : "The supplied card was declined"
+}
+
+/*
+module.exports._10100 = {
+	status : 10100,
 	short_message : "Invalid cart",
 	long_message : "A user attempted to purchase multiple tickets for the same event"
 };
+*/
+
 module.exports._10101 = {
 	status : 10101,
 	short_message : "Invalid user",
