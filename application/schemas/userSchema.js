@@ -95,20 +95,8 @@ mpCore.loadPlugin(userSchema, "Stripe", StripeOptions);
  */
 userSchema.statics.createNewUser = function(userData, onCompleteCallback) {
 	
-	/*
-	model = user.model(user.constructor.modelName)
-		schema = userSchema;
-		*/
-
-
 	var user = new this(userData);
 	
-	/*
-	user.invoke("UserAuth.isUnique").withArgs(userData, function(err, user){
-		console.log(lol);
-	});
-	*/
-
 	try {
 		user.invoke("UserAuth.set").withArgs(userData);
 	}catch(err) {
@@ -139,37 +127,6 @@ userSchema.statics.createNewUser = function(userData, onCompleteCallback) {
 		}
 	});
 
-	/*
-	try {
-		user.UserAuth.set(userData);
-	}catch(err) {
-		// password cannot be used
-		return onCompleteCallback({
-			scia_errcode : 10400
-		}, null);
-	}
-	
-
-	user.UserAuth.isUnique(function(err, unique) {
-		
-		if(err) {
-			return onCompleteCallback(err, null);
-		}
-
-		user.Stripe.createCustomerProfile({
-			email : userData.email,
-			description : "Profile for " + userData.email,
-		}, function(err) {
-		
-			if(err) {
-				return onCompleteCallback(err, null);
-			}
-
-			return onCompleteCallback(null, user);
-
-		});
-	});
-	*/
 };
 
 mongoose.model("user", userSchema);
