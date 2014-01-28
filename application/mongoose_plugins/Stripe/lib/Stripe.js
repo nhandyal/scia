@@ -36,6 +36,6 @@ module.exports = exports = function StripeMongoosePlugin(schema, options) {
  	};
 
  	// attach all the plugin functions to the schema
-	require("./methods").attach(schema, namespace);
+	require("./methods").attach(schema, namespace, paths, Stripe);
 	
 };

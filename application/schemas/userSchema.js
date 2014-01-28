@@ -86,8 +86,8 @@ var UserAuthOptions = {
 var mpCore = Utils.loadMPCore();
 
 mpCore.prime(userSchema);
-mpCore.loadPlugin(userSchema, "UserAuth", UserAuthOptions);
-mpCore.loadPlugin(userSchema, "Stripe", StripeOptions);
+mpCore.bindPlugin("UAuth").toSchema(userSchema).withOptions(UserAuthOptions);
+mpCore.bindPlugin("Stripe").toSchema(userSchema).withOptions(StripeOptions);
 
 
 /**
@@ -98,15 +98,14 @@ userSchema.statics.createNewUser = function(userData, onCompleteCallback) {
 	var user = new this(userData);
 	
 	try {
-		user.invoke("UserAuth.set").withArgs(userData);
+		user.invoke("UAuth.set").withArgs(userData);
 	}catch(err) {
-		console.log(err);
 		return onCompleteCallback({
 			scia_errcode : 10400
 		}, null);
 	}
 
-	user.invoke("UserAuth.isUnique").withArgs(function(err, unique) {
+	user.invoke("UAuth.isUnique").withArgs(function(err, unique) {
 		if(err) {
 			return onCompleteCallback(err, null);
 		}

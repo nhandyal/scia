@@ -21,12 +21,14 @@ var settings = require("./settings.js");
 
  module.exports = exports = function UserAuthMongoosePlugin(schema, options) {
 
- 	var paths = settings.paths,
+ 	
+ 	var paths = settings.getDefaultPaths(),
  		namespace = options.namespace ? options.namespace : settings.namespace;;
 
+ 	
  	for(var path in paths) {
  		
- 		if(options.paths) { 		
+ 		if(options.paths) {
 	 		if(options.paths[path]) {
 	 			var mappedPath_ref = options.paths[path];
 	 			paths[path].path_ref = mappedPath_ref;
@@ -35,14 +37,16 @@ var settings = require("./settings.js");
 	 		}
 	 	}
 
+	 	
  		var path_ref = paths[path].path_ref,
  			path_options = paths[path].options;
+
 
  		schema.path(path_ref, path_options);
 
  	};
 
- 	
+
  	// attach all the plugin functions to the schema
 	require("./methods").attach(schema, namespace, paths);
 	

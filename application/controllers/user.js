@@ -87,7 +87,7 @@ module.exports.login = function(req, res) {
 			return ResponseHandler.sendError(res, 10051);
 		}
 
-		user.invoke("UserAuth.verifyPassword").withArgs(pwd, function(err, authenticated) {
+		user.invoke("UAuth.verifyPassword").withArgs(pwd, function(err, authenticated) {
 			if(err) {
 				console.log(err);
 				return ResponseHandler.sendError(res, 10500);
@@ -246,7 +246,7 @@ module.exports.reset = function(req, res) {
 
 		// all clear, set the password to new_pwd
 		try {
-			user.invoke("UserAuth.setPassword").withArgs(new_pwd);
+			user.invoke("UAuth.setPassword").withArgs(new_pwd);
 			//user.setPasswordSync(new_pwd);
 		} catch(err) {
 			// password cannot be used

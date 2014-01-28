@@ -1,3 +1,13 @@
+var loadPlugin = function(schema, pluginName, pluginOptions) {
+
+	var pluginPath = "./" + pluginName + "/lib/" + pluginName + ".js",
+		plugin = require(pluginPath);
+
+
+	schema.plugin(plugin, pluginOptions);
+
+}
+
 module.exports.prime = function(schema) {
 
 	schema.methods.invoke = function(targetPath) {
@@ -32,11 +42,19 @@ module.exports.prime = function(schema) {
 	}
 };
 
-module.exports.loadPlugin = function(schema, pluginName, pluginOptions) {
 
-	var pluginPath = "./" + pluginName + "/lib/" + pluginName + ".js",
-		plugin = require(pluginPath);
+module.exports.bindPlugin = function(pluginName) {
+	return {
+		toSchema : function(schema) {
 
-
-	schema.plugin(plugin, pluginOptions);
+			return {
+				withOptions : function(pluginOptions) {
+					loadPlugin(schema, pluginName, pluginOptions);
+				},
+				withDefaultOptions : function() {
+					loadPlugin(schema, pluginName, {});
+				}
+			};
+		}
+	};
 }

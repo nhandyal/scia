@@ -1,0 +1,15 @@
+{
+	"name": "UAuth",
+	"description": "User & authentication mongoose plugin.",
+	"version": "0.0.1",
+	"private": true,
+	"dependencies": {
+		"mongoose" 			: "3.6.19",
+		"mocha"				: "1.16.2",
+		"stripe" 			: "2.3.4",
+		"expect.js"			: "0.2.0"
+	},
+	"scripts": {
+		"test"		: "make test"
+	}
+}
