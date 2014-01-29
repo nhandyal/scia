@@ -40,7 +40,7 @@ var SchemaMethods = function(paths) {
 	 * @param candidatePassword - the password that is to be verified against the current password.
 	 * @param callback - must accept (err, isMatch).
 	 */
-	var verifyPassword = function(candidatePassword, callback) {
+	var login = function(candidatePassword, callback) {
 
 		var storedPassword = get.call(this, "password");
 
@@ -49,7 +49,16 @@ var SchemaMethods = function(paths) {
 				return callback(err);	
 			}
 
-	        callback(null, isMatch);
+			if(isMatch) {
+				this.last_login = Date.now();
+				this.markModified("last_login");
+				this.save(function(err) {
+					console.log(err);
+					console.trace();
+				});
+			}
+
+	        return callback(null, isMatch);
 		});
 	};
 

@@ -96,14 +96,7 @@ module.exports.login = function(req, res) {
 			if(!authenticated) {
 				return ResponseHandler.sendError(res, 10050);
 			}
-
-			user.update({'last_login' : Date.now()}, function(err) {
-				if(err) {
-					console.log(err);
-					console.trace();
-				}
-			});
-
+			
 			AuthToken.getNewAuthToken(res, user);
 			return ResponseHandler.sendSuccess(res);
 		});
