@@ -42,7 +42,9 @@ var SchemaMethods = function(paths) {
 	 */
 	var login = function(candidatePassword, callback) {
 
-		var storedPassword = get.call(this, "password");
+		var user = this,
+			storedPassword = get.call(this, "password");
+
 
 		bcrypt.compare(candidatePassword, storedPassword, function(err, isMatch) {
 			if(err) {
@@ -50,11 +52,13 @@ var SchemaMethods = function(paths) {
 			}
 
 			if(isMatch) {
-				this.last_login = Date.now();
-				this.markModified("last_login");
-				this.save(function(err) {
-					console.log(err);
-					console.trace();
+				user.last_login = Date.now();
+				user.markModified("last_login");
+				user.save(function(err) {
+					if(err) {
+						console.log(err);
+						console.trace();
+					}
 				});
 			}
 
@@ -138,7 +142,7 @@ var SchemaMethods = function(paths) {
 	return {
 		instanceMethods : {
 			setPassword : setPassword,
-			verifyPassword : verifyPassword,
+			login : login,
 			get : get,
 			set : set,
 			isUnique : isUnique

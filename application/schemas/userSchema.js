@@ -95,6 +95,8 @@ mpCore.bindPlugin("Stripe").toSchema(userSchema).withOptions(StripeOptions);
  */
 userSchema.statics.createNewUser = function(userData, onCompleteCallback) {
 	
+	console.log(_model);
+
 	var user = new this(userData);
 	
 	try {
@@ -128,4 +130,4 @@ userSchema.statics.createNewUser = function(userData, onCompleteCallback) {
 
 };
 
-mongoose.model("user", userSchema);
+var _model = mongoose.model("user", userSchema);

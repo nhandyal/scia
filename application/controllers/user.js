@@ -87,7 +87,7 @@ module.exports.login = function(req, res) {
 			return ResponseHandler.sendError(res, 10051);
 		}
 
-		user.invoke("UAuth.verifyPassword").withArgs(pwd, function(err, authenticated) {
+		user.invoke("UAuth.login").withArgs(pwd, function(err, authenticated) {
 			if(err) {
 				console.log(err);
 				return ResponseHandler.sendError(res, 10500);
