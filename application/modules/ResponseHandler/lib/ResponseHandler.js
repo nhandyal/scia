@@ -1,7 +1,7 @@
 /*
  * 
  */
-
+ 
 var response_codes = require('./ResponseCodes');
 
 
@@ -26,6 +26,11 @@ module.exports.sendError = function(res, error_code){
 	var error_key = "_"+error_code,
 		error_object = response_codes[error_key];
 	
+	if(!error_object) {
+		console.log("unknown error code", error_code);
+		console.trace();
+	}
+
 	res.json(error_object);
 };
 
@@ -38,7 +43,6 @@ module.exports.sendError = function(res, error_code){
  * @param data - data to be returned to the client.
  */
 module.exports.sendSuccess = function(res, data) {
-	
 	var response = response_codes["_0"];
 	response.data = data;
 
@@ -53,9 +57,7 @@ module.exports.sendSuccess = function(res, data) {
  * @param res - an express response object
  */
 module.exports.processError = function(res, err) {
-
     if(err.name == "MongoError") {
-		
 		if(err.code == 11000) {
 			return this.sendError(res, 10001);
 		}
@@ -63,20 +65,13 @@ module.exports.processError = function(res, err) {
 			console.log(err);
 			return this.sendError(res, 10501);
 		}
-
     } else if(err.name == "ValidationError") {
-
         return this.sendError(res, 10400);
-
     } else if(err.scia_errcode) {
-    	
     	return this.sendError(res, err.scia_errcode);
-
     }
     else {
     	console.log("2");
-    	//console.log(err);
 		return this.sendError(res, 10500);
-
     }
 };

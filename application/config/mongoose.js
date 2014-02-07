@@ -19,14 +19,14 @@ module.exports = function() {
 	});
 
 	// load all the mongoose schemas
-	var schama_path =  global.application_root + 'schemas',
-		schema_files = fs.readdirSync(schama_path);
+	var model_path =  global.application_root + 'models',
+		model_folders = fs.readdirSync(model_path);
 
 
-	schema_files.forEach(function (file) {
-	    require(schama_path+'/'+file);
+	model_folders.forEach(function (model) {
+	    require(model_path+"/"+model + "/lib/main.js");
 	});
-	
-	console.log("mongoose schemas loaded")
+
+	console.log("mongoose models loaded")
 
 };

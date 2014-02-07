@@ -23,7 +23,7 @@ var mongoose = require("mongoose"),
  * @route - /d1/user/create
  * @failure - 10001, 10400, 10501
  */
-module.exports.create = function(req, res, transport) {
+module.exports.create = function(req, res) {
 
 	var userData = {
 			f_name : req.body.f_name,
@@ -32,7 +32,7 @@ module.exports.create = function(req, res, transport) {
 			pwd : req.body.pwd
 		};
 	
-	User.createNewUser(userData, function(err, user) {
+	User.create(userData, function(err, user) {
 
 		if(err) {
 			return ResponseHandler.processError(res, err);
@@ -71,38 +71,28 @@ module.exports.create = function(req, res, transport) {
  * Login a user.
  */
 module.exports.login = function(req, res) {
-
 	
 	var email = req.body.email,
 		pwd = req.body.pwd;
 
-	User.findOne({email : email}, function(err, user) {
-		
+	User.findOneByEmail(email, function(err, user) {
 		if(err) {
 			return ResponseHandler.processError(res, err);
 		}
 
-		// ensure the user is verified
-		if(!user.is_verified) {
-			return ResponseHandler.sendError(res, 10051);
-		}
-
-		user.invoke("UAuth.login").withArgs(pwd, function(err, authenticated) {
+		user.login(pwd, function(err, authenticated) {
 			if(err) {
-				console.log(err);
-				return ResponseHandler.sendError(res, 10500);
+				return ResponseHandler.processError(res, err);
 			}
 
 			if(!authenticated) {
 				return ResponseHandler.sendError(res, 10050);
 			}
-			
+
 			AuthToken.getNewAuthToken(res, user);
 			return ResponseHandler.sendSuccess(res);
 		});
-		
 	});
-
 }; // end module login
 
 

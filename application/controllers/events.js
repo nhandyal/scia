@@ -1,6 +1,6 @@
 
 var mongoose = require("mongoose"),
-	event = mongoose.model("event"),
+	//event = mongoose.model("event"),
 	utils = require("./utils");
 
 
