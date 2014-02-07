@@ -17,7 +17,7 @@ module.exports.getLatestMembershipPrice = function(onCompleteCallback) {
   				scia_errcode : 10500
   			}, null);
   		}
-
+  		
   		return onCompleteCallback(null, membershipDocument.price);
 	});
 }

@@ -2,70 +2,172 @@
  * METHODS
  */
 
+var processStripeError = function(err) {
+	switch (err.type) {
+  		case 'StripeCardError':
+  			return {
+  				type : "StripeError",
+  				code : 10601,
+  				msg : err.code + " -- " + err.message
+  			};
+			break;
+		case 'StripeInvalidRequestError':
+			console.log(err);
+			console.trace();
+			return {
+				type : "StripeError",
+  				code : 10602,
+  				msg : err.code + " -- " + err.message
+  			};
+			break;
+		default:
+			console.log(err);
+			console.trace();
+			return err;
+			break;
+	}
+};
+
 var SchemaMethods = function(paths, Stripe) {
 
 	/**
-	 * onComplete_callback must accept err, customer
+	 * onCompleteCallback must accept err, customer
+	 * @param params.stripeCardToken - card to add to customer profile
 	 */
-	var addCard = function(customerID, stripeToken, onComplete_callback) {
-		
-		Stripe.customers.createCard(
-			customerID,
-			{card : stripeToken},
-			function(err, card) {
+	var addCard = function(params, onCompleteCallback) {
+		var user = this,
+			profilePath = paths.stripe_customer_profile.path_ref;
+			customerID = user[profilePath].id,
+			stripeCardToken = params.stripeCardToken;
+
+		Stripe.customers.createCard(customerID, {card : stripeCardToken}, function(err, card) {
+			if(err) {
+				return onCompleteCallback(processStripeError(err), null);
+			}
+
+			Stripe.customers.retrieve(customerID, function(err, customer) {
 				if(err) {
-					console.log(err);
-					return onComplete_callback({
-						scia_errcode : 10500
-					}, null);
+					return onCompleteCallback(processStripeError(err), null);
 				}
 
-				Stripe.customers.retrieve(customerID, function(err, customer) {
-					
-					if(err) {
-						console.log(err);
-						return onComplete_callback({
-							scia_errcode : 10500
-						}, null);
-					}
-
-					return onComplete_callback(null, customer);
-
-				}); 
-			}
-		);
-
+				user[profilePath] = customer;
+				user.markModified(profilePath);
+				
+				return onCompleteCallback(null, card);
+			}); 
+		});
 	};
 
 	/**
-	 * onComplete_callback must accept err, customer
+	 * @param params.cardID - id of card to charge, must already be saved to 
+	 							customer profile. This is not a stripe token.
+	 * @param params.amount - amount to charge card (in dollars)
+	 * @param params.description - description of charge
 	 */
-	var createCustomerProfile = function(profile, onComplete_callback) {
+	var chargeExistingCard = function(params, onCompleteCallback) {
+		var user = this,
+			profilePath = paths.stripe_customer_profile.path_ref,
+			customerID = user[profilePath].id;
+
+		// we are passing on the stipe processing fee to our customers
+		// Stripe fees (as of 2/7/14) 2.9% + 30 cents
+		var amount = parseInt(params.amount) * 100; // convert dollars to cents for stripe processing
+		amount *= 1.029;
+		amount += 30;
+		amount = Math.floor(amount);
+
+		if(amount < 0 || (!params.cardID)) {
+			return onCompleteCallback({
+				code : 10400
+			}, null);
+		}
+
+		Stripe.charges.create({
+			amount : amount,
+			currency : "usd",
+			customer : customerID,
+			card : params.cardID,
+			description : params.description
+		}, function(err, charge) {
+			if(err) {
+				return onCompleteCallback(processStripeError(err), null);
+			}
+
+			return onCompleteCallback(null, charge);
+		});
+	};
+
+
+	/**
+	 * @param params.stripeCardTokem - stripe card token
+	 * @param params.amount - amount to charge card (in dollars)
+	 * @param params.description - description of charge
+	 */
+	var chargeNewCard = function(params, onCompleteCallback) {
+		var user = this;
 		
+		// we are passing on the stipe processing fee to our customers
+		// Stripe fees (as of 2/7/14) 2.9% + 30 cents
+		var amount = parseInt(params.amount) * 100; // convert dollars to cents for stripe processing
+		amount *= 1.029;
+		amount = Math.floor(amount);
+
+		if(amount < 0 || (!params.stripeCardToken)) {
+			return onCompleteCallback({
+				code : 10400
+			}, null);
+		}
+
+		Stripe.charges.create({
+			amount : amount,
+			currency : "usd",
+			card : params.stripeCardToken,
+			description : params.description
+		}, function(err, charge) {
+			if(err) {
+				console.log(params);
+				return onCompleteCallback(processStripeError(err), null);
+			}
+
+			return onCompleteCallback(null, charge);
+		});
+	};
+
+
+	/**
+	 * onCompleteCallback must accept err, customer
+	 */
+	var createCustomerProfile = function(params, onCompleteCallback) {
 		var user = this,
 			profilePath = paths.stripe_customer_profile.path_ref;
 
 		Stripe.customers.create({
-			email : profile.email,
-			description : profile.description
+			email : params.email,
+			description : params.description
 		}, function(err, customer) {
 
 			if(err) {
-				console.log(err);
-				return onComplete_callback({
-					scia_errcode : 10500
-				}, null);
+				return onCompleteCallback(processStripeError(err), null);
 			}
 			
-			user.profilePath = customer;
+			user[profilePath] = customer;
 			user.markModified(profilePath);
 
-			return onComplete_callback(null, customer);
+			return onCompleteCallback(null, user);
 		});
 
 	};
 
 	
+	/**
+	 *
+	 */
+	var get = function(field) {
+		var path = paths[field].path_ref;
+		return this[path];
+	};
+
+
 	/**
 	 *
 	 */
@@ -77,11 +179,14 @@ var SchemaMethods = function(paths, Stripe) {
 
 	}
 
+
 	return {
 		instanceMethods : {
 			addCard : addCard,
 			createCustomerProfile : createCustomerProfile,
-			set : set
+			set : set,
+			chargeExistingCard : chargeExistingCard,
+			chargeNewCard : chargeNewCard
 		}
 	};
 }
@@ -94,7 +199,6 @@ module.exports.attach = function(schema, namespace, new_paths, Stripe) {
 	var _schemaMethods = new SchemaMethods(new_paths, Stripe),
 		functionsToAttach = {};
 
-
 	// attach all methods
 	if(_schemaMethods.instanceMethods) {
 		var instanceMethods = _schemaMethods.instanceMethods;
@@ -104,5 +208,4 @@ module.exports.attach = function(schema, namespace, new_paths, Stripe) {
 
 		schema.methods[namespace] = functionsToAttach;
 	}
-	
 };

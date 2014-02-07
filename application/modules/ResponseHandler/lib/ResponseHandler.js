@@ -22,9 +22,13 @@ module.exports.sendResponse = function(res, response){
  * @res - node response object for this request
  * @error_code - error code to send to client
  */
-module.exports.sendError = function(res, error_code){
+module.exports.sendError = function(res, error_code, long_message){
 	var error_key = "_"+error_code,
 		error_object = response_codes[error_key];
+
+	if(long_message) {
+		error_object.long_message = long_message;
+	}
 	
 	if(!error_object) {
 		console.log("unknown error code", error_code);
@@ -68,10 +72,14 @@ module.exports.processError = function(res, err) {
     } else if(err.name == "ValidationError") {
         return this.sendError(res, 10400);
     } else if(err.scia_errcode) {
+
+    	if(err.scia_errcode == 10601 || err.scia_errcode == 10602) {
+    		return this.sendError(res, err.scia_errcode, err.msg);
+    	}
+
     	return this.sendError(res, err.scia_errcode);
     }
     else {
-    	console.log("2");
 		return this.sendError(res, 10500);
     }
 };

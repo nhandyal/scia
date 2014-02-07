@@ -96,7 +96,7 @@ module.exports.create = function(userData, onCompleteCallback) {
 					if(err) {
 						return onCompleteCallback(err, null);
 					}
-
+					
 					console.log("new user created: " + user.f_name + " " + user.l_name + " - " + user.id);
 					return onCompleteCallback(null, user);										
 				});

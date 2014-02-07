@@ -6,7 +6,7 @@ module.exports._0 = {
 	status : 0,
 	short_message : "Success",
 	long_message : "Success"
-}
+};
 
 
 /**************** General API Errors ***************************/
@@ -26,7 +26,7 @@ module.exports._10402 = {
 	status : 10402,
  	short_message : "No matching records",
  	long_message : "No matching records were found with the given details"
-}
+};
 
 module.exports._10500 = {
 	status : 10500,
@@ -38,7 +38,7 @@ module.exports._10501 = {
 	status : 10501,
  	short_message : "Internal Error",
  	long_message : "DB Error"
-}
+};
 
 /**************** Registration Response Codes ******************/
 module.exports._10001 = {
@@ -59,29 +59,33 @@ module.exports._10051 = {
 	status : 10051,
 	short_message : "Unverified Account",
 	long_message : "This account must be verified first. Check your email for further instructions"
-}
+};
 
 module.exports._10052 = {
 	status : 10052,
 	short_message : "Invalid reset token",
 	long_message : "The supplied reset token is invalid, request another."
-}
+};
 
+/***************** Stripe Response Codes *****************/
+module.exports._10601 = {
+	status : 10601,
+	short_message : "Stripe Card Error",
+	long_message : ""
+};
+
+module.exports._10602 = {
+	status : 10601,
+	short_message : "Stripe Invalid Request Error",
+	long_message : ""
+};
 
 /***************** Checkout Response Codes *****************/
 module.exports._10100 = {
 	status : 10100,
 	short_message : "Transaction Failed",
 	long_message : "The supplied card was declined"
-}
-
-/*
-module.exports._10100 = {
-	status : 10100,
-	short_message : "Invalid cart",
-	long_message : "A user attempted to purchase multiple tickets for the same event"
 };
-*/
 
 module.exports._10101 = {
 	status : 10101,
@@ -95,6 +99,6 @@ module.exports._10102 = {
 };
 module.exports._10103 = {
 	status : 10103,
-	short_message : "Incorrect total",
-	long_message : "The total does not match the total calculated from the database"
+	short_message : "Transaction Mismatch",
+	long_message : "The authorized total does not match the calculated total."
 };

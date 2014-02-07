@@ -28,6 +28,25 @@ module.exports.loadMPCore = function() {
 	return mpCore;
 }
 
+
+/**
+ *
+ */
+module.exports.loadController = function(controller_name) {
+	var controller = require(global.application_root + "controllers/" + controller_name);
+
+	return controller;
+}
+
+
+/**
+ *
+ */
+module.exports.logError = function(err) {
+	console.log(err);
+	console.trace();
+}
+
 /**
  * Assert that the input is numeric
  */

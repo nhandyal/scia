@@ -43,7 +43,7 @@
 		</script>
 	</head>
 	<body>
-		<form action="http://127.0.0.1:8000/d1/checkout" method="POST" id="payment-form">
+		<form action="http://127.0.0.1:8000/d1/user/52f4fc8fe3b9adf414000001/buyMembership" method="POST" id="payment-form">
 			<span class="payment-errors"></span>
 
 			<div class="form-row">
@@ -68,7 +68,8 @@
 				<span> / </span>
 				<input type="text" size="4" data-stripe="exp-year"/>
 			</div>
-
+			<input type="text" name="amountAuthorized" value="25"/>
+			<input type="text" name="saveCard" value="true"/>
 			<button id="payment-submit" type="button">Submit Payment</button>
 		</form>
 	</body>

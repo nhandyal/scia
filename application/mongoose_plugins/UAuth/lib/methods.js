@@ -1,8 +1,6 @@
 /*
  * METHODS
  */
-
-
 var SchemaMethods = function(paths) {
 	var bcrypt = require("bcrypt"),
 	SALT_WORK_FACTOR = 10;
@@ -38,9 +36,9 @@ var SchemaMethods = function(paths) {
 	 * Compare the candidate password with the password that is currently stored in the user model.
 	 * 
 	 * @param candidatePassword - the password that is to be verified against the current password.
-	 * @param callback - must accept (err, isMatch).
+	 * @param onCompleteCallback - must accept (err, isMatch).
 	 */
-	var authenticate = function(candidatePassword, callback) {
+	var authenticate = function(candidatePassword, onCompleteCallback) {
 
 		var user = this,
 			storedPassword = get.call(this, "password");
@@ -48,7 +46,7 @@ var SchemaMethods = function(paths) {
 
 		bcrypt.compare(candidatePassword, storedPassword, function(err, isMatch) {
 			if(err) {
-				return callback(err);	
+				return onCompleteCallback(err);	
 			}
 
 			if(isMatch) {
@@ -62,7 +60,7 @@ var SchemaMethods = function(paths) {
 				});
 			}
 
-	        return callback(null, isMatch);
+	        return onCompleteCallback(null, isMatch);
 		});
 	};
 
@@ -71,10 +69,8 @@ var SchemaMethods = function(paths) {
 	 *
 	 */
 	var get = function(field) {
-
 		var path = paths[field].path_ref;
 		return this[path];
-
 	};
 
 
@@ -110,7 +106,7 @@ var SchemaMethods = function(paths) {
 
 
 	/**
-	 * on complete callback must accept err, unique
+	 * onCompleteCallback must accept err, exists
 	 */
 	var exists = function(username, onCompleteCallback) {
 		

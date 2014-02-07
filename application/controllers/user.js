@@ -231,6 +231,92 @@ module.exports.verifyUser = function(res, params) {
 
 };
 
-module.exports.buyMembership = function(req, res, params) {
+/**
+ * @param params.id - the db id of this user
+ * @param params.stripeCardToken - Stripe token to be charged. If params.stripeCardID is specified
+ *									This value is ignored. However either params.stripeToken or
+ *									params.stripeCardID must be present.
+ * @param params.stripeCardID - A saved stripe card id for this user.
+ * @param params.saveCard - a flag on whether this card should be saved to this user's profile.
+ * @param params.amountAuthorized - the amount a user has authorizd to be charged on their card.
+ */
+module.exports.buyMembership = function(res, params) {
 
-}
+	if(!params.stripeCardToken && !params.stripeCardID) {
+		return ResponseHandler.sendError(res, 10400);
+	}
+
+	var amountAuthorized = parseInt(params.amountAuthorized);
+
+	User.findOneByID(params.id, function(err, user) {
+		if(err) {
+			return ResponseHandler.processError(res, err);	
+		}
+
+		Membership.getLatestMembershipPrice(function(err, membershipPrice) {
+			console.log(membershipPrice, amountAuthorized);
+			if(membershipPrice != amountAuthorized) {
+				return ResponseHandler.sendError(res, 10103);
+			}
+
+			var requestParams = {
+				cardID : params.stripeCardID,
+				stripeCardToken : params.stripeCardToken,
+				amount : membershipPrice,
+				description : "SCIA Membership"
+			}
+
+			var chargeResponseHandler = function(err, charge) {
+				if(err) {
+					return ResponseHandler.processError(res, err);
+				}
+
+				console.log(user);
+
+				user.is_member = true;
+				user.save(function(err) {
+					if(err) {
+						return ResponseHandler.processError(res, err);
+					}
+
+					return ResponseHandler.sendSuccess(res);
+				});
+			}
+
+			if(params.stripeCardID) {
+				user.chargeExistingCard(requestParams, chargeResponseHandler);
+			}else {
+				if(params.saveCard) {
+					user.addCardAndCharge(requestParams, chargeResponseHandler);
+				}else {
+					user.chargeNewCard(requestParams, chargeResponseHandler);
+				}
+			}
+		});
+
+	});
+};
+
+module.exports.test = function(req, res) {
+	var stripeToken = req.body.stripeToken;
+
+	User.findOneByEmail("nhandyal@gmail.com", function(err, user) {
+		if(err) {
+			return ResponseHandler.processError(res, err);	
+		}
+
+		var params = {
+			stripeCardToken : stripeToken,
+			amount : 10,
+			description : "Test charge"
+		};
+
+		user.addCardAndCharge(params, function(err) {
+			if(err) {
+				return ResponseHandler.processError(res, err);	
+			}
+
+			return ResponseHandler.sendSuccess(res);
+		});
+	});
+};
