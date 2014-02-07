@@ -7,6 +7,7 @@
 
 var mongoose = require("mongoose"),
 	User = mongoose.model("user"),
+	Membership = mongoose.model("membership"),
 	NodeMailer = Utils.loadModule("NodeMailer"),
 	ResponseHandler = Utils.loadModule("ResponseHandler"),
 	AuthToken = require(global.application_root + "utils/authToken"),
@@ -23,14 +24,14 @@ var mongoose = require("mongoose"),
  * @route - /d1/user/create
  * @failure - 10001, 10400, 10501
  */
-module.exports.create = function(req, res) {
+module.exports.create = function(res, params) {
 
 	var userData = {
-			f_name : req.body.f_name,
-			l_name : req.body.l_name,
-			email : req.body.email,
-			pwd : req.body.pwd
-		};
+		f_name : params.f_name,
+		l_name : params.l_name,
+		email : params.email,
+		pwd : params.pwd
+	};
 	
 	User.create(userData, function(err, user) {
 		if(err) {
@@ -40,7 +41,7 @@ module.exports.create = function(req, res) {
 		var vrf_email_data = {
 			template_path : application_root + "views/email-templates/vrf_email",
 			from : "no_reply@uscscia.com",
-			to : req.body.email,
+			to : params.email,
 			title : "USC SCIA verification email",
 			vrf_link : "https://www.uscscia.com/d1/user/verify/"+user.id,
 		};
@@ -48,7 +49,7 @@ module.exports.create = function(req, res) {
 		NodeMailer.send(res, vrf_email_data, function() {});
 
 		var responseData = {
-			id 		: user.id
+			id 	: user.id
 		};
 
 		return ResponseHandler.sendSuccess(res, responseData);
@@ -59,10 +60,10 @@ module.exports.create = function(req, res) {
 /**
  * Login a user.
  */
-module.exports.login = function(req, res) {
+module.exports.login = function(res, params) {
 	
-	var email = req.body.email,
-		pwd = req.body.pwd;
+	var email = params.email,
+		pwd = params.pwd;
 
 	User.findOneByEmail(email, function(err, user) {
 		if(err) {
@@ -85,7 +86,7 @@ module.exports.login = function(req, res) {
 /**
  * log a user out
  */
-module.exports.logout = function(req, res) {
+module.exports.logout = function(res) {
 	AuthToken.clearAuthToken(res);
 	return ResponseHandler.sendSuccess(res);
 }
@@ -97,13 +98,13 @@ module.exports.logout = function(req, res) {
  * @route - d1/user/resendVerificationEmail
  * @failure - 10001, 10400, 10401, 10501
  */
-module.exports.resendVerificationEmail = function(req, res, transport) {
+module.exports.resendVerificationEmail = function(res, params) {
 	
-	if(!req.body.email) {
+	if(!params.email) {
 		return ResponseHandler.sendError(res, 10400);
 	}
 
-	User.checkIfEmailExists(req.body.email, function(err, exists) {
+	User.checkIfEmailExists(params.email, function(err, exists) {
 		if(err) {
 			return ResponseHandler.processError(res, err);
 		}
@@ -115,7 +116,7 @@ module.exports.resendVerificationEmail = function(req, res, transport) {
 		var vrf_email_data = {
 			template_path : application_root + "views/email-templates/vrf_email",
 			from : "no_reply@uscscia.com",
-			to : req.body.email,
+			to : params.email,
 			title : "USC SCIA verification email",
 			vrf_link : "https://www.uscscia.com/d1/user/verify/"+user.id,
 		};
@@ -132,12 +133,12 @@ module.exports.resendVerificationEmail = function(req, res, transport) {
  * Initiate an account recovery process for a user. This is used if the user
  * has forgotten their login credentials and needs to change their password.
  * 
- * @param queryParams.email - the email address associated with the account we are trying to recover
- * @param queryParams.cb - the web url where the password reset form is located (see docs on why this is done)
+ * @param params.email - the email address associated with the account we are trying to recover
+ * @param params.cb - the web url where the password reset form is located (see docs on why this is done)
  */
-module.exports.recover = function(req, res, transport, queryParams) {
+module.exports.recover = function(res, params) {
 
-	User.findOneByEmail(queryParams.email, function(err, user) {
+	User.findOneByEmail(params.email, function(err, user) {
 		if(err) {
 			return ResponseHandler.processError(res, err);
 		}
@@ -150,7 +151,7 @@ module.exports.recover = function(req, res, transport, queryParams) {
 				to : user.email,
 				title : "SCIA reset account password",
 				f_name : user.f_name,
-				reset_pwd_link : queryParams.cb + "?id=" + user.id + "&token=" + recoverToken
+				reset_pwd_link : params.cb + "?id=" + user.id + "&token=" + recoverToken
 			};
 
 			NodeMailer.send(res, pwd_reset_data, function(){});
@@ -170,15 +171,15 @@ module.exports.recover = function(req, res, transport, queryParams) {
 /*
  * Reset the password for a user.
  *
- * @param req.body.id 		- id of user that needs a password reset
- * @param req.body.token 	- credential token authenticating this reset request
- * @param req.body.new_pwd 	- new user password
+ * @param params.id 		- id of user that needs a password reset
+ * @param params.token 		- credential token authenticating this reset request
+ * @param params.new_pwd 	- new user password
  */
-module.exports.reset = function(req, res) {
+module.exports.reset = function(res, params) {
 
-	var userDbID = req.body.id,
-		token = req.body.token,
-		new_pwd = req.body.new_pwd;
+	var userDbID = params.id,
+		token = params.token,
+		new_pwd = params.new_pwd;
 
 
 	User.findOneByID(userDbID, function(err, user) {
@@ -212,9 +213,9 @@ module.exports.reset = function(req, res) {
  * @route - /d1/user/verify*
  * @failure - 10001, 10400, 10401, 10501
  */
-module.exports.verifyUser = function(req, res, userDbID) {
+module.exports.verifyUser = function(res, params) {
 
-	User.findOneByID(userDbID, function(err, user) {
+	User.findOneByID(params.id, function(err, user) {
 		if(err) {
 			return ResponseHandler.processError(res, err);
 		}
@@ -227,5 +228,9 @@ module.exports.verifyUser = function(req, res, userDbID) {
 			return ResponseHandler.sendSuccess(res);
 		});
 	});
+
+};
+
+module.exports.buyMembership = function(req, res, params) {
 
 }

@@ -15,7 +15,14 @@ module.exports = function(app, transport) {
 	 * @param req.body.pwd - user password (cannot be "")
 	 */
 	app.post('/d1/user/create', function(req, res) {
-		user.create(req, res, transport);
+		var params = {
+			f_name : req.body.f_name,
+			l_name : req.body.l_name,
+			email : req.body.email,
+			pwd : req.body.pwd
+		};
+
+		user.create(res, params);
 	});
 
 	/**
@@ -23,27 +30,36 @@ module.exports = function(app, transport) {
 	 * @param req.body.pwd - user password
 	 */
 	app.post('/d1/user/login', function(req, res) {
-		user.login(req, res);
+		var params = {
+			email : req.body.email,
+			pwd : req.body.pwd
+		};
+
+		user.login(res, params);
 	});
 
 	app.get('/d1/user/logout', function(req, res) {
-		user.logout(req, res);
+		user.logout(res);
 	});
 
 	/**
 	 * @param req.body.email - user email
 	 */
 	app.post('/d1/user/resendVerificationEmail', function(req, res) {
-		user.resendVerificationEmail(req, res, transport);
+		var params = {
+			email : req.body.email
+		};
+		
+		user.resendVerificationEmail(res, params);
 	});
 
 	/**
 	 * @url /d1/user/recover?email={user email}&cb={reset form url}
 	 */
 	app.get('/d1/user/recover', function(req, res) {
-		var queryParams = Url.parse(req.url, true).query;
+		var params = Url.parse(req.url, true).query;
 		
-		user.recover(req, res, transport, queryParams);
+		user.recover(res, params);
 	});
 
 	/**
@@ -52,16 +68,24 @@ module.exports = function(app, transport) {
 	 * @param req.body.new_pwd - new user password
 	 */
 	app.post('/d1/user/reset', function(req, res) {
-		user.reset(req, res);
+		var params = {
+			id : req.body.id,
+			token : req.body.token,
+			new_pwd : req.body.new_pwd
+		};
+
+		user.reset(res, params);
 	});
 
 	/**
 	 * url schema /d1/user/verify/{user id}
 	 */
 	app.get('^/d1/user/verify/[A-Za-z0-9]{24}', function(req, res) {
-		var userDbID = (req.url).replace("/d1/user/verify/", "");
+		var params = {
+			id : (req.url).replace("/d1/user/verify/", "")
+		};
 
-		user.verifyUser(req, res, userDbID);
+		user.verifyUser(res, params);
 	});
 
 	app.get('/d1/user/test', AuthToken.authorizeRequest, function(req, res) {
