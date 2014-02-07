@@ -65,18 +65,7 @@ var SchemaMethods = function(paths, Stripe) {
 
 	};
 
-
-	/**
-	 *
-	 */
-	var get = function(field) {
-
-		var path = paths[field].path_ref;
-		return this[path];
-
-	};
-
-
+	
 	/**
 	 *
 	 */
@@ -92,7 +81,6 @@ var SchemaMethods = function(paths, Stripe) {
 		instanceMethods : {
 			addCard : addCard,
 			createCustomerProfile : createCustomerProfile,
-			get : get,
 			set : set
 		}
 	};

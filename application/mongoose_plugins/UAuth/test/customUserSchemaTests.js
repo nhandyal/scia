@@ -5,8 +5,6 @@
  * Test suite for the UAuth Mongoose plugin
  */
 
-
-
 var mongoose = require('mongoose'),
 	request = require('superagent'),
 	expect = require('expect.js'),

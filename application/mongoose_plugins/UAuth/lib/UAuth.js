@@ -48,6 +48,5 @@ var settings = require("./settings.js");
 
 
  	// attach all the plugin functions to the schema
-	require("./methods").attach(schema, namespace, paths);
-	
+	require("./methods").attach(schema, namespace, paths);	
 };

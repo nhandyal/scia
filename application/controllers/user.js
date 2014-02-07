@@ -33,36 +33,25 @@ module.exports.create = function(req, res) {
 		};
 	
 	User.create(userData, function(err, user) {
-
 		if(err) {
 			return ResponseHandler.processError(res, err);
 		}
 
-		user.save(function(err, user) {
-			
-			if(err) {
-				return ResponseHandler.processError(res, err);
-			}
+		var vrf_email_data = {
+			template_path : application_root + "views/email-templates/vrf_email",
+			from : "no_reply@uscscia.com",
+			to : req.body.email,
+			title : "USC SCIA verification email",
+			vrf_link : "https://www.uscscia.com/d1/user/verify/"+user.id,
+		};
 
-			console.log("new user created: " + user.f_name + " " + user.l_name + " - " + user.id);
+		NodeMailer.send(res, vrf_email_data, function() {});
 
-			var vrf_email_data = {
-				template_path : application_root + "views/email-templates/vrf_email",
-				from : "no_reply@uscscia.com",
-				to : req.body.email,
-				title : "USC SCIA verification email",
-				vrf_link : "https://www.uscscia.com/d1/user/verify/"+user.id,
-			};
+		var responseData = {
+			id 		: user.id
+		};
 
-			NodeMailer.send(res, vrf_email_data, function() {});
-
-			var responseData = {
-				id 		: user.id
-			};
-
-			return ResponseHandler.sendSuccess(res, responseData);
-
-		});	// end user.save
+		return ResponseHandler.sendSuccess(res, responseData);
 	}); // end User.createNewUser()
 }; // end module create
 
@@ -80,20 +69,17 @@ module.exports.login = function(req, res) {
 			return ResponseHandler.processError(res, err);
 		}
 
-		user.login(pwd, function(err, authenticated) {
+		user.login(pwd, function(err, user) {
 			if(err) {
 				return ResponseHandler.processError(res, err);
-			}
-
-			if(!authenticated) {
-				return ResponseHandler.sendError(res, 10050);
 			}
 
 			AuthToken.getNewAuthToken(res, user);
 			return ResponseHandler.sendSuccess(res);
 		});
 	});
-}; // end module login
+
+};
 
 
 /**
@@ -113,12 +99,16 @@ module.exports.logout = function(req, res) {
  */
 module.exports.resendVerificationEmail = function(req, res, transport) {
 	
-	User.findOne({ email : req.body.email}, function(err, user){
+	if(!req.body.email) {
+		return ResponseHandler.sendError(res, 10400);
+	}
+
+	User.checkIfEmailExists(req.body.email, function(err, exists) {
 		if(err) {
 			return ResponseHandler.processError(res, err);
 		}
 
-		if(!user) {
+		if(!exists) {
 			return ResponseHandler.sendError(res, 10402);
 		}
 
@@ -134,8 +124,8 @@ module.exports.resendVerificationEmail = function(req, res, transport) {
 
 		return ResponseHandler.sendSuccess(res);
 
-	}); // end user.findOne
-} // end module resendVerificationEmail
+	});
+};
 
 
 /*
@@ -147,25 +137,12 @@ module.exports.resendVerificationEmail = function(req, res, transport) {
  */
 module.exports.recover = function(req, res, transport, queryParams) {
 
-	User.findOne({email : queryParams.email}, function(err, user) {
-
+	User.findOneByEmail(queryParams.email, function(err, user) {
 		if(err) {
 			return ResponseHandler.processError(res, err);
 		}
 
-		if(!user) {
-			return ResponseHandler.sendError(res, 10402);
-		}
-
-		// the pwd reset token is simply the UTC time in ms of when the request was initiated
-		var token = Date.now();
-		user.update({
-			pwd_reset_token : token,
-		}, function(err) {
-			
-			if(err) {
-				return ResponseHandler.processMongooseError(err, res);
-			}
+		user.generateRecoverToken(function(err, recoverToken) {
 
 			var pwd_reset_data = {
 				template_path : application_root + "views/email-templates/pwd_reset_email",
@@ -173,18 +150,17 @@ module.exports.recover = function(req, res, transport, queryParams) {
 				to : user.email,
 				title : "SCIA reset account password",
 				f_name : user.f_name,
-				reset_pwd_link : queryParams.cb + "?id=" + user.id + "&token=" + token
+				reset_pwd_link : queryParams.cb + "?id=" + user.id + "&token=" + recoverToken
 			};
 
 			NodeMailer.send(res, pwd_reset_data, function(){});
 
 			if(global.env == "test") {
 				// we need to send the client the reset token for testing purposes
-				return ResponseHandler.sendSuccess(res, {token : token});
+				return ResponseHandler.sendSuccess(res, {token : recoverToken});
 			}
 			
 			return ResponseHandler.sendSuccess(res);
-
 		});
 
 	});
@@ -204,50 +180,29 @@ module.exports.reset = function(req, res) {
 		token = req.body.token,
 		new_pwd = req.body.new_pwd;
 
-	User.findById(userDbID, function(err, user) {
 
+	User.findOneByID(userDbID, function(err, user) {
 		if(err) {
+			console.log(err);
+			console.trace();
 			return ResponseHandler.processError(res, err);
 		}
 
-		if(!user) {
-			return ResponseHandler.sendError(res, 10402);
-		}
+		if(user.verifyRecoverToken(token)) {
+			user.setPassword(new_pwd, function(err, user) {
+				if(err) {
+					console.log(err);
+					console.trace();
+					return ResponseHandler.processError(res, err);
+				}
 
-		// check that the link is legitamte
-		if(token != user.pwd_reset_token) {
+				return ResponseHandler.sendSuccess(res);
+			});
+		}else {
 			return ResponseHandler.sendError(res, 10052);	
 		}
-
-		// check that the link is still valid
-		var expirationDate = parseInt(token) + (1000 * 60 * 60);
-		if(Date.now() >= expirationDate) {
-			// this link has expired
-			console.log("link has expired");
-			return ResponseHandler.sendError(res, 10052);
-		}
-
-		// all clear, set the password to new_pwd
-		try {
-			user.invoke("UAuth.setPassword").withArgs(new_pwd);
-			//user.setPasswordSync(new_pwd);
-		} catch(err) {
-			// password cannot be used
-			return ResponseHandler.sendError(res, 10400);
-		}
-
-		user.save(function(err) {
-			if(err) {
-				console.log(err);
-				console.trace();
-				return ResponseHandler.sendError(res, 10501);
-			}
-
-			return ResponseHandler.sendSuccess(res);
-		});
-
 	});
-	
+
 };
 
 
@@ -259,24 +214,18 @@ module.exports.reset = function(req, res) {
  */
 module.exports.verifyUser = function(req, res, userDbID) {
 
-	User.findById(userDbID, function(err, user) {
-
+	User.findOneByID(userDbID, function(err, user) {
 		if(err) {
 			return ResponseHandler.processError(res, err);
 		}
 
-		if(!user) {
-			return ResponseHandler.sendError(res, 10402);
-		}
-		
-		user.is_verified = true;
-		user.save(function(err){
+		user.verifyUser(function(err, user) {
 			if(err) {
-				return ResponseHandler.processMongooseError(err, res);
+				return ResponseHandler.processError(res, err);
 			}
 
 			return ResponseHandler.sendSuccess(res);
-		})
-		
+		});
 	});
+
 }

@@ -12,6 +12,10 @@ var mongoose = require('mongoose'),
 	mpCore = require('./../../mp_core.js'),
 	collection_name = "test_users_default";
 
+
+// debug flag for mongoose
+//mongoose.set('debug', true);
+
 var UserSchema = mongoose.Schema({}, {
 		collection : collection_name
 	});
@@ -91,66 +95,66 @@ describe('Ensure UAuth.set writes correct values to db', function() {
 
 	});
 
-});
-
-
-describe('Ensure UAuth.isUnique functions properly', function() {
-
-	it('should return false for a duplicate entry', function(done) {
-
+	it("should write a pwd to the model without error", function(done) {
 		var user = new User();
 
 		try {
-			user.invoke('UAuth.set').withArgs(UserData);
+			user.invoke('UAuth.set').withArgs("password", "new_pwd");
 		}catch(err) {
 			console.log(err);
 			expect().fail("Unexpected excpetion");
 			return done();
 		}
 
-		user.invoke('UAuth.isUnique').withArgs(function(err, unique) {
-
-			if(err) {
-				console.log(err);
-				expect().fail("Unexpected error");
-				return done();
-			}
-
-			expect(unique).to.be(false);
-			done();
-
-		});
-
+		return done();
 	});
 
-	it('should return true for a unique entry', function(done) {
-
-		var user = new User();
-		UserData.username = "new_email@test.com";
-
-		try {
-			user.invoke('UAuth.set').withArgs(UserData);
-		}catch(err) {
-			console.log(err);
-			expect().fail("Unexpected excpetion");
-			return done();
-		}
-
-		user.invoke('UAuth.isUnique').withArgs(function(err, unique) {
-
-			if(err) {
-				console.log(err);
-				expect().fail("Unexpected error");
-				return done();
-			}
-
-			expect(unique).to.be(true);
-			done();
-
-		});
-
-	});
 });
+
+
+describe("Ensure UAuth.exists functions properly", function() {
+	
+	it("should return true for an entry that already exists", function(done) {
+		User.invoke("UAuth.exists").withArgs(UserData.username, function(err, exists) {
+			if(err) {
+				console.log(err);
+				expect().fail("Unexpected excpetion");
+				return done();
+			}
+
+			expect(exists).to.be(true);
+			done();
+		});
+	});
+
+	it("should return false for an entry that doesn't exist", function(done) {
+		User.invoke("UAuth.exists").withArgs("new_email@test.com", function(err, exists) {
+			if(err) {
+				console.log(err);
+				expect().fail("Unexpected excpetion");
+				return done();
+			}
+
+			expect(exists).to.be(false);
+			done();
+		});
+	});
+
+	it("should return false for a null entry", function(done) {
+		User.invoke("UAuth.exists").withArgs(null, function(err, exists) {
+			if(err) {
+				console.log(err);
+				expect().fail("Unexpected excpetion");
+				return done();
+			}
+
+			expect(exists).to.be(false);
+			done();
+		});
+	});
+
+});
+
 
 after(function(done) {
 	

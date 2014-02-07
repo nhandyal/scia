@@ -13,6 +13,8 @@ module.exports = function() {
 	mongoose.connect(dbInstance);
 	var db = mongoose.connection;
 
+	db.setProfiling(1, 100, function(){});
+	
 	db.on("error", console.error.bind(console, "connection error:"));
 	db.once("open", function callback() {
 		console.log("Connected to: " + dbInstance);

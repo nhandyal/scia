@@ -40,7 +40,7 @@ var SchemaMethods = function(paths) {
 	 * @param candidatePassword - the password that is to be verified against the current password.
 	 * @param callback - must accept (err, isMatch).
 	 */
-	var login = function(candidatePassword, callback) {
+	var authenticate = function(candidatePassword, callback) {
 
 		var user = this,
 			storedPassword = get.call(this, "password");
@@ -66,10 +66,9 @@ var SchemaMethods = function(paths) {
 		});
 	};
 
-
+	
 	/**
-	 * Gets a field stored by this plugin. The field can be a default
-	 * key or a mapped key.
+	 *
 	 */
 	var get = function(field) {
 
@@ -86,7 +85,6 @@ var SchemaMethods = function(paths) {
 	 * values, or mapped values.
 	 */
 	var set = function(field, value) {
-
 		if(typeof field === "object") {
 			for(var key in field) {
 				if(key in paths) {
@@ -101,51 +99,47 @@ var SchemaMethods = function(paths) {
 			}
 		}else {
 			var path = paths[field].path_ref;
-			if(paths[key].origin === "password") {
+			if(paths[field].origin === "password") {
 				setPassword.call(this, value);
 			}else {
 				this.set(path, value);
 				this.markModified(path);
 			}
 		}
-
 	};
 
 
 	/**
 	 * on complete callback must accept err, unique
 	 */
-	var isUnique = function(onCompleteCallback) {
-
-		var model = this.model(this.constructor.modelName),
-			unique_path = paths.username.path_ref,
-			unique_value = this[unique_path],
+	var exists = function(username, onCompleteCallback) {
+		
+		var username_path = paths.username.path_ref,
 			searchObj = {};
 
-		searchObj[unique_path] = unique_value;
-
-		model.count(searchObj, function(err, count) {
+		searchObj[username_path] = username
+		
+		this.count(searchObj, function(err, count) {
 			if(err) {
 				return onCompleteCallback(err, null);
 			}
-			
+						
 			if(count > 0) {
-				return onCompleteCallback(null, false);
-			}else {
 				return onCompleteCallback(null, true);
+			}else {
+				return onCompleteCallback(null, false);
 			}
-
 		});
-
-	}
+	};
 
 	return {
 		instanceMethods : {
 			setPassword : setPassword,
-			login : login,
-			get : get,
-			set : set,
-			isUnique : isUnique
+			authenticate : authenticate,
+			set : set
+		},
+		staticMethods : {
+			exists : exists
 		}
 	};
 
@@ -154,12 +148,19 @@ var SchemaMethods = function(paths) {
 
 
 module.exports.attach = function(schema, namespace, new_paths) {
-
 	var _schemaMethods = new SchemaMethods(new_paths),
 		functionsToAttach = {};
 
+	if(_schemaMethods.staticMethods) {
+		var staticMethods = _schemaMethods.staticMethods;
+		for(var method_name in staticMethods) {
+			functionsToAttach[method_name] = staticMethods[method_name];
+		}
 
-	// attach all methods
+		schema.statics[namespace] = functionsToAttach;
+	}
+
+	functionsToAttach = {};
 	if(_schemaMethods.instanceMethods) {
 		var instanceMethods = _schemaMethods.instanceMethods;
 		for(var method_name in instanceMethods) {
@@ -168,5 +169,4 @@ module.exports.attach = function(schema, namespace, new_paths) {
 
 		schema.methods[namespace] = functionsToAttach;
 	}
-	
 };

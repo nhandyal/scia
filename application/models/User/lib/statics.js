@@ -1,5 +1,6 @@
 var mongoose = require("mongoose");
 
+
 /**
  *
  */
@@ -21,6 +22,10 @@ module.exports.findOneByEmail = function(email, onCompleteCallback) {
 	});
 };
 
+
+/**
+ *
+ */
 module.exports.findOneByID = function(id, onCompleteCallback) {
 	var _model = mongoose.model("user");
 
@@ -37,7 +42,22 @@ module.exports.findOneByID = function(id, onCompleteCallback) {
 
 		return onCompleteCallback(null, user);
 	});
-}
+};
+
+
+/**
+ *
+ */
+module.exports.checkIfEmailExists = function(email, onCompleteCallback) {
+	User.invoke("UAuth.exists").withArgs(email, function(err, exists) {
+		if(err) {
+			return onCompleteCallback(err, null);
+		}
+
+		return onCompleteCallback(null, exists);
+	});
+};
+
 
 /**
  * onCompleteCallback must accept err, user
@@ -54,12 +74,16 @@ module.exports.create = function(userData, onCompleteCallback) {
 		}, null);
 	}
 
-	user.invoke("UAuth.isUnique").withArgs(function(err, unique) {
+	this.invoke("UAuth.exists").withArgs(userData.email, function(err, exists) {
 		if(err) {
 			return onCompleteCallback(err, null);
 		}
 
-		if(unique) {
+		if(exists) {
+			return onCompleteCallback({
+				scia_errcode : 10001
+			}, null);	
+		}else {
 			user.invoke("Stripe.createCustomerProfile").withArgs({
 				email : userData.email,
 				description : "Profile for " + userData.email
@@ -68,10 +92,16 @@ module.exports.create = function(userData, onCompleteCallback) {
 					return onCompleteCallback(err, null);
 				}
 
-				return onCompleteCallback(null, user);
+				user.save(function(err, user) {
+					if(err) {
+						return onCompleteCallback(err, null);
+					}
+
+					console.log("new user created: " + user.f_name + " " + user.l_name + " - " + user.id);
+					return onCompleteCallback(null, user);										
+				});
 			});
-		}else {
-			return onCompleteCallback(null, user);
 		}
 	});
+
 };
