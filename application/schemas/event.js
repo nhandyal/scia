@@ -10,9 +10,8 @@ var eventSchema = mongoose.Schema(
 		description : 		String,
 		member_price :		String,
 		non_member_price :	String,
-		transportation :	Boolean,
-		transportation_cost :	String,
-		event_img_url :		String
+		event_img_url :		String,
+		removed :		Boolean
 	},
 	{
 		collection: "events"

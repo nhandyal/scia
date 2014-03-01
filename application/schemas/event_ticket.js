@@ -7,9 +7,10 @@ var eventTicketSchema = mongoose.Schema(
 		f_name : 		String,
 		l_name :		String,
 		email :			String,
-		card_id :		String,	
+		member_id :		String,	
 		event_id :		String,
-		transportation :	Boolean
+		ticket_number :		String,
+		charge_total : 		Number
 	},
 	{
 		collection: "event_tickets"

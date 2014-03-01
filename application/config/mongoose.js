@@ -29,6 +29,16 @@ module.exports = function() {
 	    require(model_path+"/"+model + "/lib/main.js");
 	});
 
+	var schama_path =  global.application_root + 'schemas',
+		schema_files = fs.readdirSync(schama_path);
+
+
+	schema_files.forEach(function (file) {
+            	if(file != "CIC.js" && file != "orderSchema.js" && file != "userSchema.js"){
+	    		require(schama_path+'/'+file);
+		}
+	});
+
 	console.log("mongoose models loaded")
 
 };
