@@ -14,7 +14,8 @@
 		"mocha"				: "1.16.2",
 		"superagent"		: "0.15.7",
 		"expect.js"			: "0.2.0",
-		"async" 			: "0.2.9"
+		"async" 			: "0.2.9",
+		"hashids" 			: "0.3.3"
 	},
 	"scripts": {
 		"test"		: "make test"
