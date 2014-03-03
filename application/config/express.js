@@ -15,6 +15,7 @@ module.exports = function() {
 	 	
 	 	app = express();
  	
+	var path = require('path');
 
 	app.enable('trust proxy');
 
@@ -29,6 +30,8 @@ module.exports = function() {
 	app.use(express.cookieParser("gandalf the white"));
 	app.use(AuthToken.parseAuthToken);
 
+	// use the public folder?
+	app.use(express.static(path.join(__dirname, '../../public')));
 
 	// load the routes
 	var route_path =  global.application_root + 'routes',

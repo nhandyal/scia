@@ -35,8 +35,7 @@ module.exports = function(app, transport) {
 		var query = url.parse(req.url, true).query;
 		if(query.eventID) {
 			events.getEventDetails(req,res,query);
-		}
-		else {
+		} else {
 			events.getEvents(req,res,query);
 		}
 	});

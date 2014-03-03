@@ -1,6 +1,6 @@
 
 var mongoose = require("mongoose"),
-	//event = mongoose.model("event"),
+	event = mongoose.model("event"),
 	utils = require("./utils");
 
 
@@ -19,7 +19,8 @@ module.exports.getEvents = function(req,res,query) {
 		count = req.count;
 	}
 	
-	var events = event.find({start_time: {$gt: start}}, null, {sort: {start_time: 1}},function(dbErr,dbRes){
+	//var events = event.find({start_time: {$gt: start}}, null, {sort: {start_time: 1}},function(dbErr,dbRes){
+	var events = event.find({}, null, {sort: {start_time: 1}},function(dbErr,dbRes){
 		if(dbErr){
 			utils.sendError(res,10500);
 		}
@@ -32,6 +33,9 @@ module.exports.getEvents = function(req,res,query) {
 
 		for(var i=0;i<numberToReturn;i++) {
 			var entry = dbRes[i].toObject();
+			if(entry.removed){ 
+				continue; 
+			}
 			delete entry._id;
 			entry.id = entry.fb_id;
 			delete entry.fb_id;
@@ -44,17 +48,16 @@ module.exports.getEvents = function(req,res,query) {
 module.exports.getEventDetails = function(req,res,query) {
 	var event_id = query.eventID;
 
-	var event = event.find({fb_id: event_id}, function(dbErr,dbRes){
+	var events = event.find({fb_id: event_id}, function(dbErr,dbRes){
 		if(dbErr){
                         utils.sendError(res,10500);
                 }
 
-                var response = dbRes[i].toObject();
-                delete entry._id;
-                entry.id = entry.fb_id;
-                delete entry.fb_id;
-                response.push(entry);
+                var response = dbRes[0].toObject();
+                delete response._id;
+                response.id = response.fb_id;
+                delete response.fb_id;
 
-                utils.sendResponse(res,response);
+                utils.sendResponse(res,[response]);
 	});
 }
