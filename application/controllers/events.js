@@ -19,8 +19,7 @@ module.exports.getEvents = function(req,res,query) {
 		count = req.count;
 	}
 	
-	//var events = event.find({start_time: {$gt: start}}, null, {sort: {start_time: 1}},function(dbErr,dbRes){
-	var events = event.find({}, null, {sort: {start_time: 1}},function(dbErr,dbRes){
+	var events = event.find({start_time: {$gt: start}}, null, {sort: {start_time: 1}},function(dbErr,dbRes){
 		if(dbErr){
 			utils.sendError(res,10500);
 		}
