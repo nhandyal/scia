@@ -19,7 +19,7 @@ module.exports.getEvents = function(req,res,query) {
         count = req.count;
     }
     
-    var events = event.find({start_time: {$gt: start}}, null, {sort: {start_time: 1}},function(dbErr,dbRes){
+    event.find({start_time: {$gt: start}}, null, {sort: {start_time: 1}},function(dbErr,dbRes){
         
         if(dbErr) {
             return ResponseHandler.processError(res, err);
@@ -46,7 +46,7 @@ module.exports.getEvents = function(req,res,query) {
             response.push(entry);
         }
         
-        return ResponseHandler.sendSuccess(res, responseData);
+        return ResponseHandler.sendSuccess(res, response);
     }); 
 }
 
