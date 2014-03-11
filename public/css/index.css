@@ -92,26 +92,6 @@ body{
 	font-weight: 700;
 	font-size: 1.3em;
 }
-#navigation{
-	list-style: none;
-	position: absolute;
-	right: -10px;
-	bottom: 0px;
-	margin: 0px;
-	padding: 0px;
-}
-#navigation li{
-	float: left;
-	font-weight: 500;
-	padding: 10px;
-}
-#navigation li a{
-	text-decoration: none;
-	color: rgb(80,80,80);
-}
-#navigation li a:hover{
-	color: rgb(204,40,40);
-}
 #footer{
 	height: 20%;
 	position: relative;

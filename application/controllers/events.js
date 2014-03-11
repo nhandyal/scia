@@ -58,6 +58,10 @@ module.exports.getEventDetails = function(req,res,query) {
         if(dbErr) {
             return ResponseHandler.processError(res, err);
         }
+	
+	if(dbRes.length<=0){
+		return ResponseHandler.sendError(res, "500"); //Add event isnt in the db error later
+	}
 
         var response = dbRes[0];
         response.id = response.fb_id;

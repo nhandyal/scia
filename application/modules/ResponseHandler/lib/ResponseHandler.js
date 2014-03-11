@@ -22,7 +22,7 @@ var sendResponse = function(res, response){
  * @res - node response object for this request
  * @error_code - error code to send to client
  */
-var sendError = function(res, error_code, long_message){
+module.exports.sendError = function(res, error_code, long_message){
     var error_key = "_"+error_code,
         error_object = response_codes[error_key];
 

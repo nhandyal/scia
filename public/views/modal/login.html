@@ -2,7 +2,7 @@
     // ======================================================================== //
     //   LOGIN MODAL                                                            //
 
-    var loginEmail, loginPassword;
+    var loginEmail, loginPassword, loggedIn;
     // Verify Form
     function verify(x) {
         switch (x.filter) {
@@ -21,6 +21,14 @@
         }
     }
 
+    function closeModal() {
+        if (loggedIn) {
+            location.reload();
+        } else {
+            modal.close();
+        }
+    }
+
     $(document).ready(function () {
         $('#modal-login-userinfo').show();
         $('#modal-login-verify').hide();
@@ -32,75 +40,97 @@
             loginEmail = $('input[name=LoginEmail]').val();
             loginPassword = $('input[name=LoginPassword]').val();
             if (allPass) {
+                /*
                 svc('/d1/login', {
-                    'email': loginEmail,
-                    'password': loginPassword
+                'email': loginEmail,
+                'pwd': loginPassword
                 }, function (data) {
-                    if (data.status == 0) {
-                        $('#modal-login-userinfo').hide();
-                        $('#modal-login-verify').show();
-                        $('#modal-login-thankyou').hide();
-                    }
-                    else if (data.status == 10050) {
-                        alert('Login failed\nEmail/password combination was not correct');
-                        //error short_message : "Login failed", long_message : "Email/password combination was not correct"
-                    }
-                    else {
-                        alert('Login failed');
-                        //all other error
-                    }
+                if (data.status == 0) {
+                location.reload();
+                }
+                else if (data.status == 10051) {
+                // Verify account
+                $('#modal-login-userinfo').hide();
+                $('#modal-login-verify').show();
+                $('#modal-login-thankyou').hide();
+                }
+                else if (data.status == 10050) {
+                // Error login failed - email/password combination was not correct
+                alert(data.short_message + '\n' + data.long_message);
+                }
+                else {
+                // Error all other
+                alert('Login failed');
+                }
                 }, true);
-                //TODO add AJAX
-                //alertString = '<label>' + alertString + '</label>';
-                //$('div#user-info').html(alertString);
+                */
+                //TEST
+                $.cookie('card_id', 123);
+                $.cookie('f_name', 'JACK');
+                $.cookie('l_name', 'KWAN');
+                $.cookie('pay_membership_flag', 1);
+                location.reload();
             }
         });
 
         $('#btn-verify').click(function (event) {
-            var alertString = '';
             event.preventDefault();
             allPass = field.checkAll('form#verify');
+            vrf_token = $('input[name=VerifyConfirmationCode]').val();
             if (allPass) {
                 svc('/d1/register?action=vrf', {
                     'email': loginEmail,
-                    'password': loginPassword
+                    'vrf_token': vrf_token
                 }, function (data) {
                     if (data.status == 0) {
-                        $('#modal-login-userinfo').hide();
-                        $('#modal-login-verify').hide();
-                        $('#modal-login-thankyou').show();
+                        svc('/d1/login', {
+                            'email': loginEmail,
+                            'pwd': loginPassword
+                        }, function (data2) {
+                            if (data2.status == 0) {
+                                $('#modal-login-userinfo').hide();
+                                $('#modal-login-verify').hide();
+                                $('#modal-login-thankyou').show();
+                                loggedIn = true;
+                            }
+                            else if (data2.status == 10050) {
+                                // Error login failed - email/password combination was not correct
+                                alert(data2.short_message + '\n' + data2.long_message);
+                            }
+                            else {
+                                // Error all other
+                                alert('Login failed');
+                            }
+                        }, true);
                     }
                     else if (data.status == 10003) {
-                        alert('Verify failed\nSupplied vrf_token does not match token on file');
-                        //error short_message : "Verify failed", long_message : "Supplied vrf_token does not match token on file"
+                        // Error verify failed - supplied vrf_token does not match token on file
+                        alert(data.short_message + '\n' + data.long_message);
                     }
                     else if (data.status == 10004) {
-                        alert('Account already verified\nAccount already verified');
-                        //error short_message : "Account already verified", long_message : "Account already verified"
+                        // Error account already verified - account already verified
+                        alert(data.short_message + '\n' + data.long_message);
                     }
                     else {
+                        // Error all other
                         alert('Verify failed');
-                        //all other error
                     }
                 }, true);
-                //TODO add AJAX
-                //alertString = '<label>' + alertString + '</label>';
-                //$('div#user-info').html(alertString);
             }
         });
     });
 </script>
 
-<a class="modal-close" href="javascript:modal.close()">X</a>
+<a class="modal-close" href="javascript:closeModal()">X</a>
 
 <div id="modal-login-userinfo" class="modal-screen">
     <h1>Login</h1>
     <form action="#" id="login" method="post">
         <div class="col col2">
             <label for="LoginEmail">Email:</label>
-            <input type="text" name="LoginEmail" id="LoginEmail" value="jackkwan@usc.edu" tabindex="1" onblur="field.check(this)" />
+            <input type="text" name="LoginEmail" id="LoginEmail" value="" tabindex="1" onblur="field.check(this)" />
             <label for="LoginPassword">Password:</label>
-            <input type="password" name="LoginPassword" id="LoginPassword" value="123456Mn" tabindex="2" onblur="field.check(this)" />
+            <input type="password" name="LoginPassword" id="LoginPassword" value="" tabindex="2" onblur="field.check(this)" />
         </div>
         <div class="action-buttons">
             <a id="btn-login" class="go" href="#" tabindex="3">Login &nbsp; &gt;</a>
@@ -118,7 +148,7 @@
         </div>
     </div>
     <div class="action-buttons">
-        <a id="btn-close" class="go" href="javascript:modal.close()" tabindex="1">X &nbsp; Close</a>
+        <a id="btn-close" class="go" href="javascript:closeModal()" tabindex="1">X &nbsp; Close</a>
     </div>
 </div>
 

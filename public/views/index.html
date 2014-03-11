@@ -15,12 +15,20 @@
 		<div id="wrapper">
 			<div id="header">
 				<a id="header-logo" href="index.html"><img src="../assets/scia-logo.png" height="50" width="218" border="0" alt="Southern California Indio Americans" /></a>
-				<ul id="navigation">
-					<li><a href="">About</a></li>
-					<li><a href="events.html">Events</a></li>
-					<li><a href="javascript:modal.registration()">Register</a></li>
-					<li><a href="javascript:modal.login()">Login</a></li>
-				</ul>
+				<div id="navigation">
+					<a href="index.html">Home</a>
+					<a href="about.html">About</a>
+					<a href="events.html">Events</a>
+					<a href="javascript:modal.registration()" id="navigation-register">Register</a>
+					<a href="javascript:modal.login()" id="navigation-login">Login</a>
+                    <a href="javascript:openProfileOpts()" id="navigation-profile"><span id="profile-f-name"></span> <span id="profile-l-name"></span> &#8744;</a>
+                    <div id="profile-detail" class="dropdown-menu">
+                        <a href="javascript:modal.payMembership()" id="navigation-pay-membership">Pay Membership</a>
+                        <a href="javascript:modal.editProfile()" id="navigation-edit-profile">Edit Profile</a>
+                        <a href="javascript:logout()">Logout</a>
+                    </div>
+				</div>
+                <div class="clear"></div>
 			</div>
 			<div id="ZuneView"></div>
 			<div class="ZuneView-spacer"></div>
@@ -32,10 +40,11 @@
 		</div>
         
         <script type="text/javascript" src="../js/dist/jquery/1.7.1/jquery.min.js"></script>
+        <script type="text/javascript" src="../js/dist/jquery/plugins/jquery.cookie.js"></script>
         <script type="text/javascript" src="../js/dist/SCIA.js"></script>
         <script type="text/javascript" src="../js/src/globals.js"></script>
 		<script type="text/javascript">
-			SC.ZuneView.init({height:4},"ZuneView");
+		    SC.ZuneView.init({ height: 4 }, "ZuneView");
 		</script>
         
         <div id="modal-overlay"></div>

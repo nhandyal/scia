@@ -18,12 +18,6 @@ function verify(x) {
         case 'RegisterMobile':
             field.pass(x, true, 'phone');
             break;
-        case 'PaymentCardNumber':
-            field.pass(x, true, 'creditcard');
-            break;
-        case 'PaymentCsc':
-            field.pass(x, true, 'csc');
-            break;
         //case 'ContactAddress': 
         //    field.pass(x, true, 'alphanumeric'); 
         //    break; 
@@ -32,9 +26,7 @@ function verify(x) {
                     'RegisterYear',
                     'RegisterFirstName',
                     'RegisterLastName',
-                    'RegisterMajor',
-                    'PaymentName',
-                    'PaymentExpirationDate',
+                    'RegisterMajor'
             //,'ContactGender',
             //,'ContactLanguagesKnown'
                 ];
@@ -47,31 +39,8 @@ function verify(x) {
     }
 }
 
-/*
-Stripe.setPublishableKey('YOUR_PUBLISHABLE_KEY');
-var stripeResponseHandler = function (status, response) {
-var $form = $('form#payment');
-if (response.error) {
-// Show the errors on the form
-//$form.find('.payment-errors').text(response.error.message);
-$('div#payment-error').html(response.error.message);
-//$form.find('button').prop('disabled', false);
-}
-else {
-// token contains id, last4, and card type
-var token = response.id;
-alert('token : ' + token);
-// Insert the token into the form so it gets submitted to the server
-$form.append($('<input type="hidden" name="stripeToken" />').val(token));
-// and re-submit
-$form.get(0).submit();
-}
-};
-*/
-
 $(document).ready(function () {
     $('#modal-registration-userinfo').show();
-    $('#modal-registration-payment').hide();
     $('#modal-registration-thankyou').hide();
 
     $('#btn-register').click(function (event) {
@@ -90,6 +59,7 @@ $(document).ready(function () {
         registerMajor = $('input[name=RegisterMajor]').val().toUpperCase();
         registerPassword = $('input[name=RegisterPassword]').val();
         if (allPass) {
+            /*
             svc('/d1/register', {
                 'f_name': registerFirstName,
                 'l_name': registerLastName,
@@ -101,35 +71,25 @@ $(document).ready(function () {
             }, function (data) {
                 if (data.status == 0) {
                     $('#modal-registration-userinfo').hide();
-                    $('#modal-registration-payment').hide();
                     $('#modal-registration-thankyou').show();
                 }
                 else if (data.status == 10002) {
-                    alert('Duplicate entry\nEmail is already registered');
-                    //error short_message : "Duplicate entry", long_message : "Email is already registered"
+                    // Error duplicate entry - email is already registered
+                    alert(data.short_message + '\n' + data.long_message);
                 }
                 else {
-                    alert('Login failed');
-                    //all other error
+                    // Error all other
+                    alert('Verify failed');
                 }
             }, true);
+            */
+            //TEST
+            $('#modal-registration-userinfo').hide();
+            $('#modal-registration-thankyou').show();
             //TODO add AJAX
             //alertString = '<label>' + alertString + '</label>';
             //$('div#user-info').html(alertString);
         }
-    });
-
-    $('#btn-submit').click(function (event) {
-        var alertString = '';
-        var $form = $('form#payment');
-        event.preventDefault();
-        allPass = field.checkAll('form#payment');
-        // Disable the submit button to prevent repeated clicks
-        //$form.find('button').prop('disabled', true);
-        Stripe.createToken($form, stripeResponseHandler);
-        alert('Test');
-        // Prevent the form from submitting with the default action
-        return false;
     });
 });
 </script>
@@ -141,13 +101,13 @@ $(document).ready(function () {
     <form action="#" id="registration" method="post">
         <div class="col col2">
             <label for="RegisterFirstName">First Name:</label>
-            <input type="text" name="RegisterFirstName" id="RegisterFirstName" value="Jack" tabindex="1" onblur="field.check(this)" />
+            <input type="text" name="RegisterFirstName" id="RegisterFirstName" value="" tabindex="1" onblur="field.check(this)" />
             <label for="RegisterLastName">Last Name:</label>
-            <input type="text" name="RegisterLastName" id="RegisterLastName" value="Kwan" tabindex="2" onblur="field.check(this)" />
+            <input type="text" name="RegisterLastName" id="RegisterLastName" value="" tabindex="2" onblur="field.check(this)" />
             <label for="RegisterEmail">USC Email:</label>
-            <input type="text" name="RegisterEmail" id="RegisterEmail" value="jackkwan@usc.edu" tabindex="3" onblur="field.check(this)" />
+            <input type="text" name="RegisterEmail" id="RegisterEmail" value="" tabindex="3" onblur="field.check(this)" />
             <label for="RegisterMobile">Mobile Phone Number:</label>
-            <input type="text" name="RegisterMobile" id="RegisterMobile" value="(123) 456-7890" tabindex="4" onblur="field.check(this)" />
+            <input type="text" name="RegisterMobile" id="RegisterMobile" value="" tabindex="4" onblur="field.check(this)" />
         </div>
         <div class="col col2">
             <div class="year-major">
@@ -159,17 +119,17 @@ $(document).ready(function () {
                         <option value="freshman">FRESHMAN</option>
                         <option value="sophomore">SOPHOMORE</option>
                         <option value="junior">JUNIOR</option>
-                        <option value="senior" selected="selected">SENIOR</option>
+                        <option value="senior">SENIOR</option>
                         <option value="graduate">GRADUATE</option>
                     </select>
                 </span>
-                <input type="text" name="RegisterMajor" id="RegisterMajor" value="Computer Science" tabindex="6" onblur="field.check(this)" />
+                <input type="text" name="RegisterMajor" id="RegisterMajor" value="" tabindex="6" onblur="field.check(this)" />
                 <div class="clear"></div>
             </div>
             <label for="RegisterPassword">Password:</label>
-            <input type="password" name="RegisterPassword" id="RegisterPassword" value="123456Mn" tabindex="7" onblur="field.check(this)" />
+            <input type="password" name="RegisterPassword" id="RegisterPassword" value="" tabindex="7" onblur="field.check(this)" />
             <label for="RegisterConfirm">Confirm Password:</label>
-            <input type="password" name="RegisterConfirm" id="RegisterConfirm" value="123456Mn" tabindex="8" onblur="field.check(this)" />
+            <input type="password" name="RegisterConfirm" id="RegisterConfirm" value="" tabindex="8" onblur="field.check(this)" />
         </div>
         <div class="action-buttons">
             <a id="btn-register" class="go" href="#" tabindex="9">Register &nbsp; &gt;</a>
@@ -194,26 +154,4 @@ $(document).ready(function () {
     <div class="action-buttons">
         <a id="btn-close" class="go" href="javascript:modal.close()" tabindex="1">X &nbsp; Close</a>
     </div>
-</div>
-
-<div id="modal-registration-payment" class="modal-screen">
-    <h1>Registration - Payment</h1>
-    <form action="#" id="payment" method="post">
-        <div class="col col2">
-            <label for="PaymentCardNumber">Card Number:</label>
-            <input type="text" name="PaymentCardNumber" id="PaymentCardNumber" value="" tabindex="1" onblur="field.check(this)" />
-            <label for="PaymentName">Name:</label>
-            <input type="text" name="PaymentName" id="PaymentName" value="" tabindex="2" onblur="field.check(this)" />
-            <label for="PaymentCsc">CSC:</label>
-            <input type="text" name="PaymentCsc" id="PaymentCsc" value="" tabindex="3" onblur="field.check(this)" />
-            <label for="PaymentExpirationDate">Expiration Date:</label>
-            <input type="text" name="PaymentExpirationDate" id="PaymentExpirationDate" value="" tabindex="4" onblur="field.check(this)" />
-        </div>
-        <div class="col col2">
-            <div id="payment-error"></div>
-        </div>
-        <div class="action-buttons">
-            <a id="btn-submit" class="go" href="#" tabindex="5">Submit &nbsp; &gt;</a>
-        </div>
-    </form>
 </div>

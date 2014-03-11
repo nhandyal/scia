@@ -33,6 +33,7 @@ module.exports = function(app, transport) {
 
 	app.get('/d1/events*', function(req, res){
 		var query = url.parse(req.url, true).query;
+
 		if(query.eventID) {
 			events.getEventDetails(req,res,query);
 		} else {

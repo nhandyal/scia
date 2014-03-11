@@ -1,0 +1,144 @@
+﻿<script type="text/javascript">
+// ======================================================================== //
+//   EDIT PROFILE MODAL                                                     //
+
+var editProfileFirstName, editProfileLastName, editProfileMobile, editProfileYear, editProfileMajor, editProfilePassword;
+// Verify Form
+function verify(x) {
+    switch (x.filter) {
+        case 'EditProfilePassword':
+            field.pass(x, true, 'password');
+            break;
+        case 'EditProfileConfirm':
+            field.pass(x, true, 'match', $('input#EditProfilePassword').val());
+            break;
+        case 'EditProfileMobile':
+            field.pass(x, true, 'phone');
+            break;
+        default:
+            var simplyExist = [
+                    'EditProfileYear',
+                    'EditProfileFirstName',
+                    'EditProfileLastName',
+                    'EditProfileMajor'
+            //,'ContactGender',
+            //,'ContactLanguagesKnown'
+                ];
+            if (simplyExist.indexOf(x.filter) > -1) {
+                field.pass(x);
+            } else {
+                x.val;
+            }
+            break;
+    }
+}
+
+$(document).ready(function () {
+    $('#modal-edit-profile-userinfo').show();
+    $('#modal-edit-profile-thankyou').hide();
+
+    $('#btn-edit-profile').click(function (event) {
+        var alertString = '';
+        event.preventDefault();
+        allPass = field.checkAll('form#edit-profile');
+        editProfileFirstName = $('input[name=EditProfileFirstName]').val().toUpperCase();
+        editProfileLastName = $('input[name=EditProfileLastName]').val().toUpperCase();
+        $('span#ThankYouName').html(editProfileFirstName + ' ' + editProfileLastName);
+        editProfileMobile = $('input[name=EditProfileMobile]').val();
+        editProfileYear = $('select[name=EditProfileYear] option:selected').val().toUpperCase();
+        editProfileMajor = $('input[name=EditProfileMajor]').val().toUpperCase();
+        editProfilePassword = $('input[name=EditProfilePassword]').val();
+        if (allPass) {
+            /*
+            svc('/d1/editProfile', {
+                'f_name': editProfileFirstName,
+                'l_name': editProfileLastName,
+                'mobile': editProfileMobile.toString().replace(/[^0-9]/g, ''),
+                'major': editProfileMajor,
+                'year': editProfileYear,
+                'pwd': editProfilePassword
+            }, function (data) {
+                if (data.status == 0) {
+                    $('#modal-edit-profile-userinfo').hide();
+                    $('#modal-edit-profile-payment').hide();
+                    $('#modal-edit-profile-thankyou').show();
+                }
+                else if (data.status == 10002) {
+                    // Error duplicate entry - email is already editProfileed
+                    alert(data.short_message + '\n' + data.long_message);
+                }
+                else {
+                    // Error all other
+                    alert('Verify failed');
+                }
+            }, true);
+            */
+            //TODO Test
+            $('#modal-edit-profile-userinfo').hide();
+            $('#modal-edit-profile-payment').hide();
+            $('#modal-edit-profile-thankyou').show();
+            //TODO add AJAX
+            //alertString = '<label>' + alertString + '</label>';
+            //$('div#user-info').html(alertString);
+        }
+    });
+});
+</script>
+
+<a class="modal-close" href="javascript:modal.close()">X</a>
+
+<div id="modal-edit-profile-userinfo" class="modal-screen">
+    <h1>Edit Profile</h1>
+    <form action="#" id="edit-profile" method="post">
+        <div class="col col2">
+            <label for="EditProfileFirstName">First Name:</label>
+            <input type="text" name="EditProfileFirstName" id="EditProfileFirstName" value="JACK" tabindex="1" onblur="field.check(this)" />
+            <label for="EditProfileLastName">Last Name:</label>
+            <input type="text" name="EditProfileLastName" id="EditProfileLastName" value="KWAN" tabindex="2" onblur="field.check(this)" />
+            <label for="EditProfileMobile">Mobile Phone Number:</label>
+            <input type="text" name="EditProfileMobile" id="EditProfileMobile" value="(213) 123-4567" tabindex="4" onblur="field.check(this)" />
+        </div>
+        <div class="col col2">
+            <div class="year-major">
+                <label for="EditProfileYear">Year:</label>
+                <label for="EditProfileMajor">Major:</label>
+                <span class="dropdown">
+                    <select name="EditProfileYear" id="EditProfileYear" tabindex="5" onblur="field.check(this)">
+                        <option value=""></option>
+                        <option value="freshman">FRESHMAN</option>
+                        <option value="sophomore">SOPHOMORE</option>
+                        <option value="junior" selected>JUNIOR</option>
+                        <option value="senior">SENIOR</option>
+                        <option value="graduate">GRADUATE</option>
+                    </select>
+                </span>
+                <input type="text" name="EditProfileMajor" id="EditProfileMajor" value="COMPUTER SCIENCE" tabindex="6" onblur="field.check(this)" />
+                <div class="clear"></div>
+            </div>
+            <label for="EditProfilePassword">Password:</label>
+            <input type="password" name="EditProfilePassword" id="EditProfilePassword" value="" tabindex="7" onblur="field.check(this)" />
+            <label for="EditProfileConfirm">Confirm Password:</label>
+            <input type="password" name="EditProfileConfirm" id="EditProfileConfirm" value="" tabindex="8" onblur="field.check(this)" />
+        </div>
+        <div class="action-buttons">
+            <a id="btn-edit-profile" class="go" href="#" tabindex="9">Submit &nbsp; &gt;</a>
+        </div>
+    </form>
+</div>
+
+<div id="modal-edit-profile-thankyou" class="modal-screen">
+    <h1>Thank you!</h1>
+    <div class="col">
+        <div id="welcome">
+            Hey <span id="ThankYouName"></span>, and welcome to USC SCIA!<br /><br />
+            Your user profile was updated successfully.<br /><br />
+            Cheers,<br/>
+            SCIA Executive Board<br /><br />
+        </div>
+        <div id="user-info">
+        </div>
+    </div>
+    <div class="action-buttons">
+        <a id="btn-close" class="go" href="javascript:modal.close()" tabindex="1">X &nbsp; Close</a>
+    </div>
+</div>

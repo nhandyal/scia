@@ -1,6 +1,32 @@
 var svcRunning = [], html, table, tdArr, checkbox, label, detailLink, popWidth = null, popHeight = null, goToScreen; //TODO Remove the reserved word final from variable
 
 $(function () {
+    // TODO - test
+    //$.cookie('card_id', 123);
+    //$.cookie('f_name', 'JACK');
+    //$.cookie('l_name', 'KWAN');
+    //$.cookie('pay_membership_flag', 1);
+
+    // Close options when clicking outside the menu
+    $('div#profile-detail').click(function (event) { event.stopPropagation(); });
+    $('html').click(function (event) { closeProfileOpts(); });
+    if ($.cookie('card_id')) {
+        $('a#navigation-register').hide();
+        $('a#navigation-login').hide();
+        $('a#navigation-profile').show();
+        if ($.cookie('pay_membership_flag') == 1) {
+            $('a#navigation-pay-membership').show();
+        } else {
+            $('a#navigation-pay-membership').hide();
+        }
+        $('span#profile-f-name').html($.cookie('f_name'));
+        $('span#profile-l-name').html($.cookie('l_name'));
+    } else {
+        $('a#navigation-register').show();
+        $('a#navigation-login').show();
+        $('a#navigation-profile').hide();
+    }
+
     // FORM JAVASCRIPT
     // Loop through checkboxes
     $('span.checkbox').each(function () {
@@ -166,6 +192,20 @@ $(function () {
     });
 });
 
+// Open profile options
+function openProfileOpts() {
+    if ($('div#profile-detail').is(':visible')) {
+        closeProfileOpts();
+    } else {
+        $('div#profile-detail').slideDown(65);
+    }
+}
+
+// Close profile options
+function closeProfileOpts() {
+    $('div#profile-detail').slideUp(65);
+}
+
 // Lock screen from further action
 function screenLock() {
     $('#modal-overlay').show();
@@ -188,7 +228,7 @@ function screenUnlock() {
 
 // Gateway for ALL service calls
 function svc(serviceMethod, jsonRequest, callback, modal) {
-    //$.support.cors = true;
+    $.support.cors = true;
     //svcStart(serviceMethod, modal);
     $.ajax({
         url: serviceMethod,
@@ -229,17 +269,9 @@ function svcError(xhr, ajaxOptions, thrownError) {
 // == SERVICE CALLS =============================== //
 
 // User
-function login() {
-    svc('userLogin', {
-        "username": $('input#login-username').val(),
-        "password": $('input#login-password').val()
-    }, function (data) {
-        userGetSummary();
-    });
-}
 function logout() {
-    svc('userLogout', {}, function (data) {
-        window.top.location = "login.cshtml";
+    svc('/d1/logout', {}, function (data) {
+        location.reload();
     });
 }
 
@@ -762,7 +794,15 @@ var modal = {
 modal.registration = function () {
     modal.open('modal/registration.html', {}, 768, 352);
 }
+// Edit Profile popup
+modal.editProfile = function () {
+    modal.open('modal/edit-profile.html', {}, 768, 294);
+}
 // Login popup
 modal.login = function () {
     modal.open('modal/login.html', {}, 396, 236);
+}
+// Pay Membership popup
+modal.payMembership = function () {
+    modal.open('modal/pay-membership.html', {}, 396, 324);
 }

@@ -5,6 +5,7 @@ Table of Contents
 [02] HEADER / FOOTER
 [03] MODAL
 [04] GRADIENTS
+[04] TABLE
 */
 
 /* ================================ */
@@ -24,6 +25,11 @@ header, footer {
 	font-weight: normal;
 	font-family: Verdana;
 	vertical-align: baseline;
+}
+h1 {
+	font-size: 15px;
+	font-family: Verdana;
+	font-weight: bolder;
 }
 header, footer {
     display : block;
@@ -53,6 +59,10 @@ div.col h3 {
 	font-size: 16px;
 	padding: 15px 0 5px;
 }
+a.site-link,
+div.simpleCart_items a {
+    color: #990000;
+}
 
 .clear {clear: both}
 .hide {display: none}
@@ -68,7 +78,7 @@ div.checkbox-q {
 input[type="text"],
 input[type="password"] {
     display: block;
-	width: 340px;
+	width: 352px;
 	color: #333333;
 	font-size: 12px;
 	line-height: 15px;
@@ -148,7 +158,7 @@ span.dropdown select {
 	-webkit-appearance: none;
 }
 html.ie7 span.dropdown select {width:350px; background:#fefefe;}
-        
+
 div.year-major {
 }
 div.year-major label {
@@ -173,9 +183,24 @@ div.year-major span.dropdown select {
 html.ie7 div.year-major span.dropdown select {width: 128px}
 div.year-major input[type="text"] {
 	float: left;
-	width: 200px !important;
+	width: 212px !important;
 }
-        
+
+div.expdate-cvc {
+}
+div.expdate-cvc label {
+	width: 167px;
+	float: left;
+}
+div.expdate-cvc label:first-child,
+div.expdate-cvc input[name="PaymentExpirationDate"] {
+	margin-right: 8px;
+}
+div.expdate-cvc input[type="text"] {
+	float: left;
+	width: 172px !important;
+}
+   
 ul.radio-buttons {
     overflow: hidden;
     list-style-type: none;
@@ -216,6 +241,10 @@ div.action-buttons a {
 	margin-left: 2px;
 	background-color: #666666;
 }
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
 
 /* ================================ */
 /* [02] HEADER / FOOTER             */
@@ -231,7 +260,44 @@ a#header-logo {
 	float: left;
 	margin: 20px 25px;
 }
-
+div#navigation {
+	position: absolute;
+	right: -10px;
+	bottom: 0px;
+	margin: 0px;
+	padding: 0px;
+}
+div#navigation a {
+	text-decoration: none;
+	color: #000000;
+	padding-right: 20px;
+}
+div#navigation div#profile-detail {
+    position: absolute;
+    left: 115px;
+    width: 150px;
+    z-index: 100;
+}
+div#navigation div.dropdown-menu {
+    display: none;
+    background: #ffffff;
+    border: 1px solid #b8b8ba;
+}
+div#navigation div.dropdown-menu a {
+    display: block;
+    float: none;
+    text-decoration: none;
+    padding: 7px 4px;
+}
+div#navigation div.dropdown-menu a:link,
+div#navigation div.dropdown-menu a:visited {
+    color: #000000;
+}
+div#navigation div.dropdown-menu a:hover,
+div#navigation div.dropdown-menu a:active {
+    color: #ffffff;
+    background-color: #b8b8ba;
+}
 
 /* ================================ */
 /* [03] MODAL                       */
@@ -273,7 +339,7 @@ div.modal-screen div#welcome {
 div#modal-loading {
 	width: 100px;
 	height: 100px;
-	background: url(../../assets/spinner-large.gif) center no-repeat;
+	/*background: url(../../assets/spinner-large.gif) center no-repeat;*/
 	margin: 80px auto 0;
 }
 div#modal-content {
@@ -295,9 +361,6 @@ div#modal a.modal-close {
 	background: -ms-linear-gradient(top, #969698 0%,#8f8f91 100%); /* IE10+ */
 }
 div#modal h1 {
-	font-size: 15px;
-	font-family: Verdana;
-	font-weight: bolder;
 	padding: 6px 11px;
 	margin: 1px;
 	border: 1px solid #d4d4d5;
@@ -324,4 +387,70 @@ div.action-buttons a.go:active {
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#aa5555', endColorstr='#990000'); /* for IE */
 	background: -webkit-gradient(linear, left top, left bottom, from(#aa5555), to(#990000)); /* for webkit browsers */
 	background: -moz-linear-gradient(top,  #aa5555,  #990000); /* for firefox 3.6+ */
+}
+table th {
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#b2b2b3', endColorstr='#717174'); /* IE */
+	background: -webkit-gradient(linear, left top, left bottom, from(#b2b2b3), to(#717174)); /* Webkit */
+	background: -moz-linear-gradient(top,  #b2b2b3,  #717174); /* FF 3.6+ */
+	background: -ms-linear-gradient(top, #b2b2b3 0%,#717174 100%); /* IE10+ */
+}
+
+/* ================================ */
+/* [05] TABLES                      */
+
+table {
+	width: 746px;
+	font-size: 11px;
+	margin-bottom: 18px;
+	border-width: 1px 1px 0 0;
+	border-style: solid;
+	border-color: #d4d4d5;
+}
+table th {
+	color: #ffffff;
+	font-weight: bold;
+	vertical-align: middle;
+	background-color: #717174;
+}
+table th a {
+	color: #ffffff;
+	text-decoration: none;
+}
+table td {
+	vertical-align: top;
+}
+table th,
+table td {
+	text-align: left;
+	padding: 6px 9px;
+	border-width: 0 0 1px 1px;
+	border-style: solid;
+	border-color: #d4d4d5;
+}
+table tr:nth-child(even) td {background: #ffffff}
+table tr:nth-child(odd) td  {background: #e6e6e6}
+table tr.unread td {
+	font-weight: bold;
+	background-color: #ffffcc;
+}
+
+table span.arrow {
+	display: inline-block;
+	visibility: hidden;
+	width: 11px;
+	height: 9px;
+	margin-left: 5px;
+	background-position: left top;
+	background-repeat: no-repeat;
+}
+table span.sort-down,
+table span.sort-up   {
+	visibility: visible;
+	background-image: url(../images/sprite-map.png);
+}
+table span.sort-down {background-position: -106px -51px}
+table span.sort-up   {background-position: -119px -51px}
+
+.show-results {
+	display: none;
 }
