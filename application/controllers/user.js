@@ -5,12 +5,11 @@
  * Controller to handle all interaction with the user model in the database.
  */
 
-var mongoose = require("mongoose"),
-    User = mongoose.model("user"),
-    Membership = mongoose.model("membership"),
+var User = Utils.loadModel("User"),
+    Membership = Utils.loadModel("Membership"),
     NodeMailer = Utils.loadModule("NodeMailer"),
     ResponseHandler = Utils.loadModule("ResponseHandler"),
-    AuthToken = require(global.application_root + "utils/authToken"),
+    AuthToken = Utils.AuthToken,
     
 
     getNextCICIndex = function(callback) {

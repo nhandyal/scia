@@ -10,4 +10,4 @@ for(static_method in statics) {
 	membership_schema.statics[static_method] = statics[static_method];
 }
 
-var _model = mongoose.model("membership", membership_schema);
+var _model = mongoose.model("Membership", membership_schema);

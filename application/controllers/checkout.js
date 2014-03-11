@@ -1,3 +1,4 @@
+/*
 var mongoose = require("mongoose"),
 	user = mongoose.model("user"),
 	EventTicket = mongoose.model("event_ticket"),
@@ -186,4 +187,4 @@ module.exports.submitPayment = function(req,res,transport) {
 		});     
 	}); // end async parallel
 }
-
+*/
