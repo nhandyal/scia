@@ -40,7 +40,6 @@
             loginEmail = $('input[name=LoginEmail]').val();
             loginPassword = $('input[name=LoginPassword]').val();
             if (allPass) {
-                /*
                 svc('/d1/login', {
                 'email': loginEmail,
                 'pwd': loginPassword
@@ -63,12 +62,11 @@
                 alert('Login failed');
                 }
                 }, true);
-                */
                 //TEST
-                $.cookie('card_id', 123);
-                $.cookie('f_name', 'JACK');
-                $.cookie('l_name', 'KWAN');
-                $.cookie('pay_membership_flag', 1);
+                //$.cookie('card_id', 123);
+                //$.cookie('f_name', 'JACK');
+                //$.cookie('l_name', 'KWAN');
+                //$.cookie('pay_membership_flag', 1);
                 location.reload();
             }
         });
