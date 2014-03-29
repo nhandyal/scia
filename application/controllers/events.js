@@ -1,6 +1,7 @@
 
 var mongoose = require("mongoose"),
     event = mongoose.model("event"),
+    async = require("async"),
     ResponseHandler = Utils.loadModule("ResponseHandler");
 
 
@@ -18,36 +19,91 @@ module.exports.getEvents = function(req,res,query) {
     if(req.count) {
         count = req.count;
     }
-    
-    event.find({start_time: {$gt: start}}, null, {sort: {start_time: 1}},function(dbErr,dbRes){
-        
-        if(dbErr) {
-            return ResponseHandler.processError(res, err);
-        }
 
-        var numberToReturn = dbRes.length;
-        if(count > 0){
-            numberToReturn = count;
-        }
-        
-        var response = [];
+    if(req.loggedIn) {
+	async.parallel({
+                events: function(callback){
+			 event.find({start_time: {$gt: start}}, null, {sort: {start_time: 1}},function(dbErr,dbRes){
+                                dbTransactionCallback(dbErr, dbRes, callback);
+                        });
+                },
+                tickets: function(callback){
+                        EventTicket.find({member_id: req.id}, function(dbErr,dbRes){
+                                dbTransactionCallback(dbErr, dbRes, callback);
+                        });
+                }
+        }, function(err, results){
+                if(err || results.events.dbErr || results.tickets.dbErr){
+                        utils.log("Error finding the events or the tickets" +err);
+                        utils.sendError(res,10050);
+                }
+       			         
+		var numberToReturn = results.user.dbRes.length;
+		if(count > 0){
+		    numberToReturn = count;
+		}
+			 
+		var response = [];
 
-        for(var i=0;i<numberToReturn;i++) {
-            var entry = dbRes[i].toObject();
-            if(entry.removed){ 
-                continue; 
-            }
+		for(var i=0;i<numberToReturn;i++) {
+		    var entry = results.events.dbRes[i].toObject();
+		    if(entry.removed){ 
+			continue; 
+		    }
+		
+		    entry.bought_ticket = false;
+		    
+		    if(results.tickets.dbRes.length != "undefined"){
+		    //can't find javascript hashes that are good, using brute force searches until I do
+		    for(var i=0;i<results.tickets.dbRes.length;i++){
+			if(results.tickets.dbRes[i].event_id == entry.fb_id){
+				entry.bought_ticket = true; //should remove the found tickets from the list, but that can be added later
+				break;
+			}
+		    }
 
-            entry.id = entry.fb_id;
+		    entry.id = entry.fb_id;
 
-            delete entry.fb_id;
-            delete entry._id;
-            
-            response.push(entry);
-        }
-        
-        return ResponseHandler.sendSuccess(res, response);
-    }); 
+		    delete entry.fb_id;
+		    delete entry._id;
+		     
+		    response.push(entry);
+		}
+			 
+		return ResponseHandler.sendSuccess(res, response);
+		}
+	});
+    } else {
+	    event.find({start_time: {$gt: start}}, null, {sort: {start_time: 1}},function(dbErr,dbRes){
+		
+		if(dbErr) {
+		    return ResponseHandler.processError(res, err);
+		}
+
+		var numberToReturn = dbRes.length;
+		if(count > 0){
+		    numberToReturn = count;
+		}
+		
+		var response = [];
+
+		for(var i=0;i<numberToReturn;i++) {
+		    var entry = dbRes[i].toObject();
+		    if(entry.removed){ 
+			continue; 
+		    }
+
+		    entry.id = entry.fb_id;
+
+		    delete entry.fb_id;
+		    delete entry._id;
+		    
+		    response.push(entry);
+		}
+		
+		return ResponseHandler.sendSuccess(res, response);
+	    }); 
+    }
 }
 
 module.exports.getEventDetails = function(req,res,query) {
