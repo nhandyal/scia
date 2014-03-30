@@ -203,10 +203,10 @@ $(document).ready(function () {
 			    }
 
 			    function createDiv(json) {
-			        var eventContainer = document.createElement('div');
-			        eventContainer.id = 'eventContainer';
-			        eventContainer.className = 'eventContainer';
-			        document.getElementById('eventContent').appendChild(eventContainer);
+			        var eventContainerModal = document.createElement('div');
+			        eventContainerModal.id = 'eventContainerModal';
+			        eventContainerModal.className = 'eventContainerModal';
+			        document.getElementById('eventContent').appendChild(eventContainerModal);
 
 			        //Event Title
 			        var divTitle = document.createElement('div');
@@ -214,7 +214,7 @@ $(document).ready(function () {
 			        divTitle.className = 'eventTitle';
 			        var date = new Date(json.start_time);
 			        divTitle.innerHTML = json.name + ' - ' + date.toDateString() + '<input type=\"hidden\" name=\"eventID\" value=\"' + json.id + '\">';
-			        document.getElementById('eventContainer').appendChild(divTitle);
+			        document.getElementById('eventContainerModal').appendChild(divTitle);
 
 			        //Price
 			        var eventPrice = document.createElement('div');
@@ -229,7 +229,7 @@ $(document).ready(function () {
 			        } else {
 			            eventPrice.innerHTML = 'No Price Information Available';
 			        }
-			        document.getElementById('eventContainer').appendChild(eventPrice);
+			        document.getElementById('eventContainerModal').appendChild(eventPrice);
 			        updateAmount();
 			    }
 

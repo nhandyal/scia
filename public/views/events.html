@@ -292,7 +292,7 @@
 	            var divTitle = document.createElement('div');
 	            divTitle.id = 'eventTitle' + digit;
 	            divTitle.className = 'eventTitle';
-	            divTitle.innerHTML = '<a href=\"?eventID=' + json.id + '\">' + json.name + '</a><input type=\"hidden\" name=\"eventTitle' + digit + '\" value=\"' + json.name + '\"><input type=\"hidden\" name=\"eventID' + digit + '\" value=\"' + json.id + '\">';
+	            divTitle.innerHTML = '<a href=\"event.html?eventID=' + json.id + '\">' + json.name + '</a><input type=\"hidden\" name=\"eventTitle' + digit + '\" value=\"' + json.name + '\"><input type=\"hidden\" name=\"eventID' + digit + '\" value=\"' + json.id + '\">';
 	            document.getElementById('leftContainer' + digit).appendChild(divTitle);
 
 	            //Image
@@ -318,7 +318,7 @@
 	            eventDescription.className = 'eventDescription';
 	            var theString = json.description;
 	            if (theString.length > 100 && multiple) {
-	                theString = theString.substr(0, 400) + '...';
+	                theString = theString.substr(0, 400) + '... ' + '<a href=\"event.html?eventID=' + json.id + '\">' + '[See More]' + '</a>';
 	            }
 	            eventDescription.innerHTML = theString;
 	            document.getElementById('rightContainer' + digit).appendChild(eventDescription);
