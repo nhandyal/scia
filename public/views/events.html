@@ -245,7 +245,7 @@
                 //Purchase Button
 	            var eventButton = document.createElement('div');
 	            eventButton.className = 'action-buttons';
-                eventButton.innerHTML = '<a id=\"btn-purchase-' + digit + '\" class=\"go\" href=\"javascript:;\" onclick=\"\">Add Ticket &nbsp; &gt;</a>';
+                eventButton.innerHTML = '<a id=\"btn-purchase-' + digit + '\" class=\"go\" href=\"javascript:modal.addTickets(' + json.non_member_price +');\" >Add Ticket &nbsp; &gt;</a>';
 	            document.getElementById('leftContainer' + digit).appendChild(eventButton);
 	        }
         </script>
