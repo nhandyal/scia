@@ -180,7 +180,7 @@ module.exports.reset = function(res, params) {
         token = params.token,
         new_pwd = params.new_pwd;
 
-
+    
     User.findOneByID(userDbID, function(err, user) {
         if(err) {
             console.log(err);

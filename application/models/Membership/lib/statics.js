@@ -5,7 +5,7 @@ var mongoose = require("mongoose");
  *
  */
 module.exports.getLatestMembershipPrice = function(onCompleteCallback) {
-	var _model = mongoose.model("membership");
+	var _model = mongoose.model("Membership");
 
 	_model.findOne({}, {}, { sort: { 'created' : -1 } }, function(err, membershipDocument) {
   		if(err) {

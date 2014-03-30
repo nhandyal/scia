@@ -1,10 +1,6 @@
 module.exports.schema_def = {
-	// required elements
-	member_id 			: {
-		type				: Number,
-		default				: 000000
-	},
 	
+	// required elements
 	is_verified 		: {
 		type				: Boolean,
 		default				: false
