@@ -113,9 +113,9 @@ module.exports.queryFacebook = function() {
 
                 event.update({fb_id:newEvent.fb_id},newEvent,{upsert: true, new: true},function(err, newEvent){
                     if(err) {
-                        Utils.log("There was an error processing the request "+err);
+                        //Utils.log("There was an error processing the request "+err);
                     } else {
-                        Utils.log("Event successfully written to database");
+                        //Utils.log("Event successfully written to database");
                     }
                 });
             }

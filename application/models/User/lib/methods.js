@@ -7,6 +7,22 @@ var processStripeError = function(err) {
     }else {
         return err;
     }
+};
+
+module.exports.getCoreUserDetails = function() {
+    var user = this;
+
+    return {
+        "user_id"   : user._id,
+        "f_name"    : user.f_name,
+        "l_name"    : user.l_name,
+        "email"     : user.email
+    };
+
+};
+
+module.exports.isMemeber = function() {
+    return this.is_member;
 }
 
 module.exports.login = function(pwd, onCompleteCallback) {
