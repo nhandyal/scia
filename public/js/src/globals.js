@@ -264,7 +264,7 @@ function svcError(xhr, ajaxOptions, thrownError) {
 
 // User
 function logout() {
-    svc('/d1/logout', {}, function (data) {
+    svc('/d1/user/logout', {}, function (data) {
         location.reload();
     });
 }
@@ -799,4 +799,10 @@ modal.login = function () {
 // Pay Membership popup
 modal.payMembership = function () {
     modal.open('modal/pay-membership.html', {}, 396, 324);
+}
+
+// Add tickets popup
+modal.addTickets = function (price) {
+    modal.open('modal/add-tickets.html', {}, 396, 324);
+	sessionStorage['price'] = price;
 }
