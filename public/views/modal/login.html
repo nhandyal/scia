@@ -10,6 +10,7 @@
                 var simplyExist = [
                     'LoginEmail',
                     'LoginPassword',
+                    'ResendEmail',
                     'VerifyConfirmationCode'
                 ];
                 if (simplyExist.indexOf(x.filter) > -1) {
@@ -32,6 +33,8 @@
     $(document).ready(function () {
         $('#modal-login-userinfo').show();
         $('#modal-login-verify').hide();
+        $('#modal-login-resend').hide();
+        $('#modal-login-sent').hide();
         $('#modal-login-thankyou').hide();
 
         $('#btn-login').click(function (event) {
@@ -40,27 +43,29 @@
             loginEmail = $('input[name=LoginEmail]').val();
             loginPassword = $('input[name=LoginPassword]').val();
             if (allPass) {
-                svc('/d1/login', {
+                svc('/d1/user/login', {
                 'email': loginEmail,
                 'pwd': loginPassword
                 }, function (data) {
-                if (data.status == 0) {
-                location.reload();
-                }
-                else if (data.status == 10051) {
-                // Verify account
-                $('#modal-login-userinfo').hide();
-                $('#modal-login-verify').show();
-                $('#modal-login-thankyou').hide();
-                }
-                else if (data.status == 10050) {
-                // Error login failed - email/password combination was not correct
-                alert(data.short_message + '\n' + data.long_message);
-                }
-                else {
-                // Error all other
-                alert('Login failed');
-                }
+                    if (data.status == 0) {
+                        location.reload();
+                    }
+                    else if (data.status == 10051) {
+                        // Verify account
+                        $('#modal-login-userinfo').hide();
+                        $('#modal-login-verify').show();
+                        $('#modal-login-resend').hide();
+                        $('#modal-login-sent').hide();
+                        $('#modal-login-thankyou').hide();
+                    }
+                    else if (data.status == 10050) {
+                        // Error login failed - email/password combination was not correct
+                        alert(data.short_message + '\n' + data.long_message);
+                    }
+                    else {
+                        // Error all other
+                        alert('Login failed');
+                    }
                 }, true);
                 //TEST
                 //$.cookie('card_id', 123);
@@ -68,6 +73,42 @@
                 //$.cookie('l_name', 'KWAN');
                 //$.cookie('pay_membership_flag', 1);
                 location.reload();
+            }
+        });
+
+        $('#link-resend').click(function (event) {
+            event.preventDefault();
+            $('#modal-login-userinfo').hide();
+            $('#modal-login-verify').hide();
+            $('#modal-login-resend').show();
+            $('#modal-login-sent').hide();
+            $('#modal-login-thankyou').hide();
+        });
+
+        $('#btn-resend').click(function (event) {
+            event.preventDefault();
+            allPass = field.checkAll('form#resend');
+            resendEmail = $('input[name=VerifyConfirmationCode]').val();
+            if (allPass) {
+                svc('/d1/user/resendVerificationEmail', {
+                    'email': resendEmail
+                }, function (data) {
+                    if (data.status == 0) {
+                        $('#modal-login-userinfo').hide();
+                        $('#modal-login-verify').hide();
+                        $('#modal-login-resend').hide();
+                        $('#modal-login-sent').show();
+                        $('#modal-login-thankyou').hide();
+                    }
+                    else if (data.status != null) {
+                        // Error resend email failed
+                        alert(data.short_message + '\n' + data.long_message);
+                    }
+                    else {
+                        // Error all other
+                        alert('Resend email Failed');
+                    }
+                }, true);
             }
         });
 
@@ -81,13 +122,15 @@
                     'vrf_token': vrf_token
                 }, function (data) {
                     if (data.status == 0) {
-                        svc('/d1/login', {
+                        svc('/d1/user/login', {
                             'email': loginEmail,
                             'pwd': loginPassword
                         }, function (data2) {
                             if (data2.status == 0) {
                                 $('#modal-login-userinfo').hide();
                                 $('#modal-login-verify').hide();
+                                $('#modal-login-resend').hide();
+                                $('#modal-login-sent').hide();
                                 $('#modal-login-thankyou').show();
                                 loggedIn = true;
                             }
@@ -154,7 +197,7 @@
     <h1>Verification</h1>
     <form action="#" id="verify" method="post">
         <div class="col col2">
-            <label>Enter the confirmation code generated from the verification email.</label>
+            <label>Please enter the confirmation code generated from the verification email.  If you did not receive the verification email, please check your spam mailbox. <a href="javascript:;" id="link-resend" class="site-link">Click here</a> to send another email to yourself.</label>
             <label for="VerifyConfirmationCode">Confirmation Code:</label>
             <input type="text" name="VerifyConfirmationCode" id="VerifyConfirmationCode" value="" tabindex="1" onblur="field.check(this)" />
         </div>
@@ -162,4 +205,30 @@
             <a id="btn-verify" class="go" href="#" tabindex="5">Verify &nbsp; &gt;</a>
         </div>
     </form>
+</div>
+
+<div id="modal-login-resend" class="modal-screen">
+    <h1>Resend Verification Email</h1>
+    <form action="#" id="resend" method="post">
+        <div class="col col2">
+            <label>Please enter the email address that you registered with to resend the verification email.  Please make sure that uscscia.com is allowed to send you email.</label>
+            <label for="ResendEmail">Email Address:</label>
+            <input type="text" name="ResendEmail" id="ResendEmail" value="" tabindex="1" onblur="field.check(this)" />
+        </div>
+        <div class="action-buttons">
+            <a id="btn-resend" class="go" href="#" tabindex="5">Resend &nbsp; &gt;</a>
+        </div>
+    </form>
+</div>
+
+<div id="modal-login-sent" class="modal-screen">
+    <h1>Resend Verification Email</h1>
+    <div class="col col2">
+        <div id="welcome">
+            Thank you! Verification email was sent.<br /><br />
+        </div>
+    </div>
+    <div class="action-buttons">
+        <a id="btn-close" class="go" href="javascript:closeModal()" tabindex="1">X &nbsp; Close</a>
+    </div>
 </div>
