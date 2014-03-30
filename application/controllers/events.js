@@ -62,10 +62,10 @@ module.exports.getEvents = function(req,res,query) {
 			}
 		    }
 
-		    entry.id = entry.fb_id;
+		    //entry.id = entry.fb_id;
 
-		    delete entry.fb_id;
-		    delete entry._id;
+		    //delete entry.fb_id;
+		    //delete entry._id;
 		     
 		    response.push(entry);
 		}
@@ -89,14 +89,15 @@ module.exports.getEvents = function(req,res,query) {
 
 		for(var i=0;i<numberToReturn;i++) {
 		    var entry = dbRes[i].toObject();
+		    console.log(entry);
 		    if(entry.removed){ 
 			continue; 
 		    }
 
-		    entry.id = entry.fb_id;
+		    //entry.id = entry.fb_id;
 
-		    delete entry.fb_id;
-		    delete entry._id;
+		    //delete entry.fb_id;
+		    //delete entry._id;
 		    
 		    response.push(entry);
 		}
@@ -120,10 +121,10 @@ module.exports.getEventDetails = function(req,res,query) {
 	}
 
         var response = dbRes[0];
-        response.id = response.fb_id;
+        //response.id = response.fb_id;
 
-        delete response._id;
-        delete response.fb_id;
+        //delete response._id;
+        //delete response.fb_id;
 
         return ResponseHandler.sendSuccess(res, responseData);
     });

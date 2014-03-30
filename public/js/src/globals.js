@@ -1,12 +1,6 @@
 var svcRunning = [], html, table, tdArr, checkbox, label, detailLink, popWidth = null, popHeight = null, goToScreen; //TODO Remove the reserved word final from variable
 
 $(function () {
-    // TODO - test
-    //$.cookie('card_id', 123);
-    //$.cookie('f_name', 'JACK');
-    //$.cookie('l_name', 'KWAN');
-    //$.cookie('pay_membership_flag', 1);
-
     // Close options when clicking outside the menu
     $('div#profile-detail').click(function (event) { event.stopPropagation(); });
     $('html').click(function (event) { closeProfileOpts(); });
@@ -270,7 +264,7 @@ function svcError(xhr, ajaxOptions, thrownError) {
 
 // User
 function logout() {
-    svc('/d1/logout', {}, function (data) {
+    svc('/d1/user/logout', {}, function (data) {
         location.reload();
     });
 }
@@ -805,4 +799,10 @@ modal.login = function () {
 // Pay Membership popup
 modal.payMembership = function () {
     modal.open('modal/pay-membership.html', {}, 396, 324);
+}
+
+// Add tickets popup
+modal.addTickets = function (price) {
+    modal.open('modal/add-tickets.html', {}, 396, 324);
+	sessionStorage['price'] = price;
 }

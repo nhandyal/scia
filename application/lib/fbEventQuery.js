@@ -53,8 +53,6 @@ module.exports.queryFacebook = function() {
                 var non_member_price = null;
                 if(typeof description != "undefined"){
                     member_price = description.match(/\|\| +member.+/i);
-                    console.log(member_price);
-                    console.log(typeof member_price);
                     if(member_price == null) {
                         member_price = null;
                     } else {
@@ -113,9 +111,9 @@ module.exports.queryFacebook = function() {
 
                 event.update({fb_id:newEvent.fb_id},newEvent,{upsert: true, new: true},function(err, newEvent){
                     if(err) {
-                        //Utils.log("There was an error processing the request "+err);
+                        console.log("There was an error processing the request "+err);
                     } else {
-                        //Utils.log("Event successfully written to database");
+                        console.log("Event successfully written to database");
                     }
                 });
             }
