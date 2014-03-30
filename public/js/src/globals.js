@@ -1,12 +1,6 @@
 var svcRunning = [], html, table, tdArr, checkbox, label, detailLink, popWidth = null, popHeight = null, goToScreen; //TODO Remove the reserved word final from variable
 
 $(function () {
-    // TODO - test
-    //$.cookie('card_id', 123);
-    //$.cookie('f_name', 'JACK');
-    //$.cookie('l_name', 'KWAN');
-    //$.cookie('pay_membership_flag', 1);
-
     // Close options when clicking outside the menu
     $('div#profile-detail').click(function (event) { event.stopPropagation(); });
     $('html').click(function (event) { closeProfileOpts(); });

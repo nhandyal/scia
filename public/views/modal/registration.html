@@ -59,7 +59,6 @@ $(document).ready(function () {
         registerMajor = $('input[name=RegisterMajor]').val().toUpperCase();
         registerPassword = $('input[name=RegisterPassword]').val();
         if (allPass) {
-            /*
             svc('/d1/register', {
                 'f_name': registerFirstName,
                 'l_name': registerLastName,
@@ -82,10 +81,9 @@ $(document).ready(function () {
                     alert('Verify failed');
                 }
             }, true);
-            */
             //TEST
-            $('#modal-registration-userinfo').hide();
-            $('#modal-registration-thankyou').show();
+            //$('#modal-registration-userinfo').hide();
+            //$('#modal-registration-thankyou').show();
             //TODO add AJAX
             //alertString = '<label>' + alertString + '</label>';
             //$('div#user-info').html(alertString);
