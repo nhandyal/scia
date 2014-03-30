@@ -47,7 +47,7 @@ var stripeResponseHandler = function (status, response) {
 */
 
 $(document).ready(function () {
-	$("#price").html("$" + sessionStorage.getItem('price'));
+    //var ticket = sessionStorage.getItem('ticket');
     $('#modal-pay-ticket-payment').show();
     $('#modal-pay-ticket-thankyou').hide();
 
@@ -130,22 +130,120 @@ $(document).ready(function () {
     <h1>Ticket Payment</h1>
     <form action="#" id="payment" method="post">
         <div class="col col2">
-            <p style="margin-top:10px;">Please enter your payment information for:<br /><b>SCIA Ticket Fee: <span id="price"></span></b></p>
+		    <div style="margin-top:10px;" id="eventContent"></div>
+            <p style="margin-top:10px;">Please enter your payment information:</p>
 			<label for="TicketAmount">Number of tickets:</label>
-			<input type="text" name="TicketAmount" id="TicketAmount" value="0" tabindex="5" onblur="field.check(this)" />
-			<div id="totalAmount" onload="">Total: $0</div>
-			
-			<script>
-			
-			function updateAmount() {
-				var price = sessionStorage.getItem('price');
-				var amount = $("#TicketAmount").val();
-				$("#totalAmount").html("Total: $" + price + " * " + amount + " = $" + price*amount);
-			}
-			
-			$("#TicketAmount").keyup(function() {
-				updateAmount();
-			});
+            <span class="dropdown">
+                <select name="TicketAmount" id="TicketAmount" tabindex="0">
+                    <option value="1" selected>1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="9">9</option>
+                </select>
+            </span>
+			<div style="margin-top:10px;" id="totalAmount" onload=""><b>Total: $0</b></div>
+			<script type="text/javascript">
+			    var eventMemberPrice = 0;
+			    var eventNonMemberPrice = 0;
+			    var sampleEventJSON = [
+                    {
+                        "member_price": "15",
+                        "non_member_price": "20",
+                        "description": "Join SCIA this Garba season at one of the most colorful, fun, and social events our Indian culture has to offer!\n\nSCIA will be carpooling members to the annual raas/garba held at the Anaheim Convention Center on Saturday, October 12th. \n\nPrice: $15 for members and $20 for non-members. This includes parking, gas, AND admission to the event! If you don't have dandiyas, you can purchase them from SCIA for $3! (They're $5 at the event)\n\nYou can purchase tickets at THIS LINK: http://bit.ly/sciagarba\n\nOR from any board member/ at our booth on Trousdale this week between 11-2 pm Tues-Thurs! \n\nThursday Oct. 10th is the LAST day to buy your ticket! \n\nCars will leave from behind Leavey at 7:30 pm. If you are able/willing to drive, please indicate that on the form below (you will be reimbursed!).\n\nDon't know how to garba? No worries, SCIA will be hosting a workshop at 2 pm at VKC the day of to go over basic moves and formations! We'll have you garba ready in no time.\n\nFill out the interest form below!\nhttp://tinyurl.com/sciagarba",
+                        "event_img_url": "http://scontent-a.xx.fbcdn.net/hphotos-prn1/1380654_613114062063882_1565605745_n.jpg",
+                        "location": "Anaheim Convention Center",
+                        "name": "Garba with SCIA",
+                        "start_time": "2013-10-13T02:30:00.000Z",
+                        "transportation": false,
+                        "transportation_cost": null,
+                        "id": "447187142065109"
+                    }
+                ];
+
+			    $(document).ready(function () {
+			        /*
+			        $.ajax({
+			        url: '/d1/events' + window.location.search,
+			        dataType: 'json',
+			        type: 'GET',
+			        contentType: 'application/json',
+			        success: function (data) {
+			        if (data != null) {
+			        //loadEvents(data);
+			        }
+			        }
+			        });
+			        */
+                    //TEST
+			        loadEvents(sampleEventJSON);
+			    });
+
+
+			    function loadEvents(events) {
+			        if (events.length > 0) {
+			            createDiv(events[0]);
+			        }
+			    }
+
+			    function createDiv(json) {
+			        var eventContainer = document.createElement('div');
+			        eventContainer.id = 'eventContainer';
+			        eventContainer.className = 'eventContainer';
+			        document.getElementById('eventContent').appendChild(eventContainer);
+
+			        //Event Title
+			        var divTitle = document.createElement('div');
+			        divTitle.id = 'eventTitle';
+			        divTitle.className = 'eventTitle';
+			        var date = new Date(json.start_time);
+			        divTitle.innerHTML = json.name + ' - ' + date.toDateString() + '<input type=\"hidden\" name=\"eventID\" value=\"' + json.id + '\">';
+			        document.getElementById('eventContainer').appendChild(divTitle);
+
+			        //Price
+			        var eventPrice = document.createElement('div');
+			        eventPrice.id = 'eventPrice';
+			        eventPrice.className = 'eventPrice';
+			        eventMemberPrice = json.member_price;
+			        eventNonMemberPrice = json.non_member_price;
+			        if (eventMemberPrice != null) {
+			            eventPrice.innerHTML = 'Member Price: ' + eventMemberPrice + '<br> Non-Member Price: ' + eventNonMemberPrice + '<br>';
+			        } else if (eventNonMemberPrice != null) {
+			            eventPrice.innerHTML = 'Price: ' + eventNonMemberPrice;
+			        } else {
+			            eventPrice.innerHTML = 'No Price Information Available';
+			        }
+			        document.getElementById('eventContainer').appendChild(eventPrice);
+			        updateAmount();
+			    }
+
+			    function updateAmount() {
+			        //var price = sessionStorage.getItem('ticket');
+			        //var amount = $("#TicketAmount").val();
+			        var amount = $('select[name=TicketAmount] option:selected').val();
+			        ticketText = (amount > 1) ? 's' : '';
+			        $("#totalAmount").html('<b>Total: $' + eventNonMemberPrice * amount + ' (' + amount + ' $' + eventNonMemberPrice + ' ticket' + ticketText + ')</b>');
+			    }
+
+			    $('select[name=TicketAmount]').change(function () {
+				    updateAmount();
+			    });
 			</script>
 			
             <label for="PaymentCardNumber">Card Number:</label>
