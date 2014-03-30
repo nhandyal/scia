@@ -264,7 +264,7 @@ function svcError(xhr, ajaxOptions, thrownError) {
 
 // User
 function logout() {
-    svc('/d1/logout', {}, function (data) {
+    svc('/d1/user/logout', {}, function (data) {
         location.reload();
     });
 }
