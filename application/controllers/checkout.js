@@ -45,7 +45,7 @@ module.exports.submitPayment = function(req,res,transport) {
 			});
 		},
 		event_info: function(callback){
-			Event.find({fb_id: event_id},function(err, dbRes){
+			Event.find({_id: event_id},function(err, dbRes){
 				dbTransactionCallback(dbErr, dbRes, callback);
 			});
 		}
@@ -91,7 +91,7 @@ module.exports.submitPayment = function(req,res,transport) {
 		
 		if(charge_total != total){
 			utils.sendError(res,10103);
-			utils.log("Failed Transaction for "+user.email+" calculated total: "+charge_total+"       input total: "+total);
+			console.log("Failed Transaction for "+user.email+" calculated total: "+charge_total+"       input total: "+total);
 			return;
 		}
 
