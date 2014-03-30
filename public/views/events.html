@@ -30,12 +30,7 @@
                 <div class="clear"></div>
 			</div>
 			<h1>Upcoming Events</h1>
-            <p style="text-align: right;">
-	        Shopping Cart: <a href="cart.html" class="site-link"><span class="simpleCart_total"></span> (<span id="simpleCart_quantity" class="simpleCart_quantity"></span> items)</a>
-	        <br />
-	        </p>
-		<div id="eventsContent"></div>
-            </div>
+		    <div id="eventsContent"></div>
 		</div>
 		<div id="footer">
 			<div id="legal">
@@ -43,159 +38,216 @@
 			</div>
 		</div>
 		<style type="text/css">
-		#eventHeader {
-			text-align: center;
-		}
-		#eventsContent {
-			width: 100%;
-			height: 100%;
-		}
-		.eventContainerLeft {
-			float: left;
-			width: 600px;
-			height: 200px;
-		}
-		.eventContainerRight {
-			float: left;
-			width: 600px;
-			height: 200px;
-		}
+		    #eventHeader {
+			    text-align: center;
+		    }
+		    #eventsContent {
+			    width: 100%;
+			    height: 100%;
+		    }
+		    .eventContainerLeft {
+			    float: left;
+			    width: 600px;
+			    height: 200px;
+		    }
+		    .eventContainerRight {
+			    float: left;
+			    width: 600px;
+			    height: 200px;
+		    }
 
-		.rightContainer {
-			margin: 10px;
-			float: left;
-			width: 340px;
-		}
-		.leftContainer {
-			margin: 10px;
-			float: left;
-			width: 180px;
-		}
-		.eventTitle {
-			margin-bottom: 10px;
-			font-weight: bold;
-		}
-		.eventTitle a {
-		    color: #990000;
-			font-weight: bold;
-			text-decoration: none;
-		}
-		.eventImage {
+		    .rightContainer {
+			    margin: 10px 5px;
+			    float: left;
+			    width: 380px;
+		    }
+		    .leftContainer {
+			    margin: 10px 5px;
+			    float: left;
+			    width: 180px;
+		    }
+		    .eventTitle {
+			    margin-bottom: 7px;
+			    font-weight: bold;
+		    }
+		    .eventTitle a {
+		        color: #990000;
+			    font-weight: bold;
+			    text-decoration: none;
+		    }
+		    .eventImage {
+			    margin-bottom: 7px;
+		    }
+		    .eventDate {
+			    font-style: italic;
+			    margin-bottom: 7px;
+		    }
+		    .eventDescription {
+			    margin-bottom: 7px;
+		    }
+		    .eventDescription {
 
-		}
-		.eventDate {
-			font-style: italic;
-			margin-bottom: 10px;
-		}
-		.eventDescription {
+		    }
+		    .eventPrice {
 
-		}
-		.eventPrice {
-
-		}
+		    }
 		</style>
        	
-	<script type="text/javascript" src="../js/dist/jquery/1.7.1/jquery.min.js"></script>
-	<script type="text/javascript" src="../js/dist/jquery/plugins/jquery.cookie.js"></script>
-	<script type="text/javascript">
-        var sampleEventJSON = [{"member_price":"15","non_member_price":"20","description":"Join SCIA this Garba season at one of the most colorful, fun, and social events our Indian culture has to offer!\n\nSCIA will be carpooling members to the annual raas/garba held at the Anaheim Convention Center on Saturday, October 12th. \n\nPrice: $15 for members and $20 for non-members. This includes parking, gas, AND admission to the event! If you don't have dandiyas, you can purchase them from SCIA for $3! (They're $5 at the event)\n\nYou can purchase tickets at THIS LINK: http://bit.ly/sciagarba\n\nOR from any board member/ at our booth on Trousdale this week between 11-2 pm Tues-Thurs! \n\nThursday Oct. 10th is the LAST day to buy your ticket! \n\nCars will leave from behind Leavey at 7:30 pm. If you are able/willing to drive, please indicate that on the form below (you will be reimbursed!).\n\nDon't know how to garba? No worries, SCIA will be hosting a workshop at 2 pm at VKC the day of to go over basic moves and formations! We'll have you garba ready in no time.\n\nFill out the interest form below!\nhttp://tinyurl.com/sciagarba","event_img_url":"http://scontent-a.xx.fbcdn.net/hphotos-prn1/1380654_613114062063882_1565605745_n.jpg","location":"Anaheim Convention Center","member_price":null,"name":"Garba with SCIA","start_time":"2013-10-13T02:30:00.000Z","transportation":false,"transportation_cost":null,"id":"447187142065109"},{"description":"Because everyone loves a good SCandal.\n\nGet ready for our biggest party of the year! \n\nCome misbehave at SCIA's annual club party THIS Thursday, October 17th at 9 PM!\n\nRelease your inhibitions and let loose on the dance floor or get cheeky next to someone in the hookah lounge!\n\n18+ gets you in\n21+ lets you sin\n\nPRESALE: \n|| Members: $15 \n|| Non-Members: $20 \n\nAT THE BUS:\n|| Members: $20 \n|| Non-Members: $25\n\nPRESALE closes at 2 PM on Thursday so get your tickets now!\n\n\nHOOKAH\nSICK DJ\nA WELL STOCKED CLUB BAR (Ain't nobody got time for a fratty thursday night)\n\nBUSES will leave from behind Leavey at 9 PM SHARP! \n\nOnline ticket sales:http://bit.ly/sciascandal\n\nTickets can also be purchased from any board member or at our booth on Trousdale from 11 am to 2 pm Mon-Thursday!\n\nTickets are LIMITED and it's first come first serve, so get yours NOW!\n\nTry to remember this scandalous night for you will be waking up to plenty of malicious gossip and trending rumors the next morning...In fact why not be scandy yourself and trend the party with our official hashtags: #GetScandy #SCandal2013 #uscscia ","event_img_url":"http://scontent-b.xx.fbcdn.net/hphotos-prn2/1376375_617457278296227_1840798335_n.jpg","location":"Secret Location","member_price":"15","name":"SCandal: SCIA's Annual Club Party","non_member_price":"20","start_time":"2013-10-18T04:00:00.000Z","transportation":false,"transportation_cost":null,"id":"1429534883940515"},{"description":"South Asian Parent Circle is proud to bring you a Mentoring Panel Discussion this Friday, October 25 from 3:45pm – 4:30pm in the Tutor Campus Center Trojan Generations Room (#326). \n\nHear advice from panelists including USC alumni who will discuss opportunities in their fields and companies. This session will also provide a lot of great information about potential internships and much more! \n\nThis is a great opportunity for anyone looking for internships, networking, and job opportunities and we encourage everyone to come by!\n\nStudents are welcome to attend with their parents. No RSVP is required for this session, but if you plan to attend, please email Geetika Walia at uscsouthasianparentcircle@gmail.com. ","event_img_url":"http://scontent-b.xx.fbcdn.net/hphotos-ash3/539797_623764064332215_2147324600_n.jpg","location":"TCC Trojan Generations Room (326)","member_price":null,"name":"SAPC Mentoring/Internship Panel","non_member_price":null,"start_time":"2013-10-25T22:45:00.000Z","transportation":false,"transportation_cost":null,"id":"587283531336292"}]
+	    <script type="text/javascript" src="../js/dist/jquery/1.7.1/jquery.min.js"></script>
+	    <script type="text/javascript" src="../js/dist/jquery/plugins/jquery.cookie.js"></script>
+	    <script type="text/javascript">
+	        var sampleEventJSON = [
+                {
+                    "member_price": "15",
+                    "non_member_price": "20",
+                    "description": "Join SCIA this Garba season at one of the most colorful, fun, and social events our Indian culture has to offer!\n\nSCIA will be carpooling members to the annual raas/garba held at the Anaheim Convention Center on Saturday, October 12th. \n\nPrice: $15 for members and $20 for non-members. This includes parking, gas, AND admission to the event! If you don't have dandiyas, you can purchase them from SCIA for $3! (They're $5 at the event)\n\nYou can purchase tickets at THIS LINK: http://bit.ly/sciagarba\n\nOR from any board member/ at our booth on Trousdale this week between 11-2 pm Tues-Thurs! \n\nThursday Oct. 10th is the LAST day to buy your ticket! \n\nCars will leave from behind Leavey at 7:30 pm. If you are able/willing to drive, please indicate that on the form below (you will be reimbursed!).\n\nDon't know how to garba? No worries, SCIA will be hosting a workshop at 2 pm at VKC the day of to go over basic moves and formations! We'll have you garba ready in no time.\n\nFill out the interest form below!\nhttp://tinyurl.com/sciagarba",
+                    "event_img_url": "http://scontent-a.xx.fbcdn.net/hphotos-prn1/1380654_613114062063882_1565605745_n.jpg",
+                    "location": "Anaheim Convention Center",
+                    "name": "Garba with SCIA",
+                    "start_time": "2013-10-13T02:30:00.000Z",
+                    "transportation": false,
+                    "transportation_cost": null,
+                    "id": "447187142065109"
+                },
+                {
+                    "member_price": "15",
+                    "non_member_price": "20",
+                    "description": "Because everyone loves a good SCandal.\n\nGet ready for our biggest party of the year! \n\nCome misbehave at SCIA's annual club party THIS Thursday, October 17th at 9 PM!\n\nRelease your inhibitions and let loose on the dance floor or get cheeky next to someone in the hookah lounge!\n\n18+ gets you in\n21+ lets you sin\n\nPRESALE: \n|| Members: $15 \n|| Non-Members: $20 \n\nAT THE BUS:\n|| Members: $20 \n|| Non-Members: $25\n\nPRESALE closes at 2 PM on Thursday so get your tickets now!\n\n\nHOOKAH\nSICK DJ\nA WELL STOCKED CLUB BAR (Ain't nobody got time for a fratty thursday night)\n\nBUSES will leave from behind Leavey at 9 PM SHARP! \n\nOnline ticket sales:http://bit.ly/sciascandal\n\nTickets can also be purchased from any board member or at our booth on Trousdale from 11 am to 2 pm Mon-Thursday!\n\nTickets are LIMITED and it's first come first serve, so get yours NOW!\n\nTry to remember this scandalous night for you will be waking up to plenty of malicious gossip and trending rumors the next morning...In fact why not be scandy yourself and trend the party with our official hashtags: #GetScandy #SCandal2013 #uscscia ",
+                    "event_img_url": "http://scontent-b.xx.fbcdn.net/hphotos-prn2/1376375_617457278296227_1840798335_n.jpg",
+                    "location": "Secret Location",
+                    "name": "SCandal: SCIA's Annual Club Party",
+                    "start_time": "2013-10-18T04:00:00.000Z",
+                    "transportation": false,
+                    "transportation_cost": null,
+                    "id": "1429534883940515"
+                },
+                {
+                    "member_price": null,
+                    "non_member_price": null,
+                    "description": "South Asian Parent Circle is proud to bring you a Mentoring Panel Discussion this Friday, October 25 from 3:45pm - 4:30pm in the Tutor Campus Center Trojan Generations Room (#326). \n\nHear advice from panelists including USC alumni who will discuss opportunities in their fields and companies. This session will also provide a lot of great information about potential internships and much more! \n\nThis is a great opportunity for anyone looking for internships, networking, and job opportunities and we encourage everyone to come by!\n\nStudents are welcome to attend with their parents. No RSVP is required for this session, but if you plan to attend, please email Geetika Walia at uscsouthasianparentcircle@gmail.com. ",
+                    "event_img_url": "http://scontent-b.xx.fbcdn.net/hphotos-ash3/539797_623764064332215_2147324600_n.jpg",
+                    "location": "TCC Trojan Generations Room (326)",
+                    "name": "SAPC Mentoring/Internship Panel",
+                    "start_time": "2013-10-25T22:45:00.000Z",
+                    "transportation": false,
+                    "transportation_cost": null,
+                    "id": "587283531336292"
+                }
+            ];
 
-		$(document).ready(function () {
-			$.ajax({
-				url: '/d1/events'+window.location.search,
-				dataType: 'json',
-				type: 'GET',
-				contentType: 'application/json',
-				success: function (data) {
-					if(data != null) {
-						loadEvents(data);
-					}
-				}
-			});
-		});
+            $(document).ready(function () {
+                /*
+                $.ajax({
+                    url: '/d1/events' + window.location.search,
+                    dataType: 'json',
+                    type: 'GET',
+                    contentType: 'application/json',
+                    success: function (data) {
+                        if (data != null) {
+                            //loadEvents(data);
+                        }
+                    }
+                });
+                */
+                loadEvents(sampleEventJSON);
+            });
 
-   		function loadEvents(events) {
-   			for(var i = 0; i<events.length; i++) {
-   				createDiv(events[i], i);
-   			}
-   		}
+            function loadEvents(events) {
+                for (var i = 0; i < events.length; i++) {
+                    if (events.length > 1) {
+                        createDiv(events[i], i, true);
+                    }
+                    else {
+                        createDiv(events[i], i, false);
+                    }
+                }
+	        }
 
-   		function createDiv(json, digit) {
-   			var eventContainer = document.createElement('div');
-   			eventContainer.id = 'eventContainer'+digit;
-   			if(digit%2==0) {
-   				eventContainer.className = 'eventContainerLeft';
-   			}
-   			else {
-   				eventContainer.className = 'eventContainerRight';
-   			}
-   			document.getElementById('eventsContent').appendChild(eventContainer);
+	        function createDiv(json, digit, multiple) {
+	            var eventContainer = document.createElement('div');
+	            eventContainer.id = 'eventContainer' + digit;
+	            if (digit % 2 == 0) {
+	                eventContainer.className = 'eventContainerLeft';
+	            }
+	            else {
+	                eventContainer.className = 'eventContainerRight';
+	            }
+	            document.getElementById('eventsContent').appendChild(eventContainer);
 
-   			var leftContainer = document.createElement('div');
-   			leftContainer.id = 'leftContainer'+digit;
-   			leftContainer.className = 'leftContainer';
+	            var leftContainer = document.createElement('div');
+	            leftContainer.id = 'leftContainer' + digit;
+	            leftContainer.className = 'leftContainer';
 
-   			var rightContainer = document.createElement('div');
-   			rightContainer.id = 'rightContainer'+digit;
-   			rightContainer.className = 'rightContainer';
-   			
-   			document.getElementById('eventContainer'+digit).appendChild(leftContainer);
-   			document.getElementById('eventContainer'+digit).appendChild(rightContainer);
+	            var rightContainer = document.createElement('div');
+	            rightContainer.id = 'rightContainer' + digit;
+	            rightContainer.className = 'rightContainer';
 
-   			//Event Title
-   			var divTitle = document.createElement('a');
-   			divTitle.id = 'eventTitle'+digit;
-   			divTitle.className = 'eventTitle';
-   			divTitle.innerHTML = json.name;
-			divTitle.href = '?eventID='+json.id;
-   			document.getElementById('leftContainer'+digit).appendChild(divTitle);
+	            document.getElementById('eventContainer' + digit).appendChild(leftContainer);
+	            document.getElementById('eventContainer' + digit).appendChild(rightContainer);
 
-   			//Image
-   			var eventImage = document.createElement('img');
-   			eventImage.id = 'eventImage'+digit;
-   			eventImage.className = 'eventImage';
-   			eventImage.src = json.event_img_url;
-   			eventImage.width = 179;
-   			eventImage.height = 67;
-   			document.getElementById('leftContainer'+digit).appendChild(eventImage);
+	            //Event Title
+	            var divTitle = document.createElement('div');
+	            divTitle.id = 'eventTitle' + digit;
+	            divTitle.className = 'eventTitle';
+	            divTitle.innerHTML = '<a href=\"?eventID=' + json.id + '\">' + json.name + '</a>';
+	            document.getElementById('leftContainer' + digit).appendChild(divTitle);
 
-   			//Date
-   			var eventDate = document.createElement('div');
-   			eventDate.id = 'eventDate'+digit;
-   			eventDate.className = 'eventDate';
-   			var date = new Date(json.start_time);
-   			eventDate.innerHTML = date.toDateString();
-   			document.getElementById('rightContainer'+digit).appendChild(eventDate);
+	            //Image
+	            var eventImage = document.createElement('img');
+	            eventImage.id = 'eventImage' + digit;
+	            eventImage.className = 'eventImage';
+	            eventImage.src = json.event_img_url;
+	            eventImage.width = 179;
+	            eventImage.height = 67;
+	            document.getElementById('leftContainer' + digit).appendChild(eventImage);
 
+	            //Date
+	            var eventDate = document.createElement('div');
+	            eventDate.id = 'eventDate' + digit;
+	            eventDate.className = 'eventDate';
+	            var date = new Date(json.start_time);
+	            eventDate.innerHTML = date.toDateString();
+	            document.getElementById('rightContainer' + digit).appendChild(eventDate);
 
-   			//Description
-   			var eventDescription = document.createElement('div');
-   			eventDescription.id = 'eventDescription'+digit;
-   			eventDescription.className = 'eventDescription';
-   			var theString = json.description;
-   			if(theString.length>100){
-   				theString = theString.substr(0,400)+'...';
-			}
-   			//var n = json.description.split('\n')
+	            //Description
+	            var eventDescription = document.createElement('div');
+	            eventDescription.id = 'eventDescription' + digit;
+	            eventDescription.className = 'eventDescription';
+	            var theString = json.description;
+	            if (theString.length > 100 && multiple) {
+	                theString = theString.substr(0, 400) + '...';
+	            }
+	            eventDescription.innerHTML = theString;
+	            document.getElementById('rightContainer' + digit).appendChild(eventDescription);
 
-   			//var text = n[0] + ' ' + n[2];
-   			eventDescription.innerHTML = theString;
-   			document.getElementById('rightContainer'+digit).appendChild(eventDescription);
-			
-			//Price
-			var eventPrice = document.createElement('div');
-			eventPrice.id = 'eventPrice'+digit;
-			eventPrice.className = 'eventPrice';
-			if(json.member_price != null) {
-				eventPrice.innerHTML = 'Member Price: ' + json.member_price + '<br> Non-Member Price: ' + json.non_member_price+'<br>';
-			} else if(json.non_member_price != null) {
-				eventPrice.innerHTML = 'Price: '+json.non_member_price;
-			} else {
-				eventPrice.innerHTML = 'No Price Information Available';
-			}
-			document.getElementById('leftContainer'+digit).appendChild(eventPrice);
+	            //Location
+	            if (json.location != null) {
+	                var eventLocation = document.createElement('div');
+	                eventLocation.id = 'eventLocation' + digit;
+	                eventLocation.className = 'eventLocation';
+	                eventLocation.innerHTML = 'Event Location: ' + json.location;
+	                document.getElementById('rightContainer' + digit).appendChild(eventLocation);
+	            }
 
-   		}
+	            //Price
+	            var eventPrice = document.createElement('div');
+	            eventPrice.id = 'eventPrice' + digit;
+	            eventPrice.className = 'eventPrice';
+	            if (json.member_price != null) {
+	                eventPrice.innerHTML = 'Member Price: ' + json.member_price + '<br> Non-Member Price: ' + json.non_member_price + '<br>';
+	            } else if (json.non_member_price != null) {
+	                eventPrice.innerHTML = 'Price: ' + json.non_member_price;
+	            } else {
+	                eventPrice.innerHTML = 'No Price Information Available';
+	            }
+	            document.getElementById('leftContainer' + digit).appendChild(eventPrice);
+
+                //Purchase Button
+	            var eventButton = document.createElement('div');
+	            eventButton.className = 'action-buttons';
+                eventButton.innerHTML = '<a id=\"btn-purchase-' + digit + '\" class=\"go\" href=\"javascript:;\" onclick=\"\">Add Ticket &nbsp; &gt;</a>';
+	            document.getElementById('leftContainer' + digit).appendChild(eventButton);
+	        }
         </script>
         <script type="text/javascript" src="../js/dist/SCIA.js"></script>
         <script type="text/javascript" src="../js/src/globals.js"></script>
