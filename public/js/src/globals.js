@@ -802,7 +802,7 @@ modal.payMembership = function () {
 }
 
 // Add tickets popup
-modal.addTickets = function (price) {
-    modal.open('modal/add-tickets.html', {}, 396, 324);
-	sessionStorage['price'] = price;
+modal.addTickets = function (ticket) {
+    modal.open('modal/add-tickets.html?eventID=' + ticket, {}, 396, 464);
+    //sessionStorage['ticket'] = ticket;
 }

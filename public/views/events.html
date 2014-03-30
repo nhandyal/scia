@@ -237,22 +237,23 @@
                 }
             ];
 
-            $(document).ready(function () {
-                /*
-                $.ajax({
-                    url: '/d1/events' + window.location.search,
-                    dataType: 'json',
-                    type: 'GET',
-                    contentType: 'application/json',
-                    success: function (data) {
-                        if (data != null) {
-                            //loadEvents(data);
-                        }
-                    }
-                });
-                */
-                loadEvents(sampleEventJSON);
-            });
+	        $(document).ready(function () {
+	            /*
+	            $.ajax({
+	            url: '/d1/events' + window.location.search,
+	            dataType: 'json',
+	            type: 'GET',
+	            contentType: 'application/json',
+	            success: function (data) {
+	            if (data != null) {
+	            //loadEvents(data);
+	            }
+	            }
+	            });
+	            */
+                //TEST
+	            loadEvents(sampleEventJSON);
+	        });
 
             function loadEvents(events) {
                 for (var i = 0; i < events.length; i++) {
@@ -291,7 +292,7 @@
 	            var divTitle = document.createElement('div');
 	            divTitle.id = 'eventTitle' + digit;
 	            divTitle.className = 'eventTitle';
-	            divTitle.innerHTML = '<a href=\"?eventID=' + json.id + '\">' + json.name + '</a>';
+	            divTitle.innerHTML = '<a href=\"?eventID=' + json.id + '\">' + json.name + '</a><input type=\"hidden\" name=\"eventTitle' + digit + '\" value=\"' + json.name + '\"><input type=\"hidden\" name=\"eventID' + digit + '\" value=\"' + json.id + '\">';
 	            document.getElementById('leftContainer' + digit).appendChild(divTitle);
 
 	            //Image
@@ -308,7 +309,7 @@
 	            eventDate.id = 'eventDate' + digit;
 	            eventDate.className = 'eventDate';
 	            var date = new Date(json.start_time);
-	            eventDate.innerHTML = date.toDateString();
+	            eventDate.innerHTML = date.toDateString() + '<input type=\"hidden\" name=\"eventDate' + digit + '\" value=\"' + date.toDateString() + '\">';
 	            document.getElementById('rightContainer' + digit).appendChild(eventDate);
 
 	            //Description
@@ -347,7 +348,7 @@
                 //Purchase Button
 	            var eventButton = document.createElement('div');
 	            eventButton.className = 'action-buttons';
-                eventButton.innerHTML = '<a id=\"btn-purchase-' + digit + '\" class=\"go\" href=\"javascript:modal.addTickets(' + json.non_member_price +');\" >Add Ticket &nbsp; &gt;</a>';
+                eventButton.innerHTML = '<a id=\"btn-purchase-' + digit + '\" class=\"go\" href=\"javascript:modal.addTickets(' + json.id +');\" >Add Ticket &nbsp; &gt;</a>';
 	            document.getElementById('leftContainer' + digit).appendChild(eventButton);
 	        }
         </script>
