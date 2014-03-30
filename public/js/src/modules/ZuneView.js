@@ -24,6 +24,7 @@ SCIA.ZuneView = {
 			flipContainer.style.height = dimension;
 			flipContainer.style.top = originY;
 			flipContainer.style.left = originX;
+console.log(originX);
 
 			flipper.className = "flipper";
 			
@@ -69,8 +70,9 @@ SCIA.ZuneView = {
 			renderX = 0,
 			renderY = 0,
 			element = null;
-		viewportTiles.width = Math.ceil(viewport.width / tile.width);
+		viewportTiles.width = Math.floor(viewport.width / tile.width);
 		
+		console.log("vpt: "+viewportTiles.width+" vp: "+viewport.width+"  t: "+tile.width);
 
 		var grid = new Array(viewportTiles.width);
 		for(c = 0; c < viewportTiles.width; c++) {

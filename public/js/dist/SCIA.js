@@ -35,6 +35,7 @@
                 flipContainer.style.height = dimension;
                 flipContainer.style.top = originY;
                 flipContainer.style.left = originX;
+                console.log(originX);
 
                 flipper.className = "flipper";
 
@@ -80,8 +81,9 @@
                 renderX = 0,
                 renderY = 0,
                 element = null;
-            viewportTiles.width = Math.ceil(viewport.width / tile.width);
+            viewportTiles.width = Math.floor(viewport.width / tile.width);
 
+            console.log("vpt: " + viewportTiles.width + " vp: " + viewport.width + "  t: " + tile.width);
 
             var grid = new Array(viewportTiles.width);
             for (c = 0; c < viewportTiles.width; c++) {
@@ -238,12 +240,6 @@ var svcRunning = [],
     goToScreen; //TODO Remove the reserved word final from variable
 
 $(function() {
-    // TODO - test
-    //$.cookie('card_id', 123);
-    //$.cookie('f_name', 'JACK');
-    //$.cookie('l_name', 'KWAN');
-    //$.cookie('pay_membership_flag', 1);
-
     // Close options when clicking outside the menu
     $('div#profile-detail').click(function(event) {
         event.stopPropagation();
@@ -519,7 +515,7 @@ function svcError(xhr, ajaxOptions, thrownError) {
 // User
 
 function logout() {
-    svc('/d1/logout', {}, function(data) {
+    svc('/d1/user/logout', {}, function(data) {
         location.reload();
     });
 }
@@ -1136,4 +1132,10 @@ modal.login = function() {
 // Pay Membership popup
 modal.payMembership = function() {
     modal.open('modal/pay-membership.html', {}, 396, 324);
+}
+
+// Add tickets popup
+modal.addTickets = function(ticket) {
+    modal.open('modal/add-tickets.html?eventID=' + ticket, {}, 396, 464);
+    //sessionStorage['ticket'] = ticket;
 }
