@@ -1,11 +1,8 @@
 var mongoose = require("mongoose"),
-	user = mongoose.model("user"),
-	EventTicket = mongoose.model("event_ticket"),
+	user = Utils.loadModel("User"),
 	Event = mongoose.model("event"),
-	User = mongoose.model("user"),
-	utils = require("./utils"),
 	async = require("async"),
-	Ticket = Util.loadModel("Tickets"),
+	Ticket = Utils.loadModel("Tickets"),
 	ResponseHandler = Utils.loadModule("ResponseHandler");
 
 module.exports.submitPayment = function(req,res,transport) {
@@ -34,12 +31,12 @@ module.exports.submitPayment = function(req,res,transport) {
 	// Verify the user's information is correct and that they have not previously purchased tickets for any of the events
 	async.parallel({
 		user: function(callback){
-			user.find({email: email}, function(dbErr,dbRes){
+			user.findOneByEmail(email, function(dbErr,dbRes){
 				dbTransactionCallback(dbErr, dbRes, callback);
 			});
 		},
 		tickets: function(callback){
-			EventTicket.find({email: email}, function(dbErr,dbRes){
+			Ticket.find({email: email}, function(dbErr,dbRes){
 				dbTransactionCallback(dbErr, dbRes, callback);
 			});
 		},

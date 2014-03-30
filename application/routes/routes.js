@@ -30,16 +30,17 @@ module.exports = function(app, transport) {
 		res.send("member id: "+req.url);
 	});
 	*/
+	
+	app.get("/d1/events/:eventID", function(req, res){
+		events.getEventDetails(req,res,req.params.eventID);
+	});
 
 	app.get('/d1/events*', function(req, res){
 		var query = url.parse(req.url, true).query;
 
-		if(query.eventID) {
-			events.getEventDetails(req,res,query);
-		} else {
-			events.getEvents(req,res,query);
-		}
+		events.getEvents(req,res,query);
 	});
+
 
 	app.get("/d1/testEJS", function(req, res){
 		res.render("email-templates/2col-1-2");
