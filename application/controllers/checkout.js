@@ -1,4 +1,3 @@
-/*
 var mongoose = require("mongoose"),
 	user = mongoose.model("user"),
 	EventTicket = mongoose.model("event_ticket"),
@@ -6,7 +5,7 @@ var mongoose = require("mongoose"),
 	User = mongoose.model("user"),
 	utils = require("./utils"),
 	async = require("async"),
-	Hashids = require("hashids"),
+	Ticket = Util.loadModel("Tickets"),
 	ResponseHandler = Utils.loadModule("ResponseHandler");
 
 module.exports.submitPayment = function(req,res,transport) {
@@ -56,6 +55,7 @@ module.exports.submitPayment = function(req,res,transport) {
 		}
 		
 		var user = results.user;
+		var event = results.event_info;
 
 		// Check if the user is a member, and if they have previously purchased a member ticket to this event
 		if(user.is_member){
@@ -95,35 +95,6 @@ module.exports.submitPayment = function(req,res,transport) {
 			return;
 		}
 
-		hashids = new Hashids("nikhil loves programming",8);
-
-		var ticket_number = hashids.encrypt(parseInt(new Date.getTime(),16)+parseInt(user._id,16));
-
-		var ticket_data;
-		if(!user.is_member){
-			ticket_data = {
-				f_name : f_name,
-				l_name : l_name, 
-				email : email,
-				event_id : event_id,
-				transportation : transportation,
-				ticket_number : ticket_number,
-				charge_total : charge_total
-			}
-		} else {
-			ticket_data = {
-				f_name : f_name,
-				l_name : l_name, 
-				email : email,
-				card_id : card_id,
-				event_id : event_id,
-				transportation : transportation,
-				ticket_number : ticket_number,
-				charge_total : charge_total
-			}
-		}
-		
-		var event_ticket = new EventTicket(ticket_data);
 		event_ticket.save(function(err, ticketDBRes){ 
 			if(err) {
 				return ResponseHandler.processError(res, err);
@@ -145,6 +116,13 @@ module.exports.submitPayment = function(req,res,transport) {
 						utils.log('Failed to remove ticket: '+event_ticket);
 					}
 					return ResponseHandler.processError(res, err);
+				}
+
+				var ticket_data = {
+							"ticket_description" 	:	"Ticket to "+event.name,
+							"number_of_tickets" 	:	ticket_number,
+							"transaction_total" 	: 	charge_total,
+							"contains_member_ticket": 	!purchased_member_ticket
 				}
 
 				var ticket_email_data = {
@@ -170,7 +148,7 @@ module.exports.submitPayment = function(req,res,transport) {
 						}); // end transport.sendMail
 					}); // end res.render
 				} catch (err) {
-					utils.log(err);
+					console.log(err);
 				}
 				utils.sendSuccess(res);
 			}
@@ -187,4 +165,3 @@ module.exports.submitPayment = function(req,res,transport) {
 		});     
 	}); // end async parallel
 }
-*/
