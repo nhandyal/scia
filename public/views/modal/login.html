@@ -47,24 +47,30 @@
                     'email': loginEmail,
                     'pwd': loginPassword
                 }, function (data) {
-                    if (data.status == 0) {
-                        location.reload();
-                    }
-                    else if (data.status == 10051) {
-                        // Verify account
-                        $('#modal-login-userinfo').hide();
-                        $('#modal-login-verify').show();
-                        $('#modal-login-resend').hide();
-                        $('#modal-login-sent').hide();
-                        $('#modal-login-thankyou').hide();
-                    }
-                    else if (data.status == 10050) {
-                        // Error login failed - email/password combination was not correct
-                        alert(data.short_message + '\n' + data.long_message);
+                    if (data != null) {
+                        if (data.status == 0) {
+                            location.reload();
+                        }
+                        else if (data.status == 10051) {
+                            // Verify account
+                            $('#modal-login-userinfo').hide();
+                            $('#modal-login-verify').show();
+                            $('#modal-login-resend').hide();
+                            $('#modal-login-sent').hide();
+                            $('#modal-login-thankyou').hide();
+                        }
+                        else if (data.status == 10050) {
+                            // Error login failed - email/password combination was not correct
+                            alert(data.short_message + '\n' + data.long_message);
+                        }
+                        else {
+                            // Error all other
+                            alert('Login failed');
+                        }
                     }
                     else {
-                        // Error all other
-                        alert('Login failed');
+                        // Data null
+                        alert('Data null');
                     }
                 }, true);
                 //TEST
