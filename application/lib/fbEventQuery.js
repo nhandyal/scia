@@ -35,7 +35,7 @@ module.exports.queryFacebook = function() {
         }
     }, function(err, results) {
         if(err || results.current_events.dbErr || results.fb_events.dbErr || typeof results.fb_events.dbRes.id == "undefined"){
-                        Utils.log("Error getting events from database or from facebook"+err+results.current_events.dbErr+results.fb_events.dbErr);
+                        console.log("Error getting events from database or from facebook"+err+results.current_events.dbErr+results.fb_events.dbErr);
                         return;
                 }
         if(typeof results.fb_events.dbRes.events != "undefined") {
