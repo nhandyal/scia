@@ -329,7 +329,6 @@
 				ticketsBought.className = 'ticketsBought';
 				ticketsBought.innerHTML = 'You have bought ' + json.ticket_total + ' tickets.';
 				document.getElementById('eventContainer' + id).appendChild(ticketsBought); 
-				window.alert(json.ticket_total);
 				}
 				
 				//
@@ -338,10 +337,12 @@
 				//if (bought_ticket) -> non-member : member
 
                 //Purchase Button
+                if(json.member_price != null || json.non_member_price != null) {
 	            var eventButton = document.createElement('div');
 	            eventButton.className = 'action-buttons';
                 eventButton.innerHTML = '<a id=\"btn-purchase-' + id + '\" class=\"go\" href=\"javascript:modal.addTickets(' + json.id +');\" >Purchase Tickets &nbsp; &gt;</a>';
 	            document.getElementById('eventContainer' + id).appendChild(eventButton);
+	            }
 			}
 
 	        function createDiv(json, digit, multiple) {

@@ -10,6 +10,7 @@ var AuthToken = require(global.application_root + 'utils/authToken'),
 	module.exports = function (app) {
 
 	app.get("/d1/events/:eventID", function(req, res){
+console.log("got event ID");
 		events.getEventDetails(req,res,req.params.eventID);
 	});
 
@@ -17,6 +18,7 @@ var AuthToken = require(global.application_root + 'utils/authToken'),
 	app.get('/d1/events*', function(req, res){
 		var query = url.parse(req.url, true).query;
 
+console.log("stuff");
 		events.getEvents(req,res,query);
 	});
 	};
