@@ -14,6 +14,33 @@ var User = Utils.loadModel("User"),
 
 
 /**
+ * get user details
+ * 
+ * @route -/d1/user/{user_id}
+ * @param params.id - user id
+ */
+ module.exports.get_details = function(res, params) {
+    
+    
+    if(params.user_id == null) {
+        return ResponseHandler.sendError(res, 10400);
+    }
+
+    User.findOneByID(params.user_id, function(err, user) {
+        if(err) {
+            return ResponseHandler.processError(res, err);
+        }
+
+        var user_data = user.getFullUserDetails();
+
+        return ResponseHandler.sendSuccess(res, user_data);
+    });
+
+ }
+
+
+
+/**
  * Creates a new user.
  * 
  * @route - /d1/user/create

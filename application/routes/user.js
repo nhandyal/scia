@@ -15,8 +15,13 @@ module.exports = function(app) {
 	 * User details can be queried using a user id. A user id is a 24 character alphanumeric
 	 * value that uniquely identifies all users in the system (it is there mongo id).
 	 */
-	app.get("^/d1/[A-Za-z0-9]{24}", AuthToken.authorizeRequest, function(req, res) {
-		
+	app.get("^/d1/user/[A-Za-z0-9]{24}", AuthToken.authorizeRequest, function(req, res) {
+		var id = ((req.url).replace("/d1/user/", "")),
+		params = {
+			user_id : id
+		};
+
+		user.get_details(res, params);
 	});
 
 

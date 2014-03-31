@@ -16,10 +16,26 @@ module.exports.getCoreUserDetails = function() {
         "user_id"   : user._id,
         "f_name"    : user.f_name,
         "l_name"    : user.l_name,
-        "email"     : user.email
+        "email"     : user.email,
+        "is_member" : user.is_member        
     };
 
 };
+
+module.exports.getFullUserDetails = function() {
+    var user = this,
+        user_details = user._doc;
+
+        user_details.stripe_customer_profile = user.stripe_customer_profile.cards;
+        
+        delete user_details.pwd;
+        delete user_details.pwd_reset_token;
+        delete user_details.is_verified;
+        delete user_details.__v;
+
+        return user_details;
+
+}
 
 module.exports.member = function() {
     return this.is_member;
