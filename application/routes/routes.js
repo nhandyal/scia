@@ -23,17 +23,6 @@ module.exports = function(app, transport) {
 	});
 	*/
 	
-	app.get("/d1/events/:eventID", function(req, res){
-		events.getEventDetails(req,res,req.params.eventID);
-	});
-
-
-	app.get('/d1/events*', function(req, res){
-		var query = url.parse(req.url, true).query;
-
-		events.getEvents(req,res,query);
-	});
-	
 	app.get("/d1/testEJS", function(req, res){
 		res.render("email-templates/2col-1-2");
 	});

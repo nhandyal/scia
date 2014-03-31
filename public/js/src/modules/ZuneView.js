@@ -24,7 +24,6 @@ SCIA.ZuneView = {
 			flipContainer.style.height = dimension;
 			flipContainer.style.top = originY;
 			flipContainer.style.left = originX;
-console.log(originX);
 
 			flipper.className = "flipper";
 			
@@ -71,9 +70,10 @@ console.log(originX);
 			renderY = 0,
 			element = null;
 		viewportTiles.width = Math.floor(viewport.width / tile.width);
-		
-		console.log("vpt: "+viewportTiles.width+" vp: "+viewport.width+"  t: "+tile.width);
 
+//		var Xoffset = (viewport.width-(viewportTiles.width * tile.width))/2;
+
+var Xoffset=0;
 		var grid = new Array(viewportTiles.width);
 		for(c = 0; c < viewportTiles.width; c++) {
 			grid[c] = new Array(viewportTiles.height);
@@ -82,6 +82,8 @@ console.log(originX);
 
 		/* Used to ensure proper logo placement and size */
 		var firstIteration = true;
+
+		document.getElementById("wrapper").style.width = viewportTiles.width*tile.width+"px";
 
 		// iterate over the entire grid
 		for(r = 0; r < viewportTiles.height; r++) {
@@ -118,7 +120,7 @@ console.log(originX);
 				}
 
 				// we know the true size of the element, as well as the start location of where to render it
-				renderX = c * tile.width;
+				renderX = c * tile.width+Xoffset;
 				renderY = r * tile.height;
 				element = new ZuneElement(trueSize, renderX, renderY);
 				if(firstIteration){
@@ -137,7 +139,7 @@ console.log(originX);
 		
 		setInterval(function(){
 			SELF.updateZuneImgs();
-		}, 2500);
+		}, 5000);
 		
 
 		/* PRINTS THE MINIMAP, for dev use only */
