@@ -325,6 +325,19 @@
 				
 				//Bought Tickets
 				// ********************* TODO *****************************
+				if(json.ticket_total != null) {
+				var ticketsBought = document.createElement('div');
+				ticketsBought.id = 'ticketsBought' + id;
+				ticketsBought.className = 'ticketsBought';
+				ticketsBought.innerHTML = 'You have bought ' + json.ticket_total + ' tickets.';
+				document.getElementById('eventContainer' + id).appendChild(ticketsBought); 
+				window.alert(json.ticket_total);
+				}
+				
+				//
+				//ticket_total
+				//bought_ticket (BOOL)
+				//if (bought_ticket) -> non-member : member
 
                 //Purchase Button
 	            var eventButton = document.createElement('div');
