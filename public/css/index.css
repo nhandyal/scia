@@ -1,6 +1,5 @@
 body{
 	min-width: 900px;
-	max-width: 1600px;
 	margin: auto;
 }
 
@@ -73,6 +72,7 @@ body{
 }
 #wrapper{
 	width: 90%;
+	max-width: 1600px;
 	margin: auto;
 	position: relative;
 }
