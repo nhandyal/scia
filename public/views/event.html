@@ -225,22 +225,20 @@
             ];
 
 	        $(document).ready(function () {
-	            /*
 	            $.ajax({
-	            url: '/d1/events' + window.location.search,
+	            url: '/d1/events/' + window.location.search.substring(9),
 	            dataType: 'json',
 	            type: 'GET',
 	            contentType: 'application/json',
 	            success: function (data) {
 	            if (data != null) {
-	            //loadEvents(data);
+	            loadEvent(data);
 	            }
 	            }
 	            });
-	            */
                 //TEST
 	            //loadEvents(sampleEventJSON);
-				loadEvent(sampleEventJSON);
+				//loadEvent(sampleEventJSON);
 	        });
 			
 			$.urlParam = function(name){
@@ -260,11 +258,8 @@
 	        }
 			
 			function loadEvent(events) {
-				for(var i = 0; i< events.length; i++) {
-					if(events[i].id == $.urlParam('eventID'))
-					{
-						createPage(events[i], $.urlParam('eventID'));
-					}
+				for(var i = 0; i< events.data.length; i++) {
+						createPage(events.data[i], $.urlParam('eventID'));
 				}
 			}
 			
