@@ -34,7 +34,7 @@ module.exports.queryFacebook = function() {
             });
         }
     }, function(err, results) {
-        if(err || results.current_events.dbErr || results.fb_events.dbErr || typeof results.fb_events.dbRes.id == "undefined"){
+        if(err || results.current_events.dbErr || results.fb_events.dbErr || results.fb_events.dbRes == null){
                         //console.log("Error getting events from database or from facebook"+err+results.current_events.dbErr+results.fb_events.dbErr);
                         return;
                 }
@@ -112,9 +112,7 @@ module.exports.queryFacebook = function() {
                 event.update({fb_id:newEvent.fb_id},newEvent,{upsert: true, new: true},function(err, newEvent){
                     if(err) {
                         console.log("There was an error processing the request "+err);
-                    } else {
-                        console.log("Event successfully written to database");
-                    }
+		    }
                 });
             }
         }

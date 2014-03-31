@@ -2,7 +2,7 @@
 // ======================================================================== //
 //   REGISTRATION MODAL                                                     //
 
-var registerFirstName, registerLastName, registerEmail, registerMobile, registerYear, registerMajor, registerPassword;
+var registerFirstName, registerLastName, registerEmail, registerPassword;
 // Verify Form
 function verify(x) {
     switch (x.filter) {
@@ -13,22 +13,12 @@ function verify(x) {
             field.pass(x, true, 'match', $('input#RegisterPassword').val());
             break;
         case 'RegisterEmail':
-            field.pass(x, true, 'uscemail');
+            field.pass(x, true, 'email');
             break;
-        case 'RegisterMobile':
-            field.pass(x, true, 'phone');
-            break;
-        //case 'ContactAddress': 
-        //    field.pass(x, true, 'alphanumeric'); 
-        //    break; 
         default:
             var simplyExist = [
-                    'RegisterYear',
                     'RegisterFirstName',
-                    'RegisterLastName',
-                    'RegisterMajor'
-            //,'ContactGender',
-            //,'ContactLanguagesKnown'
+                    'RegisterLastName'
                 ];
             if (simplyExist.indexOf(x.filter) > -1) {
                 field.pass(x);
@@ -54,18 +44,12 @@ $(document).ready(function () {
             registerEmail = $('input[name=RegisterEmail]').val().toLowerCase();
             $('span#ThankYouEmail').html('(' + registerEmail + ')');
         }
-        registerMobile = $('input[name=RegisterMobile]').val();
-        registerYear = $('select[name=RegisterYear] option:selected').val().toUpperCase();
-        registerMajor = $('input[name=RegisterMajor]').val().toUpperCase();
         registerPassword = $('input[name=RegisterPassword]').val();
         if (allPass) {
-            svc('/d1/register', {
+            svc('/d1/user/create', {
                 'f_name': registerFirstName,
                 'l_name': registerLastName,
                 'email': registerEmail,
-                'mobile': registerMobile.toString().replace(/[^0-9]/g, ''),
-                'major': registerMajor,
-                'year': registerYear,
                 'pwd': registerPassword
             }, function (data) {
                 if (data.status == 0) {
@@ -102,28 +86,8 @@ $(document).ready(function () {
             <input type="text" name="RegisterFirstName" id="RegisterFirstName" value="" tabindex="1" onblur="field.check(this)" />
             <label for="RegisterLastName">Last Name:</label>
             <input type="text" name="RegisterLastName" id="RegisterLastName" value="" tabindex="2" onblur="field.check(this)" />
-            <label for="RegisterEmail">USC Email:</label>
+            <label for="RegisterEmail">Email (USC Email required for membership):</label>
             <input type="text" name="RegisterEmail" id="RegisterEmail" value="" tabindex="3" onblur="field.check(this)" />
-            <label for="RegisterMobile">Mobile Phone Number:</label>
-            <input type="text" name="RegisterMobile" id="RegisterMobile" value="" tabindex="4" onblur="field.check(this)" />
-        </div>
-        <div class="col col2">
-            <div class="year-major">
-                <label for="RegisterYear">Year:</label>
-                <label for="RegisterMajor">Major:</label>
-                <span class="dropdown">
-                    <select name="RegisterYear" id="RegisterYear" tabindex="5" onblur="field.check(this)">
-                        <option value=""></option>
-                        <option value="freshman">FRESHMAN</option>
-                        <option value="sophomore">SOPHOMORE</option>
-                        <option value="junior">JUNIOR</option>
-                        <option value="senior">SENIOR</option>
-                        <option value="graduate">GRADUATE</option>
-                    </select>
-                </span>
-                <input type="text" name="RegisterMajor" id="RegisterMajor" value="" tabindex="6" onblur="field.check(this)" />
-                <div class="clear"></div>
-            </div>
             <label for="RegisterPassword">Password:</label>
             <input type="password" name="RegisterPassword" id="RegisterPassword" value="" tabindex="7" onblur="field.check(this)" />
             <label for="RegisterConfirm">Confirm Password:</label>
@@ -137,7 +101,7 @@ $(document).ready(function () {
 
 <div id="modal-registration-thankyou" class="modal-screen">
     <h1>Thank you!</h1>
-    <div class="col">
+    <div class="col col2">
         <div id="welcome">
             Hey <span id="ThankYouName"></span>, and welcome to USC SCIA!<br /><br />
             We're super excited that you decided to become a part of the south indian community here at USC and we can't wait to begin showing you
