@@ -44,8 +44,8 @@
             loginPassword = $('input[name=LoginPassword]').val();
             if (allPass) {
                 svc('/d1/user/login', {
-                'email': loginEmail,
-                'pwd': loginPassword
+                    'email': loginEmail,
+                    'pwd': loginPassword
                 }, function (data) {
                     if (data.status == 0) {
                         location.reload();

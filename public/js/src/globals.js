@@ -255,7 +255,7 @@ function svcStart(method, modal) {
 // Load error for services
 function svcError(xhr, ajaxOptions, thrownError) {
     $(function () {
-        alert('Status : ' + xhr.status + '\nthrownError : ' + thrownError);
+        alert('Status : ' + xhr.status + '\nthrownError : ' + thrownError + xhr.responseText);
     });
 }
 
