@@ -7,16 +7,16 @@ var AuthToken = require(global.application_root + 'utils/authToken'),
     events = require(global.application_root + "controllers/events"),
     url = require("url");
 
-module.exports = function(app) {
+	module.exports = function (app) {
 
-    app.get('/d1/events*', function(req, res){
-        var query = url.parse(req.url, true).query;
+	app.get("/d1/events/:eventID", function(req, res){
+		events.getEventDetails(req,res,req.params.eventID);
+	});
 
-        if(query.eventID) {
-            events.getEventDetails(req,res,query);
-        } else {
-            events.getEvents(req,res,query);
-        }
-    });
 
-};
+	app.get('/d1/events*', function(req, res){
+		var query = url.parse(req.url, true).query;
+
+		events.getEvents(req,res,query);
+	});
+	};

@@ -13,6 +13,7 @@ $(function () {
         } else {
             $('a#navigation-pay-membership').show();
         }
+        $('a#navigation-edit-profile').hide();
         $('span#profile-f-name').html($.cookie('f_name'));
         $('span#profile-l-name').html($.cookie('l_name'));
     } else {
@@ -230,6 +231,7 @@ function svc(serviceMethod, jsonRequest, callback, modal) {
         dataType: 'json',
         type: 'POST',
         contentType: 'application/json',
+        async: false,
         success: function (data) {
             if (data != null) {
                 callback(data);
@@ -255,7 +257,7 @@ function svcStart(method, modal) {
 // Load error for services
 function svcError(xhr, ajaxOptions, thrownError) {
     $(function () {
-        alert('Status : ' + xhr.status + '\nthrownError : ' + thrownError);
+        alert('Status : ' + xhr.status + '\nthrownError : ' + thrownError + xhr.responseText);
     });
 }
 

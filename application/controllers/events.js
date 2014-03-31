@@ -2,6 +2,7 @@
 var mongoose = require("mongoose"),
     event = mongoose.model("event"),
     async = require("async"),
+    EventTicket = Utils.loadModel("Tickets"),
     ResponseHandler = Utils.loadModule("ResponseHandler");
 
 
@@ -36,7 +37,6 @@ module.exports.getEvents = function(req,res,query) {
 
 		for(var i=0;i<numberToReturn;i++) {
 		    var entry = dbRes[i].toObject();
-			console.log(entry);
 		    if(entry.removed){ 
 			continue; 
 		    }
@@ -63,7 +63,7 @@ module.exports.getEventDetails = function(req,res,eventID) {
 	if(req.loggedIn) {
 	    async.parallel({
 		    events: function(callback){
-			     event.find({id: event_id}, null, {sort: {start_time: 1}},function(dbErr,dbRes){
+			     event.find({_id: event_id}, null, {sort: {start_time: 1}},function(dbErr,dbRes){
 				    dbTransactionCallback(dbErr, dbRes, callback);
 			    });
 		    },
@@ -78,7 +78,7 @@ module.exports.getEventDetails = function(req,res,eventID) {
 			    return ResponseHandler.sendError(res,10050);
 		    }
 				     
-		    var entry = results.events.dbRes.toObject();
+		    var entry = results.events.dbRes[0].toObject();
 		    
 		    entry.bought_ticket = false;
 		    entry.ticket_total = 0;
@@ -92,7 +92,10 @@ module.exports.getEventDetails = function(req,res,eventID) {
 			    }
 			}
 		    }
-			     
+
+		    entry.id = entry._id;
+		    delete entry._id;
+
 		    return ResponseHandler.sendSuccess(res, entry);
 	    });
 	} else {
@@ -105,7 +108,12 @@ module.exports.getEventDetails = function(req,res,eventID) {
 		    	return ResponseHandler.sendError(res,10050);
 		    }
 
-		    return ResponseHandler.sendSuccess(res, dbRes);
+		    var entry = dbRes[0].toObject();
+
+		    entry.id = entry._id;
+                    delete entry._id;
+
+		    return ResponseHandler.sendSuccess(res, entry);
 		}); 
 	}
 }
