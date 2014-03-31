@@ -247,15 +247,16 @@ $(function() {
     $('html').click(function(event) {
         closeProfileOpts();
     });
-    if ($.cookie('card_id')) {
+    if ($.cookie('id')) {
         $('a#navigation-register').hide();
         $('a#navigation-login').hide();
         $('a#navigation-profile').show();
-        if ($.cookie('pay_membership_flag') == 1) {
-            $('a#navigation-pay-membership').show();
-        } else {
+        if ($.cookie('is_member')) {
             $('a#navigation-pay-membership').hide();
+        } else {
+            $('a#navigation-pay-membership').show();
         }
+        $('a#navigation-edit-profile').hide();
         $('span#profile-f-name').html($.cookie('f_name'));
         $('span#profile-l-name').html($.cookie('l_name'));
     } else {
@@ -480,6 +481,7 @@ function svc(serviceMethod, jsonRequest, callback, modal) {
         dataType: 'json',
         type: 'POST',
         contentType: 'application/json',
+        async: false,
         success: function(data) {
             if (data != null) {
                 callback(data);
@@ -505,7 +507,7 @@ function svcStart(method, modal) {
 
 function svcError(xhr, ajaxOptions, thrownError) {
     $(function() {
-        alert('Status : ' + xhr.status + '\nthrownError : ' + thrownError);
+        alert('Status : ' + xhr.status + '\nthrownError : ' + thrownError + xhr.responseText);
     });
 }
 
@@ -755,7 +757,7 @@ var validate = {
         }
         valid = email.match(/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/i);
         if (!valid) {
-            return "Invalid email address";
+            return "Invalid email";
         } else {
             return false;
         }
@@ -766,7 +768,7 @@ var validate = {
         }
         valid = uscemail.match(/^[a-z0-9._%+-]+@usc\.edu/i);
         if (!valid) {
-            return "Invalid USC email address";
+            return "Invalid USC email";
         } else {
             return false;
         }
@@ -1119,7 +1121,7 @@ var modal = {
 
 // Registration popup
 modal.registration = function() {
-    modal.open('modal/registration.html', {}, 768, 352);
+    modal.open('modal/registration.html', {}, 396, 410);
 }
 // Edit Profile popup
 modal.editProfile = function() {
