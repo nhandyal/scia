@@ -1,7 +1,7 @@
 var Crypto = require("crypto"),
     signatureKeys = ["id", "f_name", "l_name"],
     serverKeys =    ["sid", "sig"],
-    authTokenKeys = ["id", "f_name", "l_name", "sid", "sig"],
+    authTokenKeys = ["id", "f_name", "l_name", "is_member", "sid", "sig"],
 
     clientOptions = {
         httpOnly : false,
@@ -34,6 +34,11 @@ var Crypto = require("crypto"),
         
         this.l_name = {
             value : user.l_name,
+            options : clientOptions
+        };
+
+        this.is_member {
+            value : user.is_member,
             options : clientOptions
         };
 
