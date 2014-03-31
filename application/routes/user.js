@@ -63,10 +63,12 @@ module.exports = function(app) {
 
 	/**
 	 * @param req.body.email - user email
+	 * @param req.body.cb - callback
 	 */
 	app.post('/d1/user/resendVerificationEmail', function(req, res) {
 		var params = {
-			email : req.body.email
+			email : req.body.email,
+			cb : req.body.cb
 		};
 		
 		user.resendVerificationEmail(res, params);
@@ -100,8 +102,13 @@ module.exports = function(app) {
 	 * url schema /d1/user/verify/{user id}
 	 */
 	app.get('^/d1/user/verify/[A-Za-z0-9]{24}', function(req, res) {
+		var parsed_url = Url.parse(req.url, true)
+			cb = parsed_url.query.cb,
+			user_id = (parsed_url.pathname).replace("/d1/user/verify/", "");
+
 		var params = {
-			id : (req.url).replace("/d1/user/verify/", "")
+			id : user_id,
+			cb : cb
 		};
 
 		user.verifyUser(res, params);

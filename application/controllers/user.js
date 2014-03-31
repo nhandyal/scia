@@ -12,6 +12,17 @@ var User = Utils.loadModel("User"),
     ResponseHandler = Utils.loadModule("ResponseHandler"),
     AuthToken = Utils.AuthToken;
 
+var sendVerificationEmail = function(res, params) {
+    var vrf_email_data = {
+            template_path : application_root + "views/email-templates/vrf_email",
+            from : "no_reply@uscscia.com",
+            to : params.email,
+            title : "USC SCIA verification email",
+            vrf_link : "https://www.uscscia.com/d1/user/verify/" + params.id + "?cb=" + params.cb
+        };
+
+        NodeMailer.send(res, vrf_email_data, function() {});
+};
 
 /**
  * get user details
@@ -64,15 +75,11 @@ module.exports.create = function(res, params) {
             return ResponseHandler.processError(res, err);
         }
 
-        var vrf_email_data = {
-            template_path : application_root + "views/email-templates/vrf_email",
-            from : "no_reply@uscscia.com",
-            to : params.email,
-            title : "USC SCIA verification email",
-            vrf_link : params.cb + "?userID=" + user.id
-        };
-
-        NodeMailer.send(res, vrf_email_data, function() {});
+        sendVerificationEmail(res, {
+            "email" : params.email,
+            "id" : user._id,
+            "cb" : params.cb
+        });
 
         var responseData = {
             id  : user.id
@@ -126,7 +133,7 @@ module.exports.logout = function(res) {
  */
 module.exports.resendVerificationEmail = function(res, params) {
     
-    if(!params.email) {
+    if(!params.email || !params.cb) {
         return ResponseHandler.sendError(res, 10400);
     }
 
@@ -139,15 +146,11 @@ module.exports.resendVerificationEmail = function(res, params) {
             return ResponseHandler.sendError(res, 10402);
         }
 
-        var vrf_email_data = {
-            template_path : application_root + "views/email-templates/vrf_email",
-            from : "no_reply@uscscia.com",
-            to : params.email,
-            title : "USC SCIA verification email",
-            vrf_link : "https://www.uscscia.com/d1/user/verify/"+user.id,
-        };
-
-        NodeMailer.send(res, vrf_email_data, function() {});
+        sendVerificationEmail(res, {
+            "email" : params.email,
+            "id" : user._id,
+            "cb" : params.cb
+        });
 
         return ResponseHandler.sendSuccess(res);
 
@@ -241,6 +244,10 @@ module.exports.reset = function(res, params) {
  */
 module.exports.verifyUser = function(res, params) {
 
+    if(params.cb == null) {
+        return ResponseHandler.sendError(res, 10400);
+    }
+
     User.findOneByID(params.id, function(err, user) {
         if(err) {
             return ResponseHandler.processError(res, err);
@@ -251,7 +258,7 @@ module.exports.verifyUser = function(res, params) {
                 return ResponseHandler.processError(res, err);
             }
 
-            return ResponseHandler.sendSuccess(res);
+            return res.redirect(301, cb);
         });
     });
 
