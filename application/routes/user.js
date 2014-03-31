@@ -30,13 +30,15 @@ module.exports = function(app) {
 	 * @param req.body.l_name - user last name
 	 * @param req.body.email - user email
 	 * @param req.body.pwd - user password (cannot be "")
+	 * @param req.body.cb - callback for verify
 	 */
 	app.post('/d1/user/create', function(req, res) {
 		var params = {
 			f_name : req.body.f_name,
 			l_name : req.body.l_name,
 			email : req.body.email,
-			pwd : req.body.pwd
+			pwd : req.body.pwd,
+			cb : req.body.cb
 		};
 
 		user.create(res, params);

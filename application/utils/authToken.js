@@ -37,7 +37,7 @@ var Crypto = require("crypto"),
             options : clientOptions
         };
 
-        this.is_member {
+        this.is_member = {
             value : user.is_member,
             options : clientOptions
         };

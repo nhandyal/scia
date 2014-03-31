@@ -48,6 +48,10 @@ var User = Utils.loadModel("User"),
  */
 module.exports.create = function(res, params) {
 
+    if(params.cb == null) {
+        return ResponseHandler.sendError(res, 10400);
+    }
+
     var userData = {
         f_name : params.f_name,
         l_name : params.l_name,
@@ -65,7 +69,7 @@ module.exports.create = function(res, params) {
             from : "no_reply@uscscia.com",
             to : params.email,
             title : "USC SCIA verification email",
-            vrf_link : "https://www.uscscia.com/d1/user/verify/"+user.id,
+            vrf_link : params.cb + "?userID=" + user.id
         };
 
         NodeMailer.send(res, vrf_email_data, function() {});
