@@ -6,15 +6,11 @@
  */
 
 var User = Utils.loadModel("User"),
+    Tickets = Utils.loadModel("Tickets"),
     Membership = Utils.loadModel("Membership"),
     NodeMailer = Utils.loadModule("NodeMailer"),
     ResponseHandler = Utils.loadModule("ResponseHandler"),
-    AuthToken = Utils.AuthToken,
-    
-
-    getNextCICIndex = function(callback) {
-        CIC.findOneAndUpdate({}, {$inc: { CICIndex: 1 }}, {}, callback);
-    };
+    AuthToken = Utils.AuthToken;
 
 
 /**
@@ -231,6 +227,7 @@ module.exports.verifyUser = function(res, params) {
 };
 
 /**
+ * 
  * @param params.id - the db id of this user
  * @param params.stripeCardToken - Stripe token to be charged. If params.stripeCardID is specified
  *                                  This value is ignored. However either params.stripeToken or
@@ -252,8 +249,15 @@ module.exports.buyMembership = function(res, params) {
             return ResponseHandler.processError(res, err);  
         }
 
+        if(user.member()) {
+            // user is already a member
+            return ResponseHandler.processError(res, {
+                scia_errcode : 10002
+            });
+        }
+
         Membership.getLatestMembershipPrice(function(err, membershipPrice) {
-            console.log(membershipPrice, amountAuthorized);
+
             if(membershipPrice != amountAuthorized) {
                 return ResponseHandler.sendError(res, 10103);
             }
@@ -270,9 +274,23 @@ module.exports.buyMembership = function(res, params) {
                     return ResponseHandler.processError(res, err);
                 }
 
-                console.log(user);
+                var set_membership = user.set_membership();
+                if (set_membership.err) {
+                    return ResponseHandler.processError(res, set_membership);
+                } 
 
-                user.is_member = true;
+                Tickets.createMembershipTicket(user, {
+                    'transaction_total' : amountAuthorized                    
+                }, function(err, ticket) {
+                    if(err) {
+                        console.log("there was an error writing the ticket to the db");
+                        console.log("unfortunately we don't have any error handling for this");
+                        console.log("contact Tanmay Asija to resolve this conflict");
+                    } else {
+                        console.log(ticket);
+                    }
+                });
+
                 user.save(function(err) {
                     if(err) {
                         return ResponseHandler.processError(res, err);
@@ -293,29 +311,5 @@ module.exports.buyMembership = function(res, params) {
             }
         });
 
-    });
-};
-
-module.exports.test = function(req, res) {
-    var stripeToken = req.body.stripeToken;
-
-    User.findOneByEmail("nhandyal@gmail.com", function(err, user) {
-        if(err) {
-            return ResponseHandler.processError(res, err);  
-        }
-
-        var params = {
-            stripeCardToken : stripeToken,
-            amount : 10,
-            description : "Test charge"
-        };
-
-        user.addCardAndCharge(params, function(err) {
-            if(err) {
-                return ResponseHandler.processError(res, err);  
-            }
-
-            return ResponseHandler.sendSuccess(res);
-        });
     });
 };

@@ -47,6 +47,12 @@ module.exports._10001 = {
  	long_message : "Email is already registered"
 };
 
+module.exports._10002 = {
+	status : 10001,
+	short_message : "User is already a member",
+	long_message : "User is already a member"
+};
+
 
 /***************** Auth Response Codes *****************/
 module.exports._10050 = {

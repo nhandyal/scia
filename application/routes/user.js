@@ -8,6 +8,18 @@ var Url = require("url"),
 
 module.exports = function(app) {
 
+
+	/**
+	 * login required
+	 * 
+	 * User details can be queried using a user id. A user id is a 24 character alphanumeric
+	 * value that uniquely identifies all users in the system (it is there mongo id).
+	 */
+	app.get("^/d1/[A-Za-z0-9]{24}", AuthToken.authorizeRequest, function(req, res) {
+		
+	});
+
+
 	/**
 	 * @param req.body.f_name - user first name
 	 * @param req.body.l_name - user last name
@@ -89,6 +101,8 @@ module.exports = function(app) {
 	});
 
 	/**
+	 * login required
+	 * 
 	 * url schema /d1/user/{user id}/buyMembership
 	 * @param req.body.stripeToken - Stripe token to be charged. If req.body.stripeCardID is specified
 	 *									This value is ignored. However either req.body.stripeToken or
@@ -97,7 +111,7 @@ module.exports = function(app) {
 	 * @param req.body.saveCard - a flag on whether this card should be saved to this user's profile.
 	 * @param req.body.amountAuthorized - the amount a user has authorized to be charged on their card.
 	 */
-	app.post('^/d1/user/[A-Za-z0-9]{24}/buyMembership', function(req, res) {
+	app.post('^/d1/user/[A-Za-z0-9]{24}/buyMembership', AuthToken.authorizeRequest, function(req, res) {
 		var id = ((req.url).replace("/d1/user/", "")).replace("/buyMembership", ""),
 			params = {
 				id : id,
@@ -109,15 +123,5 @@ module.exports = function(app) {
 
 		user.buyMembership(res, params);
 	});
-
-	app.get('/d1/user/test', AuthToken.authorizeRequest, function(req, res) {
-
-		res.send("done");
-	});
-
-	app.post('/d1/user/test', function(req, res) {
-
-		user.test(req, res);
-	})
 
 };
