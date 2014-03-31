@@ -94,7 +94,7 @@
         $('#btn-resend').click(function (event) {
             event.preventDefault();
             allPass = field.checkAll('form#resend');
-            resendEmail = $('input[name=VerifyConfirmationCode]').val();
+            resendEmail = $('input[name=ResendEmail]').val();
             if (allPass) {
                 svc('/d1/user/resendVerificationEmail', {
                     'email': resendEmail,
