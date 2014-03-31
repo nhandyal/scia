@@ -8,7 +8,7 @@ $(function () {
         $('a#navigation-register').hide();
         $('a#navigation-login').hide();
         $('a#navigation-profile').show();
-        if ($.cookie('is_member')) {
+        if ($.cookie('is_member') == 1) {
             $('a#navigation-pay-membership').hide();
         } else {
             $('a#navigation-pay-membership').show();
