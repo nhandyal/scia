@@ -3,7 +3,7 @@ var mongoose = require("mongoose");
 /**
  *
  */
-module.exports.AuthToken = require("./AuthToken.js");
+module.exports.AuthToken = require("./authToken.js");
 
 /**
  *

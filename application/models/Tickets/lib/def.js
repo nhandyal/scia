@@ -6,7 +6,7 @@ module.exports.schema_def = {
         required            : '{PATH} is required',
         unique              : true
     },
-    ticket_description  : {
+    description  : {
         type                : String,
         required            : '{PATH} is required'
     },
@@ -27,8 +27,7 @@ module.exports.schema_def = {
         required            : '{PATH} is required'
     },
     event_id            : {
-        type                : mongoose.Schema.Types.ObjectId,
-        required            : '{PATH} is required'
+        type                : mongoose.Schema.Types.ObjectId
     },
     user_id             : {
         type                : mongoose.Schema.Types.ObjectId,

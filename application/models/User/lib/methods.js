@@ -21,8 +21,22 @@ module.exports.getCoreUserDetails = function() {
 
 };
 
-module.exports.isMemeber = function() {
+module.exports.member = function() {
     return this.is_member;
+}
+
+module.exports.set_membership = function() {
+
+    // ensure the user is verified
+    if(!user.is_verified) {
+        return {
+            err : true,
+            scia_errcode : 10051
+        }
+    }
+
+    this.is_member = true;
+    return;
 }
 
 module.exports.login = function(pwd, onCompleteCallback) {
