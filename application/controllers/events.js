@@ -108,7 +108,12 @@ module.exports.getEventDetails = function(req,res,eventID) {
 		    	return ResponseHandler.sendError(res,10050);
 		    }
 
-		    return ResponseHandler.sendSuccess(res, dbRes);
+		    var entry = dbRes[0].toObject();
+
+		    entry.id = entry._id;
+                    delete entry._id;
+
+		    return ResponseHandler.sendSuccess(res, entry);
 		}); 
 	}
 }
