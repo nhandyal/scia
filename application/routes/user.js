@@ -57,7 +57,7 @@ module.exports = function(app) {
 		user.login(res, params);
 	});
 
-	app.get('/d1/user/logout', function(req, res) {
+	app.post('/d1/user/logout', function(req, res) {
 		user.logout(res);
 	});
 
