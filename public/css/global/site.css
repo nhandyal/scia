@@ -259,6 +259,7 @@ a#header-logo {
 	height: 50px;
 	float: left;
 	margin: 20px 25px;
+	margin-left: 5px;
 }
 div#navigation {
 	position: absolute;
