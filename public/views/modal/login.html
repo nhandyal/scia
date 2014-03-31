@@ -31,8 +31,8 @@
     }
 
     $(document).ready(function () {
-        $('#modal-login-userinfo').show();
-        $('#modal-login-verify').hide();
+        $('#modal-login-userinfo').hide();
+        $('#modal-login-verify').show();
         $('#modal-login-resend').hide();
         $('#modal-login-sent').hide();
         $('#modal-login-thankyou').hide();
@@ -194,17 +194,15 @@
 </div>
 
 <div id="modal-login-verify" class="modal-screen">
-    <h1>Verification</h1>
-    <form action="#" id="verify" method="post">
-        <div class="col col2">
-            <label>Please enter the confirmation code generated from the verification email.  If you did not receive the verification email, please check your spam mailbox. <a href="javascript:;" id="link-resend" class="site-link">Click here</a> to send another email to yourself.</label>
-            <label for="VerifyConfirmationCode">Confirmation Code:</label>
-            <input type="text" name="VerifyConfirmationCode" id="VerifyConfirmationCode" value="" tabindex="1" onblur="field.check(this)" />
+    <h1>Unverified Account</h1>
+    <div class="col col2">
+        <div id="welcome">
+            This account must be verified first. Check your email for further instructions. If you did not receive the verification email, please check your spam mailbox. <a href="javascript:;" id="link-resend" class="site-link">Click here</a> to send another email to yourself.<br /><br />
         </div>
-        <div class="action-buttons">
-            <a id="btn-verify" class="go" href="#" tabindex="5">Verify &nbsp; &gt;</a>
-        </div>
-    </form>
+    </div>
+    <div class="action-buttons">
+        <a id="btn-close" class="go" href="javascript:closeModal()" tabindex="1">X &nbsp; Close</a>
+    </div>
 </div>
 
 <div id="modal-login-resend" class="modal-screen">

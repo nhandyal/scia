@@ -476,7 +476,7 @@ var validate = {
         if (!email) { return false; }
         valid = email.match(/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/i);
         if (!valid) {
-            return "Invalid email address";
+            return "Invalid email";
         } else {
             return false;
         }
@@ -485,7 +485,7 @@ var validate = {
         if (!uscemail) { return false; }
         valid = uscemail.match(/^[a-z0-9._%+-]+@usc\.edu/i);
         if (!valid) {
-            return "Invalid USC email address";
+            return "Invalid USC email";
         } else {
             return false;
         }
@@ -786,7 +786,7 @@ var modal = {
 
 // Registration popup
 modal.registration = function () {
-    modal.open('modal/registration.html', {}, 768, 352);
+    modal.open('modal/registration.html', {}, 396, 410);
 }
 // Edit Profile popup
 modal.editProfile = function () {
