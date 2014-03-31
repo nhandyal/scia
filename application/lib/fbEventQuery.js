@@ -119,9 +119,9 @@ module.exports.queryFacebook = function() {
         for(var i=0;i<results.current_events.dbRes.length;i++) {
             event.update({fb_id: results.current_events.dbRes[i].fb_id},{removed: true}, function(err,updatedEvent){
                 if(err) {
-                    Utils.log("There was an error processing the request "+err);
+                    console.log("There was an error processing the request "+err);
                                 } else {
-                                        Utils.log("Event successfully updated to database");
+                                        console.log("Event successfully updated to database");
                                 }
             });
         }
