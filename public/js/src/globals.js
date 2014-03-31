@@ -4,14 +4,14 @@ $(function () {
     // Close options when clicking outside the menu
     $('div#profile-detail').click(function (event) { event.stopPropagation(); });
     $('html').click(function (event) { closeProfileOpts(); });
-    if ($.cookie('card_id')) {
+    if ($.cookie('id')) {
         $('a#navigation-register').hide();
         $('a#navigation-login').hide();
         $('a#navigation-profile').show();
-        if ($.cookie('pay_membership_flag') == 1) {
-            $('a#navigation-pay-membership').show();
-        } else {
+        if ($.cookie('is_member')) {
             $('a#navigation-pay-membership').hide();
+        } else {
+            $('a#navigation-pay-membership').show();
         }
         $('span#profile-f-name').html($.cookie('f_name'));
         $('span#profile-l-name').html($.cookie('l_name'));
