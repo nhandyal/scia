@@ -258,9 +258,7 @@
 	        }
 			
 			function loadEvent(events) {
-				for(var i = 0; i< events.data.length; i++) {
-						createPage(events.data[i], $.urlParam('eventID'));
-				}
+				createPage(events.data, $.urlParam('eventID'));
 			}
 			
 			function createPage(json, id) {
