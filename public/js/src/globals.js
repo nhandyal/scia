@@ -230,6 +230,7 @@ function svc(serviceMethod, jsonRequest, callback, modal) {
         dataType: 'json',
         type: 'POST',
         contentType: 'application/json',
+	async: false,
         success: function (data) {
             if (data != null) {
                 callback(data);
