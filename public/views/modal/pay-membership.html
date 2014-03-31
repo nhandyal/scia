@@ -30,15 +30,11 @@ var stripeToken = '';
 var stripeResponseHandler = function (status, response) {
     var $form = $('form#payment');
     if (response.error) {
-        // Show the errors on the form
-        //$form.find('.payment-errors').text(response.error.message);
         $('div#payment-error').html(response.error.message);
-        //$form.find('button').prop('disabled', false);
     }
     else {
         // token contains id, last4, and card type
         stripeToken = response.id;
-        //alert('stripeToken(1) :' + stripeToken);
         var userId = $.cookie('id');
         svc('/d1/user/' + userId + '/buyMembership', {
             stripeCardToken: stripeToken,
@@ -72,35 +68,6 @@ $(document).ready(function () {
             $('input[data-stripe="exp-month"]').val(paymentExpirationDateArray[0]);
             $('input[data-stripe="exp-year"]').val(paymentExpirationDateArray[1]);
             Stripe.createToken($form, stripeResponseHandler);
-            /*
-            svc('/d1/register', {
-            'f_name': registerFirstName,
-            'l_name': registerLastName,
-            'email': registerEmail,
-            'mobile': registerMobile.toString().replace(/[^0-9]/g, ''),
-            'major': registerMajor,
-            'year': registerYear,
-            'pwd': registerPassword
-            }, function (data) {
-            if (data.status == 0) {
-            $('#modal-pay-membership-userinfo').hide();
-            $('#modal-pay-membership-thankyou').show();
-            }
-            else if (data.status == 10002) { //TODO
-            // Error duplicate entry - email is already registered
-            alert(data.short_message + '\n' + data.long_message);
-            }
-            else {
-            // Error all other
-            alert('Verify failed');
-            }
-            }, true);
-            */
-            //TODO add AJAX
-            //$('#modal-pay-membership-payment').hide();
-            //$('#modal-pay-membership-thankyou').show();
-            //alertString = '<label>' + alertString + '</label>';
-            //$('div#user-info').html(alertString);
         }
     });
 });
