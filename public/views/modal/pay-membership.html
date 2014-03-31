@@ -1,6 +1,6 @@
 ﻿<script type="text/javascript">
 // ======================================================================== //
-    //   PAY MEMBERSHIP MODAL                                                   //
+//   PAY MEMBERSHIP MODAL                                                   //
 
 // Verify Form
 function verify(x) {
@@ -24,42 +24,54 @@ function verify(x) {
             break;
     }
 }
-/*
-Stripe.setPublishableKey('YOUR_PUBLISHABLE_KEY');
+
+Stripe.setPublishableKey('pk_test_HvH0HNcaXzQcAPN8wruR6JXU');
+var stripeToken = '';
 var stripeResponseHandler = function (status, response) {
     var $form = $('form#payment');
     if (response.error) {
-    // Show the errors on the form
-    //$form.find('.payment-errors').text(response.error.message);
-    $('div#payment-error').html(response.error.message);
+        // Show the errors on the form
+        //$form.find('.payment-errors').text(response.error.message);
+        $('div#payment-error').html(response.error.message);
         //$form.find('button').prop('disabled', false);
     }
     else {
         // token contains id, last4, and card type
-        var token = response.id;
-        alert('token : ' + token);
-        // Insert the token into the form so it gets submitted to the server
-        $form.append($('<input type="hidden" name="stripeToken" />').val(token));
-        // and re-submit
-        $form.get(0).submit();
+        stripeToken = response.id;
+        //alert('stripeToken(1) :' + stripeToken);
+        var userId = $.cookie('id');
+        svc('/d1/user/' + userId + '/buyMembership', {
+            stripeCardToken: stripeToken,
+            saveCard: false,
+            amountAuthorized: '45'
+        }, function (data) {
+            if (data.status == 0) {
+                $('#modal-pay-membership-payment').hide();
+                $('#modal-pay-membership-thankyou').show();
+            }
+            else {
+                // Error all other
+                alert('Payment failed');
+            }
+        }, true);
     }
 };
-*/
 
 $(document).ready(function () {
     $('#modal-pay-membership-payment').show();
     $('#modal-pay-membership-thankyou').hide();
 
     $('#btn-purchase').click(function (event) {
+        var $form = $('form#payment');
         var alertString = '';
         event.preventDefault();
         allPass = field.checkAll('form#payment');
-        PaymentCardNumber = $('input[name=PaymentCardNumber]').val().toUpperCase();
-        PaymentCvc = $('input[name=PaymentCvc]').val().toUpperCase();
-        PaymentName = $('input[name=PaymentName]').val().toUpperCase();
-        PaymentExpirationDate = $('input[name=PaymentExpirationDate]').val().toUpperCase();
-        //Stripe.createToken($form, stripeResponseHandler);
         if (allPass) {
+            var paymentExpirationDate = $('input[name=PaymentExpirationDate]').val();
+            var paymentExpirationDateArray = paymentExpirationDate.split('/');
+            $('input[data-stripe="exp-month"]').val(paymentExpirationDateArray[0]);
+            $('input[data-stripe="exp-year"]').val(paymentExpirationDateArray[1]);
+            Stripe.createToken($form, stripeResponseHandler);
             /*
             svc('/d1/register', {
             'f_name': registerFirstName,
@@ -85,24 +97,11 @@ $(document).ready(function () {
             }, true);
             */
             //TODO add AJAX
-            $('#modal-pay-membership-payment').hide();
-            $('#modal-pay-membership-thankyou').show();
+            //$('#modal-pay-membership-payment').hide();
+            //$('#modal-pay-membership-thankyou').show();
             //alertString = '<label>' + alertString + '</label>';
             //$('div#user-info').html(alertString);
         }
-    });
-
-    $('#btn-submit').click(function (event) {
-        var alertString = '';
-        var $form = $('form#payment');
-        event.preventDefault();
-        allPass = field.checkAll('form#payment');
-        // Disable the submit button to prevent repeated clicks
-        //$form.find('button').prop('disabled', true);
-        Stripe.createToken($form, stripeResponseHandler);
-        alert('Test');
-        // Prevent the form from submitting with the default action
-        return false;
     });
 });
 </script>
@@ -131,14 +130,16 @@ $(document).ready(function () {
         <div class="col col2">
             <p style="margin-top:10px;">Please enter your payment information for:<br /><b>SCIA Membership Fee: $45</b></p>
             <label for="PaymentCardNumber">Card Number:</label>
-            <input type="text" name="PaymentCardNumber" id="PaymentCardNumber" value="" tabindex="1" onblur="field.check(this)" />
+            <input type="text" data-stripe="number" id="PaymentCardNumber" value="" tabindex="1" onblur="field.check(this)" />
             <label for="PaymentName">Name:</label>
             <input type="text" name="PaymentName" id="PaymentName" value="" tabindex="2" onblur="field.check(this)" />
             <div class="expdate-cvc">
-                <label for="PaymentExpirationDate">Exp Date:</label>
+                <label for="PaymentExpirationDate">Exp Date (MM/YYYY):</label>
                 <label for="PaymentCvc">CVC:</label>
                 <input type="text" name="PaymentExpirationDate" id="PaymentExpirationDate" value="" tabindex="3" onblur="field.check(this)" />
-                <input type="text" name="PaymentCvc" id="PaymentCvc" value="" tabindex="4" onblur="field.check(this)" />
+                <input type="text" data-stripe="cvc" id="PaymentCvc" value="" tabindex="4" onblur="field.check(this)" />
+                <input type="hidden" data-stripe="exp-month" />
+                <input type="hidden" data-stripe="exp-year" />
             </div>
         </div>
         <div class="col col2">

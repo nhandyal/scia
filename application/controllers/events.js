@@ -59,6 +59,7 @@ module.exports.getEvents = function(req,res,query) {
 
 module.exports.getEventDetails = function(req,res,eventID) {
 	var event_id = eventID;
+console.log("test");
 
 	if(req.loggedIn) {
 	    async.parallel({
@@ -112,7 +113,7 @@ module.exports.getEventDetails = function(req,res,eventID) {
 
 		    entry.id = entry._id;
                     delete entry._id;
-
+console.log(entry);
 		    return ResponseHandler.sendSuccess(res, entry);
 		}); 
 	}

@@ -74,11 +74,11 @@
                     }
                 }, true);
                 //TEST
-                //$.cookie('card_id', 123);
+                //$.cookie('id', 123);
                 //$.cookie('f_name', 'JACK');
                 //$.cookie('l_name', 'KWAN');
-                //$.cookie('pay_membership_flag', 1);
-                location.reload();
+                //$.cookie('is_member', 0);
+                //location.reload();
             }
         });
 
@@ -97,7 +97,8 @@
             resendEmail = $('input[name=VerifyConfirmationCode]').val();
             if (allPass) {
                 svc('/d1/user/resendVerificationEmail', {
-                    'email': resendEmail
+                    'email': resendEmail,
+                    'cb': '/index.html?action=verified'
                 }, function (data) {
                     if (data.status == 0) {
                         $('#modal-login-userinfo').hide();
