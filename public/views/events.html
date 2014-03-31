@@ -338,12 +338,14 @@
 	            eventPrice.className = 'eventPrice';
 	            if (json.member_price != null) {
 	                eventPrice.innerHTML = 'Member Price: ' + json.member_price + '<br> Non-Member Price: ' + json.non_member_price + '<br>';
+	                document.getElementById('leftContainer' + digit).appendChild(eventPrice);
 	            } else if (json.non_member_price != null) {
 	                eventPrice.innerHTML = 'Price: ' + json.non_member_price;
+	                document.getElementById('leftContainer' + digit).appendChild(eventPrice);
 	            } else {
 	                eventPrice.innerHTML = 'No Price Information Available';
 	            }
-	            document.getElementById('leftContainer' + digit).appendChild(eventPrice);
+	            
 
                 //Purchase Button
 	            /*var eventButton = document.createElement('div');
