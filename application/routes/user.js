@@ -129,7 +129,7 @@ module.exports = function(app) {
 		var id = ((req.url).replace("/d1/user/", "")).replace("/buyMembership", ""),
 			params = {
 				id : id,
-				stripeCardToken : req.body.stripeToken,
+				stripeCardToken : req.body.stripeCardToken,
 				stripeCardID : req.body.stripeCardID,
 				saveCard : req.body.saveCard,
 				amountAuthorized : req.body.amountAuthorized

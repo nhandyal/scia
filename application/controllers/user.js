@@ -137,12 +137,12 @@ module.exports.resendVerificationEmail = function(res, params) {
         return ResponseHandler.sendError(res, 10400);
     }
 
-    User.checkIfEmailExists(params.email, function(err, exists) {
+    User.findOneByEmail(params.email, function(err, user) {
         if(err) {
             return ResponseHandler.processError(res, err);
         }
 
-        if(!exists) {
+        if(!user) {
             return ResponseHandler.sendError(res, 10402);
         }
 
@@ -276,6 +276,7 @@ module.exports.verifyUser = function(res, params) {
  */
 module.exports.buyMembership = function(res, params) {
 
+
     if(!params.stripeCardToken && !params.stripeCardID) {
         return ResponseHandler.sendError(res, 10400);
     }
@@ -313,7 +314,7 @@ module.exports.buyMembership = function(res, params) {
                 }
 
                 var set_membership = user.set_membership();
-                if (set_membership.err) {
+                if (set_membership.err != undefined) {
                     return ResponseHandler.processError(res, set_membership);
                 } 
 
@@ -334,6 +335,7 @@ module.exports.buyMembership = function(res, params) {
                         return ResponseHandler.processError(res, err);
                     }
 
+                    AuthToken.getNewAuthToken(res, user);
                     return ResponseHandler.sendSuccess(res);
                 });
             }

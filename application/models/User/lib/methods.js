@@ -42,6 +42,7 @@ module.exports.member = function() {
 }
 
 module.exports.set_membership = function() {
+    var user = this;
 
     // ensure the user is verified
     if(!user.is_verified) {
@@ -52,7 +53,9 @@ module.exports.set_membership = function() {
     }
 
     this.is_member = true;
-    return;
+    return {
+        status : "ok"
+    };
 }
 
 module.exports.login = function(pwd, onCompleteCallback) {
