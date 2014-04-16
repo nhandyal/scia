@@ -6,12 +6,8 @@ var url = require("url"),
 module.exports = function(app, transport) {
 	
 
-	app.get("/d1/testCardCommit", function(req, res){
-		
-	});
-
-	app.get("/d1/testCardRet", function(req, res){
-		
+	app.get("/d1/monit", function(req, res) {
+		res.send("ok");
 	});
 
 	

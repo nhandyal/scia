@@ -1,0 +1,27 @@
+#!/bin/bash
+
+echo
+
+SCIA_DIR=/www/scia
+
+cd $SCIA_DIR
+
+# move updated conf files to appropriate places
+echo "updating configuration files"
+cp sconf/nginx.conf /opt/nginx/conf/
+cp sconf/scia.conf /etc/init/
+cp sconf/monitrc /etc/monit/
+
+# stop nginx
+/etc/init.d/nginx stop
+
+#restart scia node server
+echo "stopping node server"
+stop scia
+start scia
+
+# start nginx
+/etc/init.d/nginx start
+
+#reload monit
+sudo monit reload
