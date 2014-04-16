@@ -15,10 +15,8 @@ function dbsync {
 }
 
 function configure_remote {
-	#first let's do everything we need to do as sudo
+	#sshpass -p "$PASSWORD" ssh admin@uscscia.com 'chmod ugo+x /www/scia/athena_scripts/update | /www/scia/athena_scripts/update'
 	lib/sshsudo -v -p $PASSWORD admin@uscscia.com /www/scia/athena_scripts/update_sudo
-
-	#now let's do everything we can do w/o sudo
 }
 
 

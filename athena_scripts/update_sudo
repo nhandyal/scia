@@ -6,6 +6,9 @@ SCIA_DIR=/www/scia
 
 cd $SCIA_DIR
 
+# install additional node packages
+npm install
+
 # move updated conf files to appropriate places
 echo "updating configuration files"
 cp sconf/nginx.conf /opt/nginx/conf/
