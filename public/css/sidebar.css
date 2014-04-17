@@ -93,14 +93,26 @@
     margin-top: 5px;
 }
 
+.sidebar-input-expcvc {
+    width : 50%;
+    float: left;
+}
+
 .sidebar-input {
-    width: 100% !important;
-    line-height: 2em !important;
-    background: rgb(30,30,30) !important;
-    border: 1px solid rgb(40,40,40) !important;
-    padding: 5px !important;
-    color: rgb(200,200,200) !important;
+    width: 100%;
+    line-height: 2em;
+    background: rgb(30,30,30);
+    border: 1px solid rgb(40,40,40);
+    padding: 5px;
+    color: rgb(200,200,200);
     font-size: 14px;
+}
+
+.sidebar-card {
+    width: 25%;
+    padding: 5px;
+    text-align: center;
+    float: left;
 }
 
 .sidebar-label {
@@ -134,4 +146,8 @@
     text-align: center;
     color: red;
     font-size: 12px;
+}
+
+.clear {
+    clear: both;
 }

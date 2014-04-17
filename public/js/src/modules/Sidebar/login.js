@@ -45,7 +45,7 @@ SCIA.Sidebar.login = {
             if(response.status === 0) {
                 // all good, close the login box and refresh the page
                 SCIA.Sidebar._hide(function() {
-                    window.location = "/";
+                    window.location = window.location.origin + window.location.pathname;
                 });
             } else if(response.status == 10402) {
                 $("#sidebar-login-error").empty().html("This email isn't registered");

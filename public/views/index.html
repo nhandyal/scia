@@ -3,32 +3,45 @@
 		<title>USC SCIA</title>
 		<link rel="stylesheet" type="text/css" href="../css/index.css">
         <link rel="stylesheet" type="text/css" href="../css/sidebar.css">
-        <!--<link rel="stylesheet" type="text/css" href="../css/global/site.css" />-->
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
         <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+        <script type="text/javascript" src="../js/dist/SCIA.js"></script>
 	</head>
 	<body>
-	<!-- 
-		Glad you like the site enough to check out the source,
-		Get in touch with us, especially if you'd like to make the site even better.
+        <!-- 
+        	Glad you like the site enough to check out the source,
+        	Get in touch with us, especially if you'd like to make the site even better.
 
-		admin@uscscia.com
-	-->	
+        	admin@uscscia.com
+        -->	
 		<div id="wrapper">
 			<div id="header">
-				<a id="header-logo" href="index.html"><img src="../assets/scia-logo.png" height="50" width="218" border="0" alt="Southern California Indio Americans" /></a>
-				<div id="navigation">
-					<a id="nav-about" href="about.html">About</a>
-					<a id="nav-events" href="events.html">Events</a>
-					<a href="javascript:SC.Sidebar.register.display()" id="navigation-register">Register</a>
-                    <span id="login-wrapper">
-					   <!-- based on the auth cookie, either the login icon, or the personalized
-                            name and menu elements will be rendered
-                            
-                            <a href="javascript:SC.Sidebar.login.display()" id="navigation-login">Login</a>
-                        -->
-                    </span>
-                    
-				</div>
+				<a id="header-logo" href="/"><img src="../assets/scia-logo.png" height="50" width="218" border="0" alt="Southern California Indio Americans" /></a>
+                <ul id="navigation">
+                    <li id="nav-about" class="nav-element">
+                        <a href="about.html">About</a>
+                    </li>
+                    <li id="nav-events" class="nav-element">
+                        <a href="events.html">Events</a>
+                    </li>
+                    <li id="nav-register" class="nav-element">
+                        <a href="javascript:SC.Sidebar.register.display()">Register</a>
+                    </li>
+                    <li id="nav-login" class="nav-element">
+                        <a href="javascript:SC.Sidebar.login.display()">Login</a>
+                    </li>
+                    <li id="nav-personal" class="nav-element">
+                        <span></span>
+                        <ul>
+                            <li id="nav-buy-membership">
+                                <a href="javascript:SC.Sidebar.purchase_membership.display()">Buy Membership</a>
+                            </li>
+                            <li>
+                                <a href="javascript:SC.logout()">Logout</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
                 <div class="clear"></div>
 			</div>
 			<div id="ZuneView"></div>
@@ -40,55 +53,11 @@
 			</div>
 		</div>
         <div id="sidebar"></div>
-        
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-        <script type="text/javascript" src="../js/dist/jquery/plugins/jquery.cookie.js"></script>
-        <script type="text/javascript" src="../js/dist/SCIA.js"></script>
-        <script type="text/javascript" src="../js/dist/global/site.js"></script>
-        <script type="text/javascript" src="../js/dist/global/site2.js"></script>
-		<script type="text/javascript">
-            SC.Sidebar.init("wrapper", "sidebar", "../assets/images/loading.gif");
-		    SC.ZuneView.init({ height: 4 }, "ZuneView");
-            var queryParams = SC.utils.parseQueryString();
-
-            if(queryParams.action == "recover") {
-                var id = queryParams.id,
-                    token = queryParams.token;
-
-                SC.Sidebar.reset_password.display(id, token);
-            }else if(queryParams.action == "verified") {
-                SC.Flash("Thanks for verifying your account!");
-            }
-
-
-            // initialize the navigation bar
-            if(SCIA.utils.readCookie("id") !== null) {
-                // the user is logged in
-                console.log("user is logged in");
-            } else {
-                $("#login-wrapper").html('<a href="javascript:SC.Sidebar.login.display()" id="navigation-login">Login</a>');
-            }
-            
-            $("#navigation").animate({"opacity" : 1}, 100, function(){});
-
-            // highlight the current view
-            switch(window.location.pathname) {
-                case "/about/":
-                    $("#nav-about").css("color" , "rgb(204,40,40)");
-                    break;
-                case "/events/":
-                    $("#nav-events").css("color" , "rgb(204,40,40)");
-                    break;
-            };
-
-		</script>
-        
-        <div id="modal-overlay"></div>
-        <div id="modal-container">
-	        <div id="modal">
-		        <div id="modal-loading"></div>
-		        <div id="modal-content"></div>
-	        </div>
-        </div>
 	</body>
+    <script type="text/javascript">
+        SC.core.init();
+        SC.navigation.init();
+        SC.Sidebar.init("wrapper", "sidebar", "../assets/images/loading.gif");
+        SC.ZuneView.init({ height: 4 }, "ZuneView");
+    </script>
 </html>

@@ -144,10 +144,52 @@ body{
 	margin-bottom: 20px;
 	padding: 0px;
 	opacity: 0;
+	list-style: none;
+	font-size: 0.8em;
+}
+
+#navigation li {
+	float: left;
+	margin-left: 10px;
 }
 
 #navigation a {
-	font-size: 0.8em;
 	color: rgb(60, 60, 60);
-	margin-left: 10px;
 }
+
+#navigation li ul {
+	display: none;
+	position: absolute;
+	list-style: none;
+	top: 15px;
+	right: 0px;
+	z-index: 3;
+	width: 150px;
+	padding: 0px;
+	margin: 0px;
+	background: white;
+}
+
+#navigation li:hover > ul {
+	display: block;
+}
+
+#navigation li ul li {
+	float: right;
+	width: 140px;
+	margin: 0px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	padding: 3px;
+}
+
+#navigation li ul li > a {
+	text-decoration: none;
+	display: inline-block;
+	width: 140px;
+}
+
+#navigation li ul li:hover {
+	color: rgb(230,230,230) !important;
+	background: rgb(204,40,40);
+};

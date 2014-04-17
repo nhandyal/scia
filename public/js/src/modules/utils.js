@@ -16,7 +16,7 @@ SCIA.utils = {
 
         for (var i = keys.length; i--;) {
             if (e.keyCode === keys[i]) {
-                preventDefault(e);
+                SELF.preventDefault(e);
                 return;
             }
         }
