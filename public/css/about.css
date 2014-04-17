@@ -1,0 +1,35 @@
+body{
+    margin: 0px;
+    padding: 0px;
+    height: 100%;
+}
+.parallax-content{
+    height: 70%;
+}
+.parallax-img{
+    height: 70%;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+#parallax-content-main{
+    height: 100%;
+    background-image: url("../../assets/images/about/scaled/tommy_blurred_main.jpg");
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+#parallax-img1{
+    background-image: url("../../assets/images/about/scaled/library.jpg");
+}
+#parallax-img2{
+    background-image: url("../../assets/images/about/scaled/fountain_2.jpg");
+}
+#parallax-img3{
+    background-image: url("../../assets/images/about/scaled/tommy_epic.jpg");                
+}
+#parallax-img4{
+    background-image: url("../../assets/images/about/scaled/cinema.jpg");
+}
+#parallax-img5{
+    background-image: url("../../assets/images/about/scaled/fountain.jpg");
+}
