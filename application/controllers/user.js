@@ -13,12 +13,20 @@ var User = Utils.loadModel("User"),
     AuthToken = Utils.AuthToken;
 
 var sendVerificationEmail = function(res, params) {
+
+    var vrf_link
+    if(global.env == "test") {
+        vrf_link = "http://localhost:8000/d1/user/verify/" + params.id + "?cb=" + params.cb;
+    }else {
+        vrf_link = "https://www.uscscia.com/d1/user/verify/" + params.id + "?cb=" + params.cb;
+    }
+
     var vrf_email_data = {
             template_path : application_root + "views/email-templates/vrf_email",
             from : "no_reply@uscscia.com",
             to : params.email,
             title : "USC SCIA verification email",
-            vrf_link : "https://www.uscscia.com/d1/user/verify/" + params.id + "?cb=" + params.cb
+            vrf_link : vrf_link
         };
 
         NodeMailer.send(res, vrf_email_data, function() {});
