@@ -1,6 +1,4 @@
 SCIA.Sidebar.forgot_password = {
-    
-    submit_processing : false,
 
     display : function() {
         this._render();
@@ -8,8 +6,7 @@ SCIA.Sidebar.forgot_password = {
     },
 
     _render : function() {
-        var SELF = this,
-            html = "",
+        var html = "",
             $sidebar_wrapper = SCIA.Sidebar._renderBase();
 
         html += "<div>";
@@ -25,8 +22,7 @@ SCIA.Sidebar.forgot_password = {
     },
 
     _renderSuccess : function() {
-        var SELF = this,
-            html = "",
+        var html = "",
             $sidebar_wrapper = SCIA.Sidebar._renderBase();
 
         html += "<div class='sidebar-error'>Awesome, you're almost there!<br/>Check your email for further instructions</div>";
@@ -45,15 +41,13 @@ SCIA.Sidebar.forgot_password = {
             cb = "https://www.uscscia.com",
             recoverLink = "/d1/user/recover?email="+email+"&cb=" + cb;
 
-        if(SELF.submit_processing) {
-            $("#sidebar-fgPwd-error").empty().html("We're still trying to take care of<br/>your last request!");
-        }else {
-            SELF.submit_processing = true;
+        if(!SCIA.Sidebar._beginTransaction()) {
+            return;
         }
 
         $.get(recoverLink, function(response) {
 
-            SELF.submit_processing = false;
+            SCIA.Sidebar._endTransaction();
 
             if(response.status === 0) {
                 SELF._renderSuccess();

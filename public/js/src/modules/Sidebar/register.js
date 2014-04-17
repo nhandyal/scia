@@ -1,15 +1,12 @@
 SCIA.Sidebar.register = {
 
-    submit_processing : false,
-
     display : function() {
         this._render();
         SCIA.Sidebar._expose();
     },
 
     _render : function() {
-        var SELF = this,
-            html = "",
+        var html = "",
             $sidebar_wrapper = SCIA.Sidebar._renderBase();
 
         html += "<div>";
@@ -41,8 +38,7 @@ SCIA.Sidebar.register = {
     },
 
     _renderSuccess : function() {
-        var SELF = this,
-            html = "",
+        var html = "",
             $sidebar_wrapper = SCIA.Sidebar._renderBase();
 
         html += "<div class='sidebar-error'>Awesome, you're almost there!<br/>Check your email for further instructions</div>";
@@ -63,10 +59,8 @@ SCIA.Sidebar.register = {
             pwd = $("#sidebar-register-password").val(),
             pwd_conf = $("#sidebar-register-password-conf").val();
 
-        if(SELF.submit_processing) {
-            $("#sidebar-register-error").empty().html("We're still trying to take care of<br/>your last request!");
-        }else {
-            SELF.submit_processing = true;
+        if(!SCIA.Sidebar._beginTransaction()) {
+            return;
         }
 
         // ensure all fields have been submitted
@@ -96,7 +90,7 @@ SCIA.Sidebar.register = {
             "cb" : "https://www.uscscia.com"
         }, function(response) {
             
-            SELF.submit_processing = false;
+            SCIA.Sidebar._endTransaction();
 
             if(response.status === 0) {
                 SELF._renderSuccess();

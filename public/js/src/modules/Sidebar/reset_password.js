@@ -2,7 +2,6 @@ SCIA.reset_password = {
     
     id : "",
     token : "",
-    submit_processing : false,
 
     display : function(id, token) {
         this.id = id;
@@ -12,8 +11,7 @@ SCIA.reset_password = {
     },
 
     _render : function() {
-        var SELF = this,
-            html = "",
+        var html = "",
             $sidebar_wrapper = SCIA.Sidebar._renderBase();
 
         html += "<div id='sidebar-reset-pwd'>";
@@ -34,8 +32,7 @@ SCIA.reset_password = {
     },
 
     _renderSuccess : function() {
-        var SELF = this,
-            html = "",
+        var html = "",
             $sidebar_wrapper = SCIA.Sidebar._renderBase();
 
         html += "<div class='sidebar-error'>Your password has been reset :-)</div>";
@@ -55,10 +52,8 @@ SCIA.reset_password = {
             id = SELF.id,
             token = SELF.token;
 
-        if(SELF.submit_processing) {
-            $("#sidebar-rstPwd-error").empty().html("We're still trying to take care of<br/>your last request!");
-        }else {
-            SELF.submit_processing = true;
+        if(!SCIA.Sidebar._beginTransaction()) {
+            return;
         }
 
         if(new_pwd === "" ) {
@@ -76,7 +71,7 @@ SCIA.reset_password = {
             "new_pwd" : new_pwd
         }, function(response) {
 
-            SELF.submit_processing = false;
+            SCIA.Sidebar._endTransaction();
 
             if(response.status === 0) {
                 SELF._renderSuccess();

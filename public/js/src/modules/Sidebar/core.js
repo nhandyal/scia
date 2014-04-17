@@ -1,21 +1,14 @@
 SCIA.Sidebar = {
 
     $sidebar : null,
+    $sidebarLoading : null,
     $wrapper : null,
     windowDimensions : null,
     isVisible : false,
+    _transactionInFlight : false,
+    loadingImgAsset : "",
 
-
-    baseTemplate : function() {
-        var templateString = "";
-
-        templateString += "<div id='sidebar-close'></div>";
-        templateString += "<div id='sidebar-mainWrapper'></div>";
-
-        return templateString;
-    },
-
-    init : function(wrapperID, sidebarID) {
+    init : function(wrapperID, sidebarID, loadingImgAsset) {
         var SELF = this;
         
         SELF.windowDimensions = SCIA.utils.getWindowSize();
@@ -29,12 +22,17 @@ SCIA.Sidebar = {
             return;
         }
 
+        if(loadingImgAsset === "" || loadingImgAsset === null) {
+            return;
+        }
 
         SELF.$wrapper = $("#"+wrapperID);
         var $wrapper = SELF.$wrapper;
 
         SELF.$sidebar = $("#"+sidebarID);
         var $sidebar = SELF.$sidebar;
+
+        SELF.loadingImgAsset = loadingImgAsset;
 
         $sidebar.css("height", windowDimensions.height);
 
@@ -101,7 +99,7 @@ SCIA.Sidebar = {
         });
 
         SELF.$sidebar.animate({
-            "right" : -300
+            "right" : -400
         }, 350, function() {
             SELF.isVisible = false;
             if(onCompleteCallback) {
@@ -115,9 +113,13 @@ SCIA.Sidebar = {
     _renderBase : function() {
         var SELF = this,
             $sidebar = SELF.$sidebar,
+            loadingImgAsset = SELF.loadingImgAsset,
             html = "";
 
         html += "<div id='sidebar-close'></div>";
+        html += "<div id='sidebar-loading-wrapper'>";
+            html += "<img id='sidebar-loading-icon' src='"+loadingImgAsset+"' width='50' height='50'/>";
+        html += "</div>";
         html += "<div id='sidebar-mainWrapper'></div>";
 
         $sidebar.empty().html(html);
@@ -125,12 +127,30 @@ SCIA.Sidebar = {
         return $("#sidebar-mainWrapper");
     },
 
-    renderHandlerbars : function() {
-        var SELF = this,
-            $sidebar = SELF.$sidebar,
-            baseTemplate = Handlebars.compile(SELF.baseTemplate()),
-            html = baseTemplate();
+    /**
+     * mark the beginning of a network transaction for the sidebar
+     * also brings up the processing screen for the UI
+     * 
+     * @return - true, it's OK to begin a transaction
+     * @return - false, there is already another network transaction in process
+     */
+    _beginTransaction : function() {
+        var SELF = this;
 
-        $sidebar.empty().html(html);
+        if(SELF._transactionInFlight) {
+            return false;
+        }
+
+        SELF._transactionInFlight = true;
+        $("#sidebar-loading-wrapper").show().animate({"opacity" : 1}, 300, function(){});
+        return true;
+    },
+
+    _endTransaction : function() {
+        var SELF = this;
+
+        SELF._transactionInFlight = false;
+        $("#sidebar-loading-wrapper").hide();
+        $("#sidebar-loading-wrapper").css({"opacity" : 0});
     }
 };

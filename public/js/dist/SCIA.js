@@ -57,21 +57,14 @@
     SCIA.Sidebar = {
 
         $sidebar: null,
+        $sidebarLoading: null,
         $wrapper: null,
         windowDimensions: null,
         isVisible: false,
+        _transactionInFlight: false,
+        loadingImgAsset: "",
 
-
-        baseTemplate: function() {
-            var templateString = "";
-
-            templateString += "<div id='sidebar-close'></div>";
-            templateString += "<div id='sidebar-mainWrapper'></div>";
-
-            return templateString;
-        },
-
-        init: function(wrapperID, sidebarID) {
+        init: function(wrapperID, sidebarID, loadingImgAsset) {
             var SELF = this;
 
             SELF.windowDimensions = SCIA.utils.getWindowSize();
@@ -85,12 +78,17 @@
                 return;
             }
 
+            if (loadingImgAsset === "" || loadingImgAsset === null) {
+                return;
+            }
 
             SELF.$wrapper = $("#" + wrapperID);
             var $wrapper = SELF.$wrapper;
 
             SELF.$sidebar = $("#" + sidebarID);
             var $sidebar = SELF.$sidebar;
+
+            SELF.loadingImgAsset = loadingImgAsset;
 
             $sidebar.css("height", windowDimensions.height);
 
@@ -159,7 +157,7 @@
             });
 
             SELF.$sidebar.animate({
-                "right": -300
+                "right": -400
             }, 350, function() {
                 SELF.isVisible = false;
                 if (onCompleteCallback) {
@@ -173,9 +171,13 @@
         _renderBase: function() {
             var SELF = this,
                 $sidebar = SELF.$sidebar,
+                loadingImgAsset = SELF.loadingImgAsset,
                 html = "";
 
             html += "<div id='sidebar-close'></div>";
+            html += "<div id='sidebar-loading-wrapper'>";
+            html += "<img id='sidebar-loading-icon' src='" + loadingImgAsset + "' width='50' height='50'/>";
+            html += "</div>";
             html += "<div id='sidebar-mainWrapper'></div>";
 
             $sidebar.empty().html(html);
@@ -183,18 +185,38 @@
             return $("#sidebar-mainWrapper");
         },
 
-        renderHandlerbars: function() {
-            var SELF = this,
-                $sidebar = SELF.$sidebar,
-                baseTemplate = Handlebars.compile(SELF.baseTemplate()),
-                html = baseTemplate();
+        /**
+         * mark the beginning of a network transaction for the sidebar
+         * also brings up the processing screen for the UI
+         *
+         * @return - true, it's OK to begin a transaction
+         * @return - false, there is already another network transaction in process
+         */
+        _beginTransaction: function() {
+            var SELF = this;
 
-            $sidebar.empty().html(html);
+            if (SELF._transactionInFlight) {
+                return false;
+            }
+
+            SELF._transactionInFlight = true;
+            $("#sidebar-loading-wrapper").show().animate({
+                "opacity": 1
+            }, 300, function() {});
+            return true;
+        },
+
+        _endTransaction: function() {
+            var SELF = this;
+
+            SELF._transactionInFlight = false;
+            $("#sidebar-loading-wrapper").hide();
+            $("#sidebar-loading-wrapper").css({
+                "opacity": 0
+            });
         }
     };
     SCIA.Sidebar.forgot_password = {
-
-        submit_processing: false,
 
         display: function() {
             this._render();
@@ -202,8 +224,7 @@
         },
 
         _render: function() {
-            var SELF = this,
-                html = "",
+            var html = "",
                 $sidebar_wrapper = SCIA.Sidebar._renderBase();
 
             html += "<div>";
@@ -219,8 +240,7 @@
         },
 
         _renderSuccess: function() {
-            var SELF = this,
-                html = "",
+            var html = "",
                 $sidebar_wrapper = SCIA.Sidebar._renderBase();
 
             html += "<div class='sidebar-error'>Awesome, you're almost there!<br/>Check your email for further instructions</div>";
@@ -239,15 +259,13 @@
                 cb = "https://www.uscscia.com",
                 recoverLink = "/d1/user/recover?email=" + email + "&cb=" + cb;
 
-            if (SELF.submit_processing) {
-                $("#sidebar-fgPwd-error").empty().html("We're still trying to take care of<br/>your last request!");
-            } else {
-                SELF.submit_processing = true;
+            if (!SCIA.Sidebar._beginTransaction()) {
+                return;
             }
 
             $.get(recoverLink, function(response) {
 
-                SELF.submit_processing = false;
+                SCIA.Sidebar._endTransaction();
 
                 if (response.status === 0) {
                     SELF._renderSuccess();
@@ -260,16 +278,13 @@
     };
     SCIA.Sidebar.login = {
 
-        submit_processing: false,
-
         display: function() {
             this._render();
             SCIA.Sidebar._expose();
         },
 
         _render: function() {
-            var SELF = this,
-                html = "",
+            var html = "",
                 $sidebar_wrapper = SCIA.Sidebar._renderBase();
 
             html += "<div>";
@@ -291,14 +306,11 @@
         },
 
         submit: function(callingElement) {
-            var SELF = this,
-                email = $("#sidebar-loginEmail").val(),
+            var email = $("#sidebar-loginEmail").val(),
                 password = $("#sidebar-loginPassword").val();
 
-            if (SELF.submit_processing) {
-                $("#sidebar-login-error").empty().html("We're still trying to take care of<br/>your last request!");
-            } else {
-                SELF.submit_processing = true;
+            if (!SCIA.Sidebar._beginTransaction()) {
+                return;
             }
 
             $.post("/d1/user/login", {
@@ -306,7 +318,7 @@
                 "pwd": password
             }, function(response) {
 
-                SELF.submit_processing = false;
+                SCIA.Sidebar._endTransaction();
 
                 if (response.status === 0) {
                     // all good, close the login box and refresh the page
@@ -327,16 +339,13 @@
     };
     SCIA.Sidebar.register = {
 
-        submit_processing: false,
-
         display: function() {
             this._render();
             SCIA.Sidebar._expose();
         },
 
         _render: function() {
-            var SELF = this,
-                html = "",
+            var html = "",
                 $sidebar_wrapper = SCIA.Sidebar._renderBase();
 
             html += "<div>";
@@ -368,8 +377,7 @@
         },
 
         _renderSuccess: function() {
-            var SELF = this,
-                html = "",
+            var html = "",
                 $sidebar_wrapper = SCIA.Sidebar._renderBase();
 
             html += "<div class='sidebar-error'>Awesome, you're almost there!<br/>Check your email for further instructions</div>";
@@ -390,10 +398,8 @@
                 pwd = $("#sidebar-register-password").val(),
                 pwd_conf = $("#sidebar-register-password-conf").val();
 
-            if (SELF.submit_processing) {
-                $("#sidebar-register-error").empty().html("We're still trying to take care of<br/>your last request!");
-            } else {
-                SELF.submit_processing = true;
+            if (!SCIA.Sidebar._beginTransaction()) {
+                return;
             }
 
             // ensure all fields have been submitted
@@ -423,7 +429,7 @@
                 "cb": "https://www.uscscia.com"
             }, function(response) {
 
-                SELF.submit_processing = false;
+                SCIA.Sidebar._endTransaction();
 
                 if (response.status === 0) {
                     SELF._renderSuccess();
@@ -462,7 +468,6 @@
 
         id: "",
         token: "",
-        submit_processing: false,
 
         display: function(id, token) {
             this.id = id;
@@ -472,8 +477,7 @@
         },
 
         _render: function() {
-            var SELF = this,
-                html = "",
+            var html = "",
                 $sidebar_wrapper = SCIA.Sidebar._renderBase();
 
             html += "<div id='sidebar-reset-pwd'>";
@@ -494,8 +498,7 @@
         },
 
         _renderSuccess: function() {
-            var SELF = this,
-                html = "",
+            var html = "",
                 $sidebar_wrapper = SCIA.Sidebar._renderBase();
 
             html += "<div class='sidebar-error'>Your password has been reset :-)</div>";
@@ -515,10 +518,8 @@
                 id = SELF.id,
                 token = SELF.token;
 
-            if (SELF.submit_processing) {
-                $("#sidebar-rstPwd-error").empty().html("We're still trying to take care of<br/>your last request!");
-            } else {
-                SELF.submit_processing = true;
+            if (!SCIA.Sidebar._beginTransaction()) {
+                return;
             }
 
             if (new_pwd === "") {
@@ -536,7 +537,7 @@
                 "new_pwd": new_pwd
             }, function(response) {
 
-                SELF.submit_processing = false;
+                SCIA.Sidebar._endTransaction();
 
                 if (response.status === 0) {
                     SELF._renderSuccess();

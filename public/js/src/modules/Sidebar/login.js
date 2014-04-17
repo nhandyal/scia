@@ -1,15 +1,12 @@
 SCIA.Sidebar.login = {
 
-    submit_processing : false,
-
     display : function() {
         this._render();
         SCIA.Sidebar._expose();
     },
 
     _render : function() {
-        var SELF = this,
-            html = "",
+        var html = "",
             $sidebar_wrapper = SCIA.Sidebar._renderBase();
 
         html += "<div>";
@@ -31,14 +28,11 @@ SCIA.Sidebar.login = {
     },
 
     submit : function(callingElement) {
-        var SELF = this,
-            email = $("#sidebar-loginEmail").val(),
+        var email = $("#sidebar-loginEmail").val(),
             password = $("#sidebar-loginPassword").val();
 
-        if(SELF.submit_processing) {
-            $("#sidebar-login-error").empty().html("We're still trying to take care of<br/>your last request!");
-        }else {
-            SELF.submit_processing = true;
+        if(!SCIA.Sidebar._beginTransaction()) {
+            return;
         }
 
         $.post("/d1/user/login", {
@@ -46,7 +40,7 @@ SCIA.Sidebar.login = {
             "pwd" : password
         }, function(response) {
 
-            SELF.submit_processing = false;
+            SCIA.Sidebar._endTransaction();
 
             if(response.status === 0) {
                 // all good, close the login box and refresh the page
