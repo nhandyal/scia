@@ -64,6 +64,7 @@
             // initialize the navigation bar
             if(SCIA.utils.readCookie("id") !== null) {
                 // the user is logged in
+                console.log("user is logged in");
             } else {
                 $("#login-wrapper").html('<a href="javascript:SC.Sidebar.login.display()" id="navigation-login">Login</a>');
             }

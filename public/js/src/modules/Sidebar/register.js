@@ -87,7 +87,7 @@ SCIA.Sidebar.register = {
             "l_name" : lname,
             "email" : email,
             "pwd" : pwd,
-            "cb" : "https://www.uscscia.com"
+            "cb" : window.location.origin + window.location.pathname
         }, function(response) {
             
             SCIA.Sidebar._endTransaction();

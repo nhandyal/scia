@@ -52,7 +52,7 @@ SCIA.Sidebar.login = {
             } else if(response.status == 10050) {
                 $("#sidebar-login-error").empty().html("Invalid password");
             } else if (response.status == 10051) {
-                $("#sidebar-login-error").empty().html("This account hasn't been verified<br/><a class='sidebar-ui-link' href='javascript:SC.Sidebar.forgot_password.display()'>Resend verification email?</a>");
+                $("#sidebar-login-error").empty().html("This account hasn't been verified<br/><a class='sidebar-ui-link' href=\"javascript:SC.Sidebar.resend_verification_email._submit(\'"+email+"\')\">Resend verification email?</a>");
             }
 
         });

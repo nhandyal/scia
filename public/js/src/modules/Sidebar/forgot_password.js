@@ -38,7 +38,7 @@ SCIA.Sidebar.forgot_password = {
     submit : function(callingElement) {
         var SELF = this,
             email = $("#sidebar-fgPwd-email").val(),
-            cb = "https://www.uscscia.com",
+            cb = window.location.origin + window.location.pathname,
             recoverLink = "/d1/user/recover?email="+email+"&cb=" + cb;
 
         if(!SCIA.Sidebar._beginTransaction()) {

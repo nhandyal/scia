@@ -256,7 +256,7 @@
         submit: function(callingElement) {
             var SELF = this,
                 email = $("#sidebar-fgPwd-email").val(),
-                cb = "https://www.uscscia.com",
+                cb = window.location.origin + window.location.pathname,
                 recoverLink = "/d1/user/recover?email=" + email + "&cb=" + cb;
 
             if (!SCIA.Sidebar._beginTransaction()) {
@@ -330,7 +330,7 @@
                 } else if (response.status == 10050) {
                     $("#sidebar-login-error").empty().html("Invalid password");
                 } else if (response.status == 10051) {
-                    $("#sidebar-login-error").empty().html("This account hasn't been verified<br/><a class='sidebar-ui-link' href='javascript:SC.Sidebar.forgot_password.display()'>Resend verification email?</a>");
+                    $("#sidebar-login-error").empty().html("This account hasn't been verified<br/><a class='sidebar-ui-link' href=\"javascript:SC.Sidebar.resend_verification_email._submit(\'" + email + "\')\">Resend verification email?</a>");
                 }
 
             });
@@ -426,7 +426,7 @@
                 "l_name": lname,
                 "email": email,
                 "pwd": pwd,
-                "cb": "https://www.uscscia.com"
+                "cb": window.location.origin + window.location.pathname
             }, function(response) {
 
                 SCIA.Sidebar._endTransaction();
@@ -451,16 +451,45 @@
     };
     SCIA.Sidebar.resend_verification_email = {
 
-        email: "",
+        _submit: function(email) {
+            var SELF = this;
 
-        display: function(email) {
-            this.email = email;
-            this._render();
-            SCIA.Sidebar._expose();
+            if (!SCIA.Sidebar._beginTransaction()) {
+                return;
+            }
+
+            $.post("/d1/user/resendVerificationEmail", {
+                "email": email,
+                "cb": window.location.origin + window.location.pathname
+            }, function(response) {
+
+                SCIA.Sidebar._endTransaction();
+
+                if (response.status === 0) {
+                    SELF._render("Awesome, you're almost there!<br/>Check your email for further instructions");
+                    return;
+                } else {
+                    SELF._render(response.short_message);
+                    return;
+                }
+
+            });
+
+
         },
 
-        _render: function() {
+        _render: function(message) {
+            var html = "",
+                $sidebar_wrapper = SCIA.Sidebar._renderBase();
 
+            html += "<div class='sidebar-error'>" + message + "</div>";
+
+            $sidebar_wrapper.html(html);
+
+            // we call expose to center the element
+            // this doesn't need to be done on _render() because display (higher up the chain)
+            // takes care of calling _expose() for us.
+            SCIA.Sidebar._expose();
         }
 
     };
