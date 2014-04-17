@@ -52,16 +52,16 @@ SCIA.reset_password = {
             id = SELF.id,
             token = SELF.token;
 
-        if(!SCIA.Sidebar._beginTransaction()) {
-            return;
-        }
-
         if(new_pwd === "" ) {
             $("#sidebar-rstPwd-error").empty().html("Invalid password");
             return;
         }
         if(new_pwd != conf_new_pwd) {
             $("#sidebar-rstPwd-error").empty().html("The passwords don't match");
+            return;
+        }
+
+        if(!SCIA.Sidebar._beginTransaction()) {
             return;
         }
 

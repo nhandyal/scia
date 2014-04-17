@@ -18,7 +18,7 @@ SCIA.navigation = {
             }
 
             // if the user is already a member, let's remove the buy membership field
-            if(SCIA.utils.readCookie("is_member")) {
+            if(SCIA.utils.readCookie("is_member") == "true") {
                 $("#nav-buy-membership").remove();
             }
         } else {

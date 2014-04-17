@@ -59,10 +59,6 @@ SCIA.Sidebar.register = {
             pwd = $("#sidebar-register-password").val(),
             pwd_conf = $("#sidebar-register-password-conf").val();
 
-        if(!SCIA.Sidebar._beginTransaction()) {
-            return;
-        }
-
         // ensure all fields have been submitted
         if(fname === "" || lname === "" || email === "" || pwd === "" || pwd_conf === "") {
             $("#sidebar-register-error").empty().html("All fields are required");
@@ -78,6 +74,10 @@ SCIA.Sidebar.register = {
         // make sure passwords match
         if(pwd != pwd_conf) {
             $("#sidebar-register-error").empty().html("passwords don't match");
+            return;
+        }
+
+        if(!SCIA.Sidebar._beginTransaction()) {
             return;
         }
 

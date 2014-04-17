@@ -15,10 +15,10 @@ var User = Utils.loadModel("User"),
 var sendVerificationEmail = function(res, params) {
 
     var vrf_link
-    if(global.env == "test") {
-        vrf_link = "http://localhost:8000/d1/user/verify/" + params.id + "?cb=" + params.cb;
-    }else {
+    if(params.origin == "www.uscscia.com") {
         vrf_link = "https://www.uscscia.com/d1/user/verify/" + params.id + "?cb=" + params.cb;
+    }else {
+        vrf_link = "http://localhost:8000/d1/user/verify/" + params.id + "?cb=" + params.cb;
     }
 
     var vrf_email_data = {
@@ -86,7 +86,8 @@ module.exports.create = function(res, params) {
         sendVerificationEmail(res, {
             "email" : params.email,
             "id" : user._id,
-            "cb" : params.cb
+            "cb" : params.cb,
+            "origin" : params.origin
         });
 
         var responseData = {
@@ -158,7 +159,8 @@ module.exports.resendVerificationEmail = function(res, params) {
         sendVerificationEmail(res, {
             "email" : params.email,
             "id" : user._id,
-            "cb" : params.cb
+            "cb" : params.cb,
+            "origin" : params.origin
         });
 
         return ResponseHandler.sendSuccess(res);

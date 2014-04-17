@@ -581,10 +581,6 @@
                 pwd = $("#sidebar-register-password").val(),
                 pwd_conf = $("#sidebar-register-password-conf").val();
 
-            if (!SCIA.Sidebar._beginTransaction()) {
-                return;
-            }
-
             // ensure all fields have been submitted
             if (fname === "" || lname === "" || email === "" || pwd === "" || pwd_conf === "") {
                 $("#sidebar-register-error").empty().html("All fields are required");
@@ -600,6 +596,10 @@
             // make sure passwords match
             if (pwd != pwd_conf) {
                 $("#sidebar-register-error").empty().html("passwords don't match");
+                return;
+            }
+
+            if (!SCIA.Sidebar._beginTransaction()) {
                 return;
             }
 
@@ -730,16 +730,16 @@
                 id = SELF.id,
                 token = SELF.token;
 
-            if (!SCIA.Sidebar._beginTransaction()) {
-                return;
-            }
-
             if (new_pwd === "") {
                 $("#sidebar-rstPwd-error").empty().html("Invalid password");
                 return;
             }
             if (new_pwd != conf_new_pwd) {
                 $("#sidebar-rstPwd-error").empty().html("The passwords don't match");
+                return;
+            }
+
+            if (!SCIA.Sidebar._beginTransaction()) {
                 return;
             }
 
@@ -969,7 +969,7 @@
                 }
 
                 // if the user is already a member, let's remove the buy membership field
-                if (SCIA.utils.readCookie("is_member")) {
+                if (SCIA.utils.readCookie("is_member") == "true") {
                     $("#nav-buy-membership").remove();
                 }
             } else {

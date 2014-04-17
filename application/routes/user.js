@@ -42,7 +42,8 @@ module.exports = function(app) {
 			l_name : req.body.l_name,
 			email : req.body.email,
 			pwd : req.body.pwd,
-			cb : req.body.cb
+			cb : req.body.cb,
+			origin : req.get("host")
 		};
 
 		user.create(res, params);
@@ -77,7 +78,8 @@ module.exports = function(app) {
 	app.post('/d1/user/resendVerificationEmail', function(req, res) {
 		var params = {
 			email : req.body.email,
-			cb : req.body.cb
+			cb : req.body.cb,
+			origin : req.get("host")
 		};
 		
 		user.resendVerificationEmail(res, params);
