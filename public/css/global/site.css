@@ -332,7 +332,7 @@ div#modal {
 	margin: 45px auto 0;
 }
 div.modal-screen div.action-buttons {
-    margin: 20px 20px 0 20px;
+    margin: 10px 20px 0 20px;
 }
 div.modal-screen div#welcome {
 	padding: 6px 2px 3px;
@@ -454,4 +454,11 @@ table span.sort-up   {background-position: -119px -51px}
 
 .show-results {
 	display: none;
+}
+
+.ui-link {
+	text-decoration: none;
+	position: relative;
+	top: 5px;
+	color: rgb(60,60,60);
 }

@@ -2,6 +2,7 @@
 	<head>
 		<title>USC SCIA</title>
 		<link rel="stylesheet" type="text/css" href="../css/index.css">
+        <link rel="stylesheet" type="text/css" href="../css/sidebar.css">
         <link rel="stylesheet" type="text/css" href="../css/global/site.css" />
         <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 	</head>
@@ -20,7 +21,7 @@
 					<a href="about.html">About</a>
 					<a href="events.html">Events</a>
 					<a href="javascript:modal.registration()" id="navigation-register">Register</a>
-					<a href="javascript:modal.login()" id="navigation-login">Login</a>
+					<a href="javascript:SC.Sidebar.login.display()" id="navigation-login">Login</a>
                     <a href="javascript:openProfileOpts()" id="navigation-profile"><span id="profile-f-name"></span> <span id="profile-l-name"></span> &#8744;</a>
                     <div id="profile-detail" class="dropdown-menu">
                         <a href="javascript:modal.payMembership()" id="navigation-pay-membership">Pay Membership</a>
@@ -38,12 +39,16 @@
 				&copy 2008-2013 USC SCIA
 			</div>
 		</div>
+        <div id="sidebar"></div>
         
-        <script type="text/javascript" src="../js/dist/jquery/1.7.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
         <script type="text/javascript" src="../js/dist/jquery/plugins/jquery.cookie.js"></script>
         <script type="text/javascript" src="../js/dist/SCIA.js"></script>
-        <script type="text/javascript" src="../js/src/globals.js"></script>
+        <script type="text/javascript" src="../js/dist/Handlebars.runtime.min.js"></script>
+        <script type="text/javascript" src="../js/dist/global/site.js"></script>
+        <script type="text/javascript" src="../js/dist/global/site2.js"></script>
 		<script type="text/javascript">
+            SC.Sidebar.init("wrapper", "sidebar");
 		    SC.ZuneView.init({ height: 4 }, "ZuneView");
 		</script>
         

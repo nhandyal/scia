@@ -51,6 +51,11 @@ module.exports = function(grunt) {
         
         jsbeautifier : {
             files : ['<%= concat.dist.dest %>']
+        },
+
+        watch : {
+            files: ['src/**/*.js'],
+            tasks: ['default']
         }
     });
 
@@ -59,6 +64,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-jsbeautifier');
+    grunt.loadNpmTasks('grunt-contrib-watch');
     
 
     // Default task(s).
