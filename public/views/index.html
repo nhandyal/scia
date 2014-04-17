@@ -3,7 +3,7 @@
 		<title>USC SCIA</title>
 		<link rel="stylesheet" type="text/css" href="../css/index.css">
         <link rel="stylesheet" type="text/css" href="../css/sidebar.css">
-        <link rel="stylesheet" type="text/css" href="../css/global/site.css" />
+        <!--<link rel="stylesheet" type="text/css" href="../css/global/site.css" />-->
         <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 	</head>
 	<body>
@@ -12,22 +12,22 @@
 		Get in touch with us, especially if you'd like to make the site even better.
 
 		admin@uscscia.com
-	-->		
+	-->	
 		<div id="wrapper">
 			<div id="header">
 				<a id="header-logo" href="index.html"><img src="../assets/scia-logo.png" height="50" width="218" border="0" alt="Southern California Indio Americans" /></a>
 				<div id="navigation">
-					<a href="index.html">Home</a>
-					<a href="about.html">About</a>
-					<a href="events.html">Events</a>
-					<a href="javascript:modal.registration()" id="navigation-register">Register</a>
-					<a href="javascript:SC.Sidebar.login.display()" id="navigation-login">Login</a>
-                    <a href="javascript:openProfileOpts()" id="navigation-profile"><span id="profile-f-name"></span> <span id="profile-l-name"></span> &#8744;</a>
-                    <div id="profile-detail" class="dropdown-menu">
-                        <a href="javascript:modal.payMembership()" id="navigation-pay-membership">Pay Membership</a>
-                        <a href="javascript:modal.editProfile()" id="navigation-edit-profile">Edit Profile</a>
-                        <a href="javascript:logout()">Logout</a>
-                    </div>
+					<a id="nav-about" href="about.html">About</a>
+					<a id="nav-events" href="events.html">Events</a>
+					<a href="javascript:SC.Sidebar.register.display()" id="navigation-register">Register</a>
+                    <span id="login-wrapper">
+					   <!-- based on the auth cookie, either the login icon, or the personalized
+                            name and menu elements will be rendered
+                            
+                            <a href="javascript:SC.Sidebar.login.display()" id="navigation-login">Login</a>
+                        -->
+                    </span>
+                    
 				</div>
                 <div class="clear"></div>
 			</div>
@@ -44,12 +44,42 @@
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
         <script type="text/javascript" src="../js/dist/jquery/plugins/jquery.cookie.js"></script>
         <script type="text/javascript" src="../js/dist/SCIA.js"></script>
-        <script type="text/javascript" src="../js/dist/Handlebars.runtime.min.js"></script>
         <script type="text/javascript" src="../js/dist/global/site.js"></script>
         <script type="text/javascript" src="../js/dist/global/site2.js"></script>
 		<script type="text/javascript">
             SC.Sidebar.init("wrapper", "sidebar");
 		    SC.ZuneView.init({ height: 4 }, "ZuneView");
+            var queryParams = SC.utils.parseQueryString();
+
+            if(queryParams.action == "recover") {
+                var id = queryParams.id,
+                    token = queryParams.token;
+
+                SC.Sidebar.reset_password.display(id, token);
+            }else if(queryParams.action == "verified") {
+                SC.Flash("Thanks for verifying your account!");
+            }
+
+
+            // initialize the navigation bar
+            if(SCIA.utils.readCookie("id") !== null) {
+                // the user is logged in
+            } else {
+                $("#login-wrapper").html('<a href="javascript:SC.Sidebar.login.display()" id="navigation-login">Login</a>');
+            }
+            
+            $("#navigation").animate({"opacity" : 1}, 100, function(){});
+
+            // highlight the current view
+            switch(window.location.pathname) {
+                case "/about/":
+                    $("#nav-about").css("color" , "rgb(204,40,40)");
+                    break;
+                case "/events/":
+                    $("#nav-events").css("color" , "rgb(204,40,40)");
+                    break;
+            };
+
 		</script>
         
         <div id="modal-overlay"></div>

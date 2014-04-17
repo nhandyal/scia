@@ -1,6 +1,10 @@
 body{
 	min-width: 900px;
 	margin: auto;
+	font-size: 100%;
+	font-weight: normal;
+	font-family: Verdana;
+	vertical-align: baseline;
 }
 
 /****** ZUNE VIEW STYLING **********/
@@ -11,14 +15,17 @@ body{
 	overflow: hidden;
 	margin: auto;
 }
+
 #ZuneView .flip-container{
 	position: absolute;
 }
+
 .flip-container{
 	-webkit-perspective: 1000;
 	-moz-perspective: 1000;
 	perspective: 1000;
 }
+
 .flip-container.flip .flipper {
 	-webkit-transform: rotateY(180deg);
 	-moz-transform: rotateY(180deg);
@@ -26,6 +33,7 @@ body{
 	filter: FlipH;
 	-ms-filter: "FlipH";
 }
+
 .flipper {
 	-webkit-transition: 0.6s;
 	-webkit-transform-style: preserve-3d;
@@ -37,6 +45,7 @@ body{
 	transition: 0.6s;
 	transform-style: preserve-3d;
 }
+
 .front, .back {
 	-webkit-backface-visibility: hidden;
 	-moz-backface-visibility: hidden;
@@ -46,6 +55,7 @@ body{
 	top: 0;
 	left: 0;
 }
+
 /* front pane, placed above back */
 .front {
 	z-index: 2;
@@ -70,20 +80,24 @@ body{
 	position: absolute;
 	top: 0; left: 0; bottom: 0; right: 0;
 }
+
 #wrapper{
 	width: 90%;
 	max-width: 1600px;
 	margin: auto;
 	position: relative;
 }
+
 .ZuneView-spacer{
 	height: 15%;
 	position: relative;
 }
+
 #header{
 	position: relative;
 	height: 15%;
 }
+
 #title{
 	position: absolute;
 	left: 0px;
@@ -92,6 +106,7 @@ body{
 	font-weight: 700;
 	font-size: 1.3em;
 }
+
 #footer{
 	height: 20%;
 	position: relative;
@@ -99,10 +114,40 @@ body{
 	background: rgb(245,245,245);
 	border-top: 2px solid #d5d5d5;
 }
+
 #legal{
 	position: absolute;
 	right: 20px;
 	top: 50%;
 	font-size: 0.75em;
 	color: rgb(150,150,150);
+}
+
+#header {
+	position: relative;
+	height: 90px;
+}
+
+#header-logo {
+	display: block;
+	width: 218px;
+	height: 50px;
+	float: left;
+	margin: 20px 25px;
+	margin-left: 5px;
+}
+
+#navigation {
+	position: absolute;
+	right: 0px;
+	bottom: 0px;
+	margin-bottom: 20px;
+	padding: 0px;
+	opacity: 0;
+}
+
+#navigation a {
+	font-size: 0.8em;
+	color: rgb(60, 60, 60);
+	margin-left: 10px;
 }

@@ -57,9 +57,14 @@
 }
 
 #sidebar-mainWrapper {
+    position: absolute;
+    width: 93%;
     margin: 4%;
-    margin-top: 50%;
     color: rgb(200,200,200);
+}
+
+.sidebar-label-smaller {
+    font-size: 10px;
 }
 
 .sidebar-ui-link {
@@ -81,7 +86,7 @@
     font-size: 14px;
 }
 
-.sidbar-label {
+.sidebar-label {
     padding: 5px;
     padding-top: 0px;
     color: rgb(200,200,200);

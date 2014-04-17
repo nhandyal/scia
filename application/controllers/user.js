@@ -92,6 +92,7 @@ module.exports.create = function(res, params) {
 
 /**
  * Login a user.
+ * possible error codes 10402, 10050
  */
 module.exports.login = function(res, params) {
     
@@ -180,7 +181,7 @@ module.exports.recover = function(res, params) {
                 to : user.email,
                 title : "SCIA reset account password",
                 f_name : user.f_name,
-                reset_pwd_link : params.cb + "?id=" + user.id + "&token=" + recoverToken
+                reset_pwd_link : params.cb + "?id=" + user.id + "&token=" + recoverToken + "&action=recover"
             };
 
             NodeMailer.send(res, pwd_reset_data, function(){});
@@ -247,6 +248,8 @@ module.exports.verifyUser = function(res, params) {
     if(params.cb == null) {
         return ResponseHandler.sendError(res, 10400);
     }
+
+    var cb = params.cb + "?action=verified";
 
     User.findOneByID(params.id, function(err, user) {
         if(err) {
