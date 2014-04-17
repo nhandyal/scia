@@ -190,366 +190,360 @@
                 html = baseTemplate();
 
             $sidebar.empty().html(html);
+        }
+    };
+    SCIA.Sidebar.forgot_password = {
+
+        submit_processing: false,
+
+        display: function() {
+            this._render();
+            SCIA.Sidebar._expose();
         },
 
-        register: {
+        _render: function() {
+            var SELF = this,
+                html = "",
+                $sidebar_wrapper = SCIA.Sidebar._renderBase();
 
-            submit_processing: false,
+            html += "<div>";
+            html += "<div id='sidebar-fgPwd-error' class='sidebar-error'></div>";
+            html += "<div class='sidebar-input-wrapper'>";
+            html += "<label class='sidebar-label' for='LoginEmail'>Registered Email</label>";
+            html += "<input id='sidebar-fgPwd-email' class='sidebar-input' type='email' name='LoginEmail' tabindex='1' />";
+            html += "</div>";
+            html += "<div class='sidebar-button large-button' onclick='SCIA.Sidebar.forgot_password.submit(this)'>Send Email</div>";
+            html += "</div>";
 
-            display: function() {
-                this._render();
-                SCIA.Sidebar._expose();
-            },
+            $sidebar_wrapper.html(html);
+        },
 
-            _render: function() {
-                var SELF = this,
-                    html = "",
-                    $sidebar_wrapper = SCIA.Sidebar._renderBase();
+        _renderSuccess: function() {
+            var SELF = this,
+                html = "",
+                $sidebar_wrapper = SCIA.Sidebar._renderBase();
 
-                html += "<div>";
-                html += "<div id='sidebar-register-error' class='sidebar-error'></div>";
-                html += "<div class='sidebar-input-wrapper'>";
-                html += "<label class='sidebar-label'>First Name</label>";
-                html += "<input id='sidebar-register-fname' class='sidebar-input' type='text' tabindex='1' />";
-                html += "</div>";
-                html += "<div class='sidebar-input-wrapper'>";
-                html += "<label class='sidebar-label'>Last Name</label>";
-                html += "<input id='sidebar-register-lname' class='sidebar-input' type='text' tabindex='2' />";
-                html += "</div>";
-                html += "<div class='sidebar-input-wrapper'>";
-                html += "<label class='sidebar-label'>Email <span class='sidebar-label-smaller'>(@usc.edu required for membership)</span></label>";
-                html += "<input id='sidebar-register-email' class='sidebar-input' type='email' tabindex='3' />";
-                html += "</div>";
-                html += "<div class='sidebar-input-wrapper'>";
-                html += "<label class='sidebar-label'>Password</label>";
-                html += "<input id='sidebar-register-password' class='sidebar-input' type='password' tabindex='4' />";
-                html += "</div>";
-                html += "<div class='sidebar-input-wrapper'>";
-                html += "<label class='sidebar-label'>Confirm Password</label>";
-                html += "<input id='sidebar-register-password-conf' class='sidebar-input' type='password' tabindex='5' />";
-                html += "</div>";
-                html += "<div class='sidebar-button large-button' onclick='SCIA.Sidebar.register.submit(this)'>Register</div>";
-                html += "</div>";
+            html += "<div class='sidebar-error'>Awesome, you're almost there!<br/>Check your email for further instructions</div>";
 
-                $sidebar_wrapper.html(html);
-            },
+            $sidebar_wrapper.html(html);
 
-            _renderSuccess: function() {
-                var SELF = this,
-                    html = "",
-                    $sidebar_wrapper = SCIA.Sidebar._renderBase();
+            // we call expose to center the element
+            // this doesn't need to be done on _render() because display (higher up the chain)
+            // takes care of calling _expose() for us.
+            SCIA.Sidebar._expose();
+        },
 
-                html += "<div class='sidebar-error'>Awesome, you're almost there!<br/>Check your email for further instructions</div>";
+        submit: function(callingElement) {
+            var SELF = this,
+                email = $("#sidebar-fgPwd-email").val(),
+                cb = "https://www.uscscia.com",
+                recoverLink = "/d1/user/recover?email=" + email + "&cb=" + cb;
 
-                $sidebar_wrapper.html(html);
+            if (SELF.submit_processing) {
+                $("#sidebar-fgPwd-error").empty().html("We're still trying to take care of<br/>your last request!");
+            } else {
+                SELF.submit_processing = true;
+            }
 
-                // we call expose to center the element
-                // this doesn't need to be done on _render() because display (higher up the chain)
-                // takes care of calling _expose() for us.
-                SCIA.Sidebar._expose();
-            },
+            $.get(recoverLink, function(response) {
 
-            submit: function(callingElement) {
-                var SELF = this,
-                    fname = $("#sidebar-register-fname").val(),
-                    lname = $("#sidebar-register-lname").val(),
-                    email = $("#sidebar-register-email").val(),
-                    pwd = $("#sidebar-register-password").val(),
-                    pwd_conf = $("#sidebar-register-password-conf").val();
+                SELF.submit_processing = false;
 
-                if (SELF.submit_processing) {
-                    $("#sidebar-register-error").empty().html("We're still trying to take care of<br/>your last request!");
+                if (response.status === 0) {
+                    SELF._renderSuccess();
+                } else if (response.status == 10402) {
+                    $("#sidebar-fgPwd-error").empty().html("This email isn't registered");
+                }
+            });
+
+        }
+    };
+    SCIA.Sidebar.login = {
+
+        submit_processing: false,
+
+        display: function() {
+            this._render();
+            SCIA.Sidebar._expose();
+        },
+
+        _render: function() {
+            var SELF = this,
+                html = "",
+                $sidebar_wrapper = SCIA.Sidebar._renderBase();
+
+            html += "<div>";
+            html += "<div id='sidebar-login-error' class='sidebar-error'></div>";
+            html += "<div class='sidebar-input-wrapper'>";
+            html += "<label class='sidebar-label' for='LoginEmail'>Email</label>";
+            html += "<input id='sidebar-loginEmail' class='sidebar-input' type='email' name='LoginEmail' value='' tabindex='1' />";
+            html += "</div>";
+            html += "<div class='sidebar-input-wrapper'>";
+            html += "<label class='sidebar-label' for='LoginPassword'>Password</label>";
+            html += "<input id='sidebar-loginPassword' class='sidebar-input' type='password' name='LoginPassword' value='' tabindex='2' />";
+            html += "</div>";
+            html += "<div class='sidebar-button large-button' onclick='SCIA.Sidebar.login.submit(this)'>login</div>";
+            html += "<a class='sidebar-ui-link' href='javascript:SC.Sidebar.forgot_password.display()'>Forgot Password?</a>";
+            html += "</div>";
+
+            $sidebar_wrapper.html(html);
+
+        },
+
+        submit: function(callingElement) {
+            var SELF = this,
+                email = $("#sidebar-loginEmail").val(),
+                password = $("#sidebar-loginPassword").val();
+
+            if (SELF.submit_processing) {
+                $("#sidebar-login-error").empty().html("We're still trying to take care of<br/>your last request!");
+            } else {
+                SELF.submit_processing = true;
+            }
+
+            $.post("/d1/user/login", {
+                "email": email,
+                "pwd": password
+            }, function(response) {
+
+                SELF.submit_processing = false;
+
+                if (response.status === 0) {
+                    // all good, close the login box and refresh the page
+                    SCIA.Sidebar._hide(function() {
+                        window.location = "/";
+                    });
+                } else if (response.status == 10402) {
+                    $("#sidebar-login-error").empty().html("This email isn't registered");
+                } else if (response.status == 10050) {
+                    $("#sidebar-login-error").empty().html("Invalid password");
+                } else if (response.status == 10051) {
+                    $("#sidebar-login-error").empty().html("This account hasn't been verified<br/><a class='sidebar-ui-link' href='javascript:SC.Sidebar.forgot_password.display()'>Resend verification email?</a>");
+                }
+
+            });
+        }
+
+    };
+    SCIA.Sidebar.register = {
+
+        submit_processing: false,
+
+        display: function() {
+            this._render();
+            SCIA.Sidebar._expose();
+        },
+
+        _render: function() {
+            var SELF = this,
+                html = "",
+                $sidebar_wrapper = SCIA.Sidebar._renderBase();
+
+            html += "<div>";
+            html += "<div id='sidebar-register-error' class='sidebar-error'></div>";
+            html += "<div class='sidebar-input-wrapper'>";
+            html += "<label class='sidebar-label'>First Name</label>";
+            html += "<input id='sidebar-register-fname' class='sidebar-input' type='text' tabindex='1' />";
+            html += "</div>";
+            html += "<div class='sidebar-input-wrapper'>";
+            html += "<label class='sidebar-label'>Last Name</label>";
+            html += "<input id='sidebar-register-lname' class='sidebar-input' type='text' tabindex='2' />";
+            html += "</div>";
+            html += "<div class='sidebar-input-wrapper'>";
+            html += "<label class='sidebar-label'>Email <span class='sidebar-label-smaller'>(@usc.edu required for membership)</span></label>";
+            html += "<input id='sidebar-register-email' class='sidebar-input' type='email' tabindex='3' />";
+            html += "</div>";
+            html += "<div class='sidebar-input-wrapper'>";
+            html += "<label class='sidebar-label'>Password</label>";
+            html += "<input id='sidebar-register-password' class='sidebar-input' type='password' tabindex='4' />";
+            html += "</div>";
+            html += "<div class='sidebar-input-wrapper'>";
+            html += "<label class='sidebar-label'>Confirm Password</label>";
+            html += "<input id='sidebar-register-password-conf' class='sidebar-input' type='password' tabindex='5' />";
+            html += "</div>";
+            html += "<div class='sidebar-button large-button' onclick='SCIA.Sidebar.register.submit(this)'>Register</div>";
+            html += "</div>";
+
+            $sidebar_wrapper.html(html);
+        },
+
+        _renderSuccess: function() {
+            var SELF = this,
+                html = "",
+                $sidebar_wrapper = SCIA.Sidebar._renderBase();
+
+            html += "<div class='sidebar-error'>Awesome, you're almost there!<br/>Check your email for further instructions</div>";
+
+            $sidebar_wrapper.html(html);
+
+            // we call expose to center the element
+            // this doesn't need to be done on _render() because display (higher up the chain)
+            // takes care of calling _expose() for us.
+            SCIA.Sidebar._expose();
+        },
+
+        submit: function(callingElement) {
+            var SELF = this,
+                fname = $("#sidebar-register-fname").val(),
+                lname = $("#sidebar-register-lname").val(),
+                email = $("#sidebar-register-email").val(),
+                pwd = $("#sidebar-register-password").val(),
+                pwd_conf = $("#sidebar-register-password-conf").val();
+
+            if (SELF.submit_processing) {
+                $("#sidebar-register-error").empty().html("We're still trying to take care of<br/>your last request!");
+            } else {
+                SELF.submit_processing = true;
+            }
+
+            // ensure all fields have been submitted
+            if (fname === "" || lname === "" || email === "" || pwd === "" || pwd_conf === "") {
+                $("#sidebar-register-error").empty().html("All fields are required");
+                return;
+            }
+
+            // validate email
+            if (email.indexOf("@") == -1) {
+                $("#sidebar-register-error").empty().html("Invalid email");
+                return;
+            }
+
+            // make sure passwords match
+            if (pwd != pwd_conf) {
+                $("#sidebar-register-error").empty().html("passwords don't match");
+                return;
+            }
+
+            // everything looks good, let's submit to the server
+            $.post("/d1/user/create", {
+                "f_name": fname,
+                "l_name": lname,
+                "email": email,
+                "pwd": pwd,
+                "cb": "https://www.uscscia.com"
+            }, function(response) {
+
+                SELF.submit_processing = false;
+
+                if (response.status === 0) {
+                    SELF._renderSuccess();
+                    return;
+                } else if (response.status == 10001) {
+                    $("#sidebar-register-error").empty().html("This email is already registered.<br/><a class='sidebar-ui-link' href='javascript:SC.Sidebar.forgot_password.display()'>Forgot Password?</a>");
+                    return;
+                } else if (response.status == 10501) {
+                    $("#sidebar-register-error").empty().html("UhOh, we messed something up.<br/>Try again later.");
+                    return;
                 } else {
-                    SELF.submit_processing = true;
-                }
-
-                // ensure all fields have been submitted
-                if (fname === "" || lname === "" || email === "" || pwd === "" || pwd_conf === "") {
-                    $("#sidebar-register-error").empty().html("All fields are required");
+                    $("#sidebar-register-error").empty().html(response.short_message);
                     return;
                 }
 
-                // validate email
-                if (email.indexOf("@") == -1) {
-                    $("#sidebar-register-error").empty().html("Invalid email");
-                    return;
-                }
+            });
+        }
 
-                // make sure passwords match
-                if (pwd != pwd_conf) {
-                    $("#sidebar-register-error").empty().html("passwords don't match");
-                    return;
-                }
+    };
+    SCIA.Sidebar.resend_verification_email = {
 
-                // everything looks good, let's submit to the server
-                $.post("/d1/user/create", {
-                    "f_name": fname,
-                    "l_name": lname,
-                    "email": email,
-                    "pwd": pwd,
-                    "cb": "https://www.uscscia.com"
-                }, function(response) {
+        email: "",
 
-                    SELF.submit_processing = false;
+        display: function(email) {
+            this.email = email;
+            this._render();
+            SCIA.Sidebar._expose();
+        },
 
-                    if (response.status === 0) {
-                        SELF._renderSuccess();
-                        return;
-                    } else if (response.status == 10001) {
-                        $("#sidebar-register-error").empty().html("This email is already registered.<br/><a class='sidebar-ui-link' href='javascript:SC.Sidebar.forgot_password.display()'>Forgot Password?</a>");
-                        return;
-                    } else if (response.status == 10501) {
-                        $("#sidebar-register-error").empty().html("UhOh, we messed something up.<br/>Try again later.");
-                        return;
-                    } else {
-                        $("#sidebar-register-error").empty().html(response.short_message);
-                        return;
-                    }
+        _render: function() {
 
-                });
-            }
+        }
+
+    };
+    SCIA.reset_password = {
+
+        id: "",
+        token: "",
+        submit_processing: false,
+
+        display: function(id, token) {
+            this.id = id;
+            this.token = token;
+            this._render();
+            SCIA.Sidebar._expose();
+        },
+
+        _render: function() {
+            var SELF = this,
+                html = "",
+                $sidebar_wrapper = SCIA.Sidebar._renderBase();
+
+            html += "<div id='sidebar-reset-pwd'>";
+            html += "<div id='sidebar-rstPwd-error' class='sidebar-error'></div>";
+            html += "<div class='sidebar-input-wrapper'>";
+            html += "<label class='sidebar-label'>New Password</label>";
+            html += "<input id='sidebar-new-password' class='sidebar-input' type='password' tabindex='1' />";
+            html += "</div>";
+            html += "<div class='sidebar-input-wrapper'>";
+            html += "<label class='sidebar-label'>Confirm Password</label>";
+            html += "<input id='sidebar-new-password-conf' class='sidebar-input' type='password' tabindex='2' />";
+            html += "</div>";
+            html += "<div class='sidebar-button large-button' onclick='SCIA.Sidebar.reset_password.submit(this)'>Reset Password</div>";
+            html += "</div>";
+
+            $sidebar_wrapper.html(html);
 
         },
 
-        login: {
+        _renderSuccess: function() {
+            var SELF = this,
+                html = "",
+                $sidebar_wrapper = SCIA.Sidebar._renderBase();
 
-            submit_processing: false,
+            html += "<div class='sidebar-error'>Your password has been reset :-)</div>";
 
-            display: function() {
-                this._render();
-                SCIA.Sidebar._expose();
-            },
+            $sidebar_wrapper.html(html);
 
-            _render: function() {
-                var SELF = this,
-                    html = "",
-                    $sidebar_wrapper = SCIA.Sidebar._renderBase();
+            // we call expose to center the element
+            // this doesn't need to be done on _render() because display (higher up the chain)
+            // takes care of calling _expose() for us.
+            SCIA.Sidebar._expose();
+        },
 
-                html += "<div>";
-                html += "<div id='sidebar-login-error' class='sidebar-error'></div>";
-                html += "<div class='sidebar-input-wrapper'>";
-                html += "<label class='sidebar-label' for='LoginEmail'>Email</label>";
-                html += "<input id='sidebar-loginEmail' class='sidebar-input' type='email' name='LoginEmail' value='' tabindex='1' />";
-                html += "</div>";
-                html += "<div class='sidebar-input-wrapper'>";
-                html += "<label class='sidebar-label' for='LoginPassword'>Password</label>";
-                html += "<input id='sidebar-loginPassword' class='sidebar-input' type='password' name='LoginPassword' value='' tabindex='2' />";
-                html += "</div>";
-                html += "<div class='sidebar-button large-button' onclick='SCIA.Sidebar.login.submit(this)'>login</div>";
-                html += "<a class='sidebar-ui-link' href='javascript:SC.Sidebar.forgot_password.display()'>Forgot Password?</a>";
-                html += "</div>";
+        submit: function(callingElement) {
+            var SELF = this,
+                new_pwd = $("#sidebar-new-password").val(),
+                conf_new_pwd = $("#sidebar-new-password-conf").val(),
+                id = SELF.id,
+                token = SELF.token;
 
-                $sidebar_wrapper.html(html);
+            if (SELF.submit_processing) {
+                $("#sidebar-rstPwd-error").empty().html("We're still trying to take care of<br/>your last request!");
+            } else {
+                SELF.submit_processing = true;
+            }
 
-            },
+            if (new_pwd === "") {
+                $("#sidebar-rstPwd-error").empty().html("Invalid password");
+                return;
+            }
+            if (new_pwd != conf_new_pwd) {
+                $("#sidebar-rstPwd-error").empty().html("The passwords don't match");
+                return;
+            }
 
-            submit: function(callingElement) {
-                var SELF = this,
-                    email = $("#sidebar-loginEmail").val(),
-                    password = $("#sidebar-loginPassword").val();
+            $.post("/d1/user/reset", {
+                "id": id,
+                "token": token,
+                "new_pwd": new_pwd
+            }, function(response) {
 
-                if (SELF.submit_processing) {
-                    $("#sidebar-login-error").empty().html("We're still trying to take care of<br/>your last request!");
+                SELF.submit_processing = false;
+
+                if (response.status === 0) {
+                    SELF._renderSuccess();
                 } else {
-                    SELF.submit_processing = true;
+                    $("#sidebar-rstPwd-error").empty().html(response.short_message);
                 }
-
-                $.post("/d1/user/login", {
-                    "email": email,
-                    "pwd": password
-                }, function(response) {
-
-                    SELF.submit_processing = false;
-
-                    if (response.status === 0) {
-                        // all good, close the login box and refresh the page
-                        SCIA.Sidebar._hide(function() {
-                            window.location = "/";
-                        });
-                    } else if (response.status == 10402) {
-                        $("#sidebar-login-error").empty().html("This email isn't registered");
-                    } else if (response.status == 10050) {
-                        $("#sidebar-login-error").empty().html("Invalid password");
-                    } else if (response.status == 10051) {
-                        $("#sidebar-login-error").empty().html("This account hasn't been verified<br/><a class='sidebar-ui-link' href='javascript:SC.Sidebar.forgot_password.display()'>Resend verification email?</a>");
-                    }
-
-                });
-            }
-
-        },
-
-        forgot_password: {
-
-            submit_processing: false,
-
-            display: function() {
-                this._render();
-                SCIA.Sidebar._expose();
-            },
-
-            _render: function() {
-                var SELF = this,
-                    html = "",
-                    $sidebar_wrapper = SCIA.Sidebar._renderBase();
-
-                html += "<div>";
-                html += "<div id='sidebar-fgPwd-error' class='sidebar-error'></div>";
-                html += "<div class='sidebar-input-wrapper'>";
-                html += "<label class='sidebar-label' for='LoginEmail'>Registered Email</label>";
-                html += "<input id='sidebar-fgPwd-email' class='sidebar-input' type='email' name='LoginEmail' tabindex='1' />";
-                html += "</div>";
-                html += "<div class='sidebar-button large-button' onclick='SCIA.Sidebar.forgot_password.submit(this)'>Send Email</div>";
-                html += "</div>";
-
-                $sidebar_wrapper.html(html);
-            },
-
-            _renderSuccess: function() {
-                var SELF = this,
-                    html = "",
-                    $sidebar_wrapper = SCIA.Sidebar._renderBase();
-
-                html += "<div class='sidebar-error'>Awesome, you're almost there!<br/>Check your email for further instructions</div>";
-
-                $sidebar_wrapper.html(html);
-
-                // we call expose to center the element
-                // this doesn't need to be done on _render() because display (higher up the chain)
-                // takes care of calling _expose() for us.
-                SCIA.Sidebar._expose();
-            },
-
-            submit: function(callingElement) {
-                var SELF = this,
-                    email = $("#sidebar-fgPwd-email").val(),
-                    cb = "https://www.uscscia.com",
-                    recoverLink = "/d1/user/recover?email=" + email + "&cb=" + cb;
-
-                if (SELF.submit_processing) {
-                    $("#sidebar-fgPwd-error").empty().html("We're still trying to take care of<br/>your last request!");
-                } else {
-                    SELF.submit_processing = true;
-                }
-
-                $.get(recoverLink, function(response) {
-
-                    SELF.submit_processing = false;
-
-                    if (response.status === 0) {
-                        SELF._renderSuccess();
-                    } else if (response.status == 10402) {
-                        $("#sidebar-fgPwd-error").empty().html("This email isn't registered");
-                    }
-                });
-
-            }
-        },
-
-        _resend_verification_email: {
-
-            email: "",
-
-            display: function(email) {
-                this.email = email;
-                this._render();
-                SCIA.Sidebar._expose();
-            },
-
-            _render: function() {
-
-            }
-
-        },
-
-        reset_password: {
-
-            id: "",
-            token: "",
-            submit_processing: false,
-
-            display: function(id, token) {
-                this.id = id;
-                this.token = token;
-                this._render();
-                SCIA.Sidebar._expose();
-            },
-
-            _render: function() {
-                var SELF = this,
-                    html = "",
-                    $sidebar_wrapper = SCIA.Sidebar._renderBase();
-
-                html += "<div id='sidebar-reset-pwd'>";
-                html += "<div id='sidebar-rstPwd-error' class='sidebar-error'></div>";
-                html += "<div class='sidebar-input-wrapper'>";
-                html += "<label class='sidebar-label'>New Password</label>";
-                html += "<input id='sidebar-new-password' class='sidebar-input' type='password' tabindex='1' />";
-                html += "</div>";
-                html += "<div class='sidebar-input-wrapper'>";
-                html += "<label class='sidebar-label'>Confirm Password</label>";
-                html += "<input id='sidebar-new-password-conf' class='sidebar-input' type='password' tabindex='2' />";
-                html += "</div>";
-                html += "<div class='sidebar-button large-button' onclick='SCIA.Sidebar.reset_password.submit(this)'>Reset Password</div>";
-                html += "</div>";
-
-                $sidebar_wrapper.html(html);
-
-            },
-
-            _renderSuccess: function() {
-                var SELF = this,
-                    html = "",
-                    $sidebar_wrapper = SCIA.Sidebar._renderBase();
-
-                html += "<div class='sidebar-error'>Your password has been reset :-)</div>";
-
-                $sidebar_wrapper.html(html);
-
-                // we call expose to center the element
-                // this doesn't need to be done on _render() because display (higher up the chain)
-                // takes care of calling _expose() for us.
-                SCIA.Sidebar._expose();
-            },
-
-            submit: function(callingElement) {
-                var SELF = this,
-                    new_pwd = $("#sidebar-new-password").val(),
-                    conf_new_pwd = $("#sidebar-new-password-conf").val(),
-                    id = SELF.id,
-                    token = SELF.token;
-
-                if (SELF.submit_processing) {
-                    $("#sidebar-rstPwd-error").empty().html("We're still trying to take care of<br/>your last request!");
-                } else {
-                    SELF.submit_processing = true;
-                }
-
-                if (new_pwd === "") {
-                    $("#sidebar-rstPwd-error").empty().html("Invalid password");
-                    return;
-                }
-                if (new_pwd != conf_new_pwd) {
-                    $("#sidebar-rstPwd-error").empty().html("The passwords don't match");
-                    return;
-                }
-
-                $.post("/d1/user/reset", {
-                    "id": id,
-                    "token": token,
-                    "new_pwd": new_pwd
-                }, function(response) {
-
-                    SELF.submit_processing = false;
-
-                    if (response.status === 0) {
-                        SELF._renderSuccess();
-                    } else {
-                        $("#sidebar-rstPwd-error").empty().html(response.short_message);
-                    }
-                });
-            }
-
+            });
         }
 
     };
