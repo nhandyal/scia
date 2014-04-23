@@ -52,6 +52,15 @@
         init: function() {
             Stripe.setPublishableKey('pk_test_HvH0HNcaXzQcAPN8wruR6JXU');
 
+            // set the page width and display
+            var pageWidth = SCIA.utils.readFromLocalStorage("pageWidth");
+            if (pageWidth !== null) {
+                $("#wrapper").width(pageWidth);
+            }
+
+            $("#wrapper").show();
+
+
             var queryParams = SC.utils.parseQueryString();
 
             if (queryParams.action == "recover") {
@@ -865,8 +874,7 @@
                 element = null;
             viewportTiles.width = Math.floor(viewport.width / tile.width);
 
-            //		var Xoffset = (viewport.width-(viewportTiles.width * tile.width))/2;
-
+            //var Xoffset = (viewport.width-(viewportTiles.width * tile.width))/2;
             var Xoffset = 0;
             var grid = new Array(viewportTiles.width);
             for (c = 0; c < viewportTiles.width; c++) {
@@ -878,6 +886,7 @@
             var firstIteration = true;
 
             document.getElementById("wrapper").style.width = viewportTiles.width * tile.width + "px";
+            SCIA.utils.writeToLocalStorage("pageWidth", viewportTiles.width * tile.width);
 
             // iterate over the entire grid
             for (r = 0; r < viewportTiles.height; r++) {
@@ -1010,16 +1019,17 @@
 
             $("#navigation").animate({
                 "opacity": 1
-            }, 100, function() {});
+            }, 0, function() {});
 
             // highlight the current view
-            switch (window.location.pathname) {
-                case "/about/":
-                    $("#nav-about").css("color", "rgb(204,40,40)");
-                    break;
-                case "/events/":
-                    $("#nav-events").css("color", "rgb(204,40,40)");
-                    break;
+            var pathname = window.location.pathname;
+            console.log(pathname);
+            if (pathname.indexOf('/about/') > -1) {
+                $("#nav-about > a").css("color", "rgb(204,40,40)");
+            } else if (pathname.indexOf('/events/') > -1) {
+                $("#nav-events > a").css("color", "rgb(204,40,40)");
+            } else {
+                console.log("do nothing");
             }
         }
 
@@ -1262,6 +1272,70 @@
                 }
             }
             return null;
+        },
+
+        /**
+         * Transparently write to local storage if available
+         * there are no guarantees of a successful write.
+         */
+        writeToLocalStorage: function(key, value) {
+            if (typeof(localStorage) === "undefined" || key === null || value === null) {
+                return null;
+            }
+
+            localStorage.setItem(key, value);
+        },
+
+        /**
+         *
+         */
+        readFromLocalStorage: function(key) {
+            if (typeof(localStorage) === "undefined" || key === null) {
+                return null;
+            }
+
+            return localStorage.getItem(key);
+        },
+
+
+        getFriendlyDateTime: function(date) {
+            var now = new Date(),
+                weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+                month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+                beginToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0),
+                beginTomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0),
+                endTomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 2, 0, 0, 0, 0);
+
+            var dateString = "";
+            if (date > beginToday && date <= beginTomorrow) {
+                dateString = "Today, ";
+            } else if (date > beginTomorrow && date <= endTomorrow) {
+                dateString = "Tomorrow, ";
+            } else {
+                dateString = weekday[date.getDay()] + ", ";
+            }
+
+            dateString += month[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear();
+
+            var timeString = "",
+                hour = null,
+                minutes = null;
+            if (date.getHours() < 12) {
+                hour = date.getHours();
+                minutes = date.getMinutes() / 10 > 1 ? date.getMinutes() : "0" + date.getMinutes();
+
+                timeString = hour + ":" + minutes + "am";
+            } else {
+                hour = date.getHours() - 12;
+                minutes = date.getMinutes() / 10 > 1 ? date.getMinutes() : "0" + date.getMinutes();
+
+                timeString = hour + ":" + minutes + "pm";
+            }
+
+            return {
+                event_date: dateString,
+                event_time: timeString
+            };
         }
     };
 

@@ -71,9 +71,8 @@ SCIA.ZuneView = {
 			element = null;
 		viewportTiles.width = Math.floor(viewport.width / tile.width);
 
-//		var Xoffset = (viewport.width-(viewportTiles.width * tile.width))/2;
-
-var Xoffset=0;
+		//var Xoffset = (viewport.width-(viewportTiles.width * tile.width))/2;
+		var Xoffset=0;
 		var grid = new Array(viewportTiles.width);
 		for(c = 0; c < viewportTiles.width; c++) {
 			grid[c] = new Array(viewportTiles.height);
@@ -84,6 +83,7 @@ var Xoffset=0;
 		var firstIteration = true;
 
 		document.getElementById("wrapper").style.width = viewportTiles.width*tile.width+"px";
+		SCIA.utils.writeToLocalStorage("pageWidth", viewportTiles.width*tile.width);
 
 		// iterate over the entire grid
 		for(r = 0; r < viewportTiles.height; r++) {

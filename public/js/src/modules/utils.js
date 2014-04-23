@@ -133,5 +133,69 @@ SCIA.utils = {
             }
         }
         return null;
+    },
+
+    /**
+     * Transparently write to local storage if available
+     * there are no guarantees of a successful write.
+     */
+    writeToLocalStorage : function(key, value) {
+        if(typeof(localStorage) === "undefined" || key === null || value === null) {
+            return null;
+        }
+
+        localStorage.setItem(key, value);
+    },
+
+    /**
+     *
+     */
+    readFromLocalStorage : function(key) {
+        if(typeof(localStorage) === "undefined" || key === null) {
+            return null;
+        }
+
+        return localStorage.getItem(key);
+    },
+
+
+    getFriendlyDateTime : function(date) {
+        var now = new Date(),
+            weekday=["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+            month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+            beginToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0),
+            beginTomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0),
+            endTomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 2, 0, 0, 0, 0);
+
+        var dateString = "";
+        if(date > beginToday && date <= beginTomorrow) {
+            dateString = "Today, ";
+        } else if(date > beginTomorrow && date <= endTomorrow) {
+            dateString = "Tomorrow, ";
+        } else {
+            dateString = weekday[date.getDay()] + ", ";
+        }
+
+        dateString += month[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear();
+
+        var timeString = "",
+            hour = null,
+            minutes = null;
+        if(date.getHours() < 12) {
+            hour = date.getHours();
+            minutes = date.getMinutes() / 10 > 1 ? date.getMinutes() : "0" + date.getMinutes();
+
+            timeString = hour + ":" + minutes + "am";
+        }else {
+            hour = date.getHours() - 12;
+            minutes = date.getMinutes() / 10 > 1 ? date.getMinutes() : "0" + date.getMinutes();
+
+            timeString = hour + ":" + minutes + "pm";
+        }
+
+        return {
+            event_date : dateString,
+            event_time : timeString
+        };
     }
 };

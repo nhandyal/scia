@@ -1,0 +1,96 @@
+.event-element {
+    border-top: 1px solid rgb(150,150,150);
+    padding: 10px 30px 10px 30px;
+}
+
+.event-header-element {
+    display: inline-block;
+    float: left;
+    line-height: 30px;
+}
+
+.clear {
+    clear: both;
+}
+
+#upcoming-events-banner {
+    color: rgb(100,100,100);
+    font-size: 16px;
+    line-height: 55px;
+}
+
+#event-detail-wrapper {
+    width: 900px;
+    margin: auto;
+}
+
+.event-date {
+    color: rgb(60,60,60);
+    width: 32%;
+}
+
+.event-title {
+    color: rgb(153,0,0);
+}
+
+#event-details-date {
+    width: 28%;
+    font-size: 18px;
+}
+
+#event-details-title {
+    text-align: right;
+    width: 72%;
+    font-size: 18px;
+}
+
+.event-content-element {
+    display: inline-block;
+    float: left;
+}
+
+.event-image {
+    width: 25%;
+    height: 100px;
+    margin-right: 7%;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center center;
+}
+
+.event-image-cover {
+    width: 100%;
+    height: 350px;
+    margin: auto;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center center;
+}
+
+.event-description {
+    width: 67%;
+    overflow: hidden;
+    font-size: 14px;
+    color: rgb(60,60,60);
+    text-align: justify;
+    margin-top: 10px;
+}
+
+.event-read-more {
+    text-decoration: none;
+    color: rgb(30, 150, 255);
+    font-size: 13px;
+}
+
+.event-details-description {
+    border-top: 1px solid rgb(150,150,150);
+    margin-top: 10px;
+    padding-top: 10px;
+    font-size: 13px;
+    text-align: justify;
+}
+
+.event-details-header {
+    margin-top: 10px;
+}
+

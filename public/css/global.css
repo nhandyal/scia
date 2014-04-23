@@ -1,0 +1,116 @@
+/************************************************ 
+ * MASTER WRAPPER
+ */
+
+ #wrapper {
+    min-width: 900px;
+    max-width: 1200px;
+    margin: auto;
+    font-size: 100%;
+    font-weight: normal;
+    font-family: Verdana;
+    vertical-align: baseline;
+    margin: auto;
+    position: relative;
+    font: "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif
+}
+
+
+/************************************************ 
+ * HEADER
+ */
+
+#header{
+    position: relative;
+    height: 90px;
+}
+
+#header-logo {
+    display: block;
+    width: 218px;
+    height: 50px;
+    float: left;
+    margin: 20px 25px;
+    margin-left: 5px;
+}
+
+/************************************************ 
+ * NAVIGATION BAR 
+ */
+
+#navigation {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    margin-bottom: 20px;
+    padding: 0;
+    opacity: 0;
+    list-style: none;
+    font-size: 0.8em;
+}
+
+#navigation li {
+    float: left;
+    margin-left: 10px;
+}
+
+#navigation a {
+    color: rgb(60, 60, 60);
+}
+
+#navigation li ul {
+    display: none;
+    position: absolute;
+    list-style: none;
+    top: 15px;
+    right: 0;
+    z-index: 3;
+    width: 150px;
+    padding: 0;
+    margin: 0;
+    background: white;
+}
+
+#navigation li:hover > ul {
+    display: block;
+}
+
+#navigation li ul li {
+    float: right;
+    width: 140px;
+    margin: 0;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 3px;
+}
+
+#navigation li ul li > a {
+    text-decoration: none;
+    display: inline-block;
+    width: 140px;
+}
+
+#navigation li ul li:hover {
+    color: rgb(230,230,230) !important;
+    background: rgb(204,40,40);
+}
+
+/************************************************ 
+ * FOOTER
+ */
+
+ #footer {
+    height: 20%;
+    position: relative;
+    background: rgb(223,227,226);
+    background: rgb(245,245,245);
+    border-top: 2px solid #d5d5d5;
+}
+
+#legal{
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    font-size: 0.75em;
+    color: rgb(150,150,150);
+}

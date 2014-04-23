@@ -48,6 +48,15 @@ SCIA.core = {
     init : function() {
         Stripe.setPublishableKey('pk_test_HvH0HNcaXzQcAPN8wruR6JXU');
 
+        // set the page width and display
+        var pageWidth = SCIA.utils.readFromLocalStorage("pageWidth");
+        if(pageWidth !== null) {
+            $("#wrapper").width(pageWidth);
+        }
+
+        $("#wrapper").show();
+
+
         var queryParams = SC.utils.parseQueryString();
 
         if(queryParams.action == "recover") {

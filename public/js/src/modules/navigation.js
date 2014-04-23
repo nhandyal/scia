@@ -25,16 +25,17 @@ SCIA.navigation = {
             $("#nav-personal").remove();
         }
         
-        $("#navigation").animate({"opacity" : 1}, 100, function(){});
+        $("#navigation").animate({"opacity" : 1}, 0, function(){});
 
         // highlight the current view
-        switch(window.location.pathname) {
-            case "/about/":
-                $("#nav-about").css("color" , "rgb(204,40,40)");
-                break;
-            case "/events/":
-                $("#nav-events").css("color" , "rgb(204,40,40)");
-                break;
+        var pathname = window.location.pathname;
+        console.log(pathname);
+        if(pathname.indexOf('/about/') > -1) {
+            $("#nav-about > a").css("color" , "rgb(204,40,40)");
+        }else if(pathname.indexOf('/events/') > -1) {
+            $("#nav-events > a").css("color" , "rgb(204,40,40)");
+        }else {
+            console.log("do nothing");
         }
     }
 
