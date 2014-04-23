@@ -125,8 +125,7 @@
                         templateData.event_title = templateData.name;
                         templateData.event_details_link = pageLocation + templateData.id;
                         templateData.event_image = templateData.event_img_url;
-                        templateData.event_description = truncateString(templateData.description, 265, " ", "...");
-
+                        templateData.event_description = (truncateString(templateData.description, 265, " ", "...")).replace(/<br>/g, " ");
 
                         html += template(templateData);
                     }

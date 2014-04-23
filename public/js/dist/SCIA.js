@@ -53,13 +53,6 @@
             Stripe.setPublishableKey('pk_test_HvH0HNcaXzQcAPN8wruR6JXU');
 
             // set the page width and display
-            var pageWidth = SCIA.utils.readFromLocalStorage("pageWidth");
-            if (pageWidth !== null) {
-                $("#wrapper").width(pageWidth);
-            }
-
-            $("#wrapper").show();
-
 
             var queryParams = SC.utils.parseQueryString();
 
@@ -164,6 +157,8 @@
             $sidebar.on('click', '#sidebar-close', function(e) {
                 SELF._hide();
             });
+
+            console.log(wrapperID);
 
             // listen for the esc key
             $(document).keyup(function(e) {
@@ -805,7 +800,7 @@
 
         zuneCards: [],
 
-        init: function(viewportTiles, zuneContainerId) {
+        init: function(viewportTiles, zuneContainerId, zuneWrapperID) {
 
             var SELF = this;
 
@@ -885,7 +880,7 @@
             /* Used to ensure proper logo placement and size */
             var firstIteration = true;
 
-            document.getElementById("wrapper").style.width = viewportTiles.width * tile.width + "px";
+            document.getElementById(zuneWrapperID).style.width = viewportTiles.width * tile.width + "px";
             SCIA.utils.writeToLocalStorage("pageWidth", viewportTiles.width * tile.width);
 
             // iterate over the entire grid

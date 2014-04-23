@@ -16,8 +16,8 @@
         	admin@uscscia.com
         -->	
 		<div id="wrapper">
-			<div id="header">
-				<a id="header-logo" href="/"><img src="../assets/scia-logo.png" height="50" width="218" border="0" alt="Southern California Indio Americans" /></a>
+            <div id="header">
+                <a id="header-logo" href="/"><img src="../assets/scia-logo.png" height="50" width="218" border="0" alt="Southern California Indio Americans" /></a>
                 <ul id="navigation">
                     <li id="nav-about" class="nav-element">
                         <a href="/about">About</a>
@@ -44,7 +44,7 @@
                     </li>
                 </ul>
                 <div class="clear"></div>
-			</div>
+            </div>
 			<div id="ZuneView"></div>
 			<div class="ZuneView-spacer"></div>
 		</div>
@@ -59,6 +59,6 @@
         SC.core.init();
         SC.navigation.init();
         SC.Sidebar.init("wrapper", "sidebar", "../assets/images/loading.gif");
-        SC.ZuneView.init({ height: 4 }, "ZuneView");
+        SC.ZuneView.init({ height: 4 }, "ZuneView", "wrapper");
     </script>
 </html>

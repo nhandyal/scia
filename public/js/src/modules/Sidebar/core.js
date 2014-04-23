@@ -40,6 +40,8 @@ SCIA.Sidebar = {
             SELF._hide();
         });
 
+        console.log(wrapperID);
+
         // listen for the esc key
         $(document).keyup(function(e) {
             if (e.keyCode == 27) { 

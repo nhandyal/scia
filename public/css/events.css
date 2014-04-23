@@ -34,13 +34,13 @@
 }
 
 #event-details-date {
-    width: 33%;
+    width: 40%;
     font-size: 18px;
 }
 
 #event-details-title {
     text-align: right;
-    width: 67%;
+    width: 60%;
     font-size: 18px;
 }
 

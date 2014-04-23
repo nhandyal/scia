@@ -2,7 +2,7 @@ SCIA.ZuneView = {
 
 	zuneCards : [],
 	
-	init : function(viewportTiles, zuneContainerId){
+	init : function(viewportTiles, zuneContainerId, zuneWrapperID){
 		
 		var SELF = this;
 
@@ -82,7 +82,7 @@ SCIA.ZuneView = {
 		/* Used to ensure proper logo placement and size */
 		var firstIteration = true;
 
-		document.getElementById("wrapper").style.width = viewportTiles.width*tile.width+"px";
+		document.getElementById(zuneWrapperID).style.width = viewportTiles.width*tile.width+"px";
 		SCIA.utils.writeToLocalStorage("pageWidth", viewportTiles.width*tile.width);
 
 		// iterate over the entire grid

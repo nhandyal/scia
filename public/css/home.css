@@ -2,6 +2,17 @@
  * ZUNE VIEW
  */
 
+#ZuneViewWrapper {
+	margin: auto;
+    font-size: 100%;
+    font-weight: normal;
+    font-family: Verdana;
+    vertical-align: baseline;
+    margin: auto;
+    position: relative;
+    font: "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif
+}
+
 #ZuneView{
 	position: relative;
 	width: 100%;
