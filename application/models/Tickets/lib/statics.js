@@ -35,7 +35,6 @@ module.exports.createEventTicket = function(user_model,
                 scia_errcode : 10400
             }, null);
     }
-	console.log(user_model);
     if(user_model == null){
 	//guest checkout
 	ticket_id = createTicketId(Math.random()*50000);

@@ -26,7 +26,6 @@ module.exports.submitPayment = function(req,res,transport) {
 	}
 	
 	if(!stripe_card_id && !stripe_card_token){
-		console.log(req.body);
 		console.log(stripe_card_id + "  "+stripe_card_token);
 		return ResponseHandler.sendError(res, 10400);
 	}
@@ -63,7 +62,6 @@ module.exports.submitPayment = function(req,res,transport) {
 		var found_user = null;
 
 		if(!results.user.err){
-			console.log("importing user");
 			found_user = results.user.dbRes;
 			email = found_user.email
                 //purchasing with an account	
