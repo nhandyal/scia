@@ -10,15 +10,15 @@
 	       </div>
 	       <div id="conf-code-container" style="width: 430px;margin: auto;padding: 0px 15px 15px 15px;font: 12px/18px &quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, Helvetica, Arial, Verdana, sans-serif;font-size: 0.85em;color: rgb(130,60,60);">
 				<div style="float: left; width: 150px;">Event: </div>
-				<div style="float: left; width: 280px;">SCIA End of the Year Banquet 2014</div>
+				<div style="float: left; width: 280px;"><%=event_name  %></div>
 				<div style="float: left; width: 150px;">Date: </div>
-				<div style="float: left; width: 280px;">Saturday, May 3, 2014 : 8:00pm</div>
+				<div style="float: left; width: 280px;"><%=event_date %></div>
 				<div style="float: left; width: 150px;">Number of Ticket(s): </div>
-				<div style="float: left; width: 280px;">1</div>
+				<div style="float: left; width: 280px;"><%=ticket_token%></div>
 				<div style="float: left; width: 150px;">Purchase Total: </div>
-				<div style="float: left; width: 280px;">$40.00</div>
+				<div style="float: left; width: 280px;">$<%=total_price%></div>
 				<div style="float: left; width: 150px; margin-top:10px">Confirmation Code: </div>
-				<div style="float: left; width: 280px; margin-top:10px">88888888</div>
+				<div style="float: left; width: 280px; margin-top:10px"><%=confirmation_code%></div>
                 <!--<% 
                     for(var i=0; i<ticket_token.length; i++) { 
                 %>

@@ -30,28 +30,35 @@ module.exports.createEventTicket = function(user_model,
 
     if(ticket_data.number_of_tickets == null || 
         ticket_data.transaction_total == null || 
-        user_model == null || 
         event_model == null) {
             return onCompleteCallback({
                 scia_errcode : 10400
             }, null);
     }
+	console.log(user_model);
+    if(user_model == null){
+	//guest checkout
+	ticket_id = createTicketId(Math.random()*50000);
+	
+	//make guest fields filled out
+	ticket_data["l_name"] = "guest";
+	ticket_data["f_name"] = "guest";
+    } else {
+	var user_details = user_model.getCoreUserDetails(),
+	ticket_id = createTicketId(user_details.user_id.getTimestamp().getTime());
 
-    var user_details = user_model.getCoreUserDetails(),
-        ticket_id = createTicketId(user_details.user_id);
-
-    // this doesn't exist yet, but we should set it up at a later point
-    // var event_details = event_model.getCoreDetails();
+	    // this doesn't exist yet, but we should set it up at a later point
+	    // var event_details = event_model.getCoreDetails();
 
 
 
-    // merge the user details into ticket_data
-    // user_details returns some extra information
-    // but we'll let mongoose automatically drop that data
-    for (var attrname in user_details) { 
-        ticket_data[attrname] = user_details[attrname]; 
+	    // merge the user details into ticket_data
+	    // user_details returns some extra information
+	    // but we'll let mongoose automatically drop that data
+	    for (var attrname in user_details) { 
+		ticket_data[attrname] = user_details[attrname]; 
+	    }
     }
-
     ticket_data["ticket_id"] = ticket_id;
     ticket_data["event_id"] = event_model._id;
 
@@ -68,9 +75,11 @@ module.exports.createEventTicket = function(user_model,
 
     // push the remaining "non-member" ticket details
     transaction_details.push({
-        "quantity_sold" : 1,
+        "quantity_sold" : number_of_tickets,
         "sale_price"    : event_model.non_member_price
     });
+
+    ticket_data["transaction_details"] = transaction_details;
 
 
     // create a new ticket document and save it to the db
@@ -106,7 +115,7 @@ module.exports.createMembershipTicket = function(user_model, ticket_data, onComp
     }
 
     var user_details = user_model.getCoreUserDetails(),
-        ticket_id = createTicketId(user_details.user_id);
+        ticket_id = createTicketId(user_details.user_id.getTimestamp().getTime());
 
 
     // figure out the description

@@ -75,7 +75,7 @@ module.exports.getEventDetails = function(req,res,eventID) {
                 });
             }
         }, function(err, results){
-            if(err || results.events.dbErr || results.tickets.dbErr){
+            if(err || results.events.err || results.tickets.err){
                 console.log("Error finding the events or the tickets" +err);
                 return ResponseHandler.sendError(res,10050);
             }

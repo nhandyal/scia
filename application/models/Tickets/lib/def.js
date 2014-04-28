@@ -30,8 +30,7 @@ module.exports.schema_def = {
         type                : mongoose.Schema.Types.ObjectId
     },
     user_id             : {
-        type                : mongoose.Schema.Types.ObjectId,
-        required            : '{PATH} is required'
+        type                : mongoose.Schema.Types.ObjectId
     },
     transaction_total   : {
         type                : Number,
