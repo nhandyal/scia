@@ -11,6 +11,11 @@ module.exports.submitPayment = function(req,res,transport) {
 	var stripe_card_id = req.body.StripeCardID;
 	var stripe_card_token = req.body.stripeToken;
 	var save_card = req.body.saveCard;
+	if(save_card == "true") { 
+		save_card = true;
+	} else {
+		save_card = false;
+	}
 	var event_id = req.body.event_id;
 	var ticket_count = req.body.ticket_count;
 	var total = req.body.amountAuthorized;

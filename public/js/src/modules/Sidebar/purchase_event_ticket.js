@@ -77,7 +77,7 @@ SCIA.Sidebar.purchase_event_ticket = {
                 }
                 html += "<div class='clear'></div>";
             html += "</div>";
-            html += "<div class='sidebar-button large-button' onclick='SCIA.Sidebar.purchase_membership.submit(this)'>Buy Ticket</div>";
+            html += "<div class='sidebar-button large-button' onclick='SCIA.Sidebar.purchase_event_ticket.submit(this)'>Buy Ticket</div>";
         html += "</div>";
 
         $sidebar_wrapper.html(html);
@@ -129,12 +129,16 @@ SCIA.Sidebar.purchase_event_ticket = {
 
             // we have all the bits that we need, let's submit to the scia server
             var stripeToken = response.id,
-                d1Route = "/d1/user/"+SCIA.utils.readCookie('id')+"/buyEVTembership";
+                d1Route = "/d1/checkout";
 
             $.post(d1Route, {
                 "stripeToken" : stripeToken,
                 "saveCard" : false,
-                "amountAuthorized" : SELF.membershipPrice
+                "amountAuthorized" : SELF.ticketPrice,
+		"event_id" : SELF.eventID,
+		//"email" : decodeURIComponent(SCIA.utils.readCookie("email")),
+		"email" : "jackkwan@usc.edu",
+		"ticket_count" : quantity
             }, function(resposne) {
                 SCIA.Sidebar._endTransaction();
 

@@ -15,7 +15,7 @@ var mongoose = require("mongoose"),
  * upstream of calling this function. 
  * ASSUMES ALL INPUT PARAMS ARE VALID
  */
-var _generateEventTicket = function(user_details, ticket_id, ticket_data, onCompleteCallback) {
+var _generateEventTicket = function(user_details, event_model, ticket_id, ticket_data, onCompleteCallback) {
     // merge the user details into ticket_data
     // user_details may contain some extra information
     // but we'll let mongoose automatically drop that data
@@ -108,7 +108,7 @@ module.exports.createEventTicketForGuest = function(guest_model,
     // this doesn't exist yet, but we should set it up at a later point
     // var event_details = event_model.getCoreDetails();
 
-    _generateEventTicket(user_details, ticket_id, ticket_data, onCompleteCallback);
+    _generateEventTicket(user_details, event_model, ticket_id, ticket_data, onCompleteCallback);
 };
 
 
@@ -148,7 +148,46 @@ module.exports.createEventTicket = function(user_model,
     // this doesn't exist yet, but we should set it up at a later point
     // var event_details = event_model.getCoreDetails();
 
-    _generateEventTicket(user_details, ticket_id, ticket_data, onCompleteCallback);
+    //_generateEventTicket(user_details, event_model, ticket_id, ticket_data, onCompleteCallback);
+    //shits broken and we have a deadline
+
+    // merge the user details into ticket_data
+    // user_details may contain some extra information
+    // but we'll let mongoose automatically drop that data
+    for (var attrname in user_details) { 
+	ticket_data[attrname] = user_details[attrname]; 
+    }
+
+    ticket_data["ticket_id"] = ticket_id;
+    ticket_data["event_id"] = event_model._id;
+
+    // build transaction details
+    var number_of_tickets = ticket_data.number_of_tickets,
+	transaction_details = [];
+    if(ticket_data.contains_member_ticket) {
+	transaction_details.push({
+	    "quantity_sold" : 1,
+	    "sale_price"    : event_model.member_price
+	});
+	number_of_tickets --;
+    }
+
+    // push the remaining "non-member" ticket details
+    transaction_details.push({
+	"quantity_sold" : 1,
+	"sale_price"    : event_model.non_member_price
+    });
+
+
+    // create a new ticket document and save it to the db
+    var ticket = new this(ticket_data);
+    ticket.save(function(err, ticket){
+	if(err) {
+	    return onCompleteCallback(err, null);
+	}
+
+	return onCompleteCallback(null, ticket);
+    });
 };
 
 /**
