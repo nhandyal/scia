@@ -7,6 +7,7 @@ SCIA.Sidebar = {
     isVisible : false,
     _transactionInFlight : false,
     loadingImgAsset : "",
+    refreshOnClose : false,
 
     init : function(wrapperID, sidebarID, loadingImgAsset) {
         var SELF = this;
@@ -106,6 +107,9 @@ SCIA.Sidebar = {
             SELF.isVisible = false;
             if(onCompleteCallback) {
                 onCompleteCallback();
+            }
+            if(SELF.refreshOnClose) {
+                window.location = window.location.origin + window.location.pathname;
             }
         });
 

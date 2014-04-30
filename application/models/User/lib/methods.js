@@ -212,7 +212,7 @@ module.exports.chargeNewCard = function(chargeParams, onCompleteCallback) {
             return onCompleteCallback(processStripeError(err), null);
         }
 
-        return onCompleteCallback(null, charge);
+        return onCompleteCallback(null, null, charge);
     });
 };
 
@@ -229,6 +229,6 @@ module.exports.chargeExistingCard = function(params, onCompleteCallback) {
             return onCompleteCallback(processStripeError(err), null);
         }
 
-        return onCompleteCallback(null, charge);
+        return onCompleteCallback(null, null, charge);
     });
 }

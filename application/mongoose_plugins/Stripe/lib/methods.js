@@ -28,6 +28,12 @@ var processStripeError = function(err) {
 	}
 };
 
+// we are passing on the stipe processing fee to our customers
+// Stripe fees (as of 2/7/14) 2.9% + 30 cents
+var adjustForStripeFees = function(amount) {
+	return Math.floor((amount * 1.029) + 30);
+}
+
 var SchemaMethods = function(paths, Stripe) {
 
 	/**
@@ -69,12 +75,8 @@ var SchemaMethods = function(paths, Stripe) {
 			profilePath = paths.stripe_customer_profile.path_ref,
 			customerID = user[profilePath].id;
 
-		// we are passing on the stipe processing fee to our customers
-		// Stripe fees (as of 2/7/14) 2.9% + 30 cents
-		var amount = parseInt(params.amount) * 100; // convert dollars to cents for stripe processing
-		amount *= 1.029;
-		amount += 30;
-		amount = Math.floor(amount);
+		// convert dollars to cents for stripe processing
+		var amount = adjustForStripeFees(parseInt(params.amount) * 100);
 
 		if(amount < 0 || (!params.cardID)) {
 			return onCompleteCallback({
@@ -106,11 +108,8 @@ var SchemaMethods = function(paths, Stripe) {
 	var chargeNewCard = function(params, onCompleteCallback) {
 		var user = this;
 		
-		// we are passing on the stipe processing fee to our customers
-		// Stripe fees (as of 2/7/14) 2.9% + 30 cents
-		var amount = parseInt(params.amount) * 100; // convert dollars to cents for stripe processing
-		amount *= 1.029;
-		amount = Math.floor(amount);
+		// convert dollars to cents for stripe processing
+		var amount = adjustForStripeFees(parseInt(params.amount) * 100);
 
 		if(amount < 0 || (!params.stripeCardToken)) {
 			return onCompleteCallback({
@@ -128,7 +127,7 @@ var SchemaMethods = function(paths, Stripe) {
 				console.log(params);
 				return onCompleteCallback(processStripeError(err), null);
 			}
-
+			debugger;
 			return onCompleteCallback(null, charge);
 		});
 	};

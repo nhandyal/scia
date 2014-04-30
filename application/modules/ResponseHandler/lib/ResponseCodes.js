@@ -89,22 +89,6 @@ module.exports._10602 = {
 /***************** Checkout Response Codes *****************/
 module.exports._10100 = {
 	status : 10100,
-	short_message : "Transaction Failed",
-	long_message : "The supplied card was declined"
-};
-
-module.exports._10101 = {
-	status : 10101,
-	short_message : "Invalid user",
-	long_message : "The user information did not match the card number"
-};
-module.exports._10102 = {
-	status : 10102,
-	short_message : "Invalid credit card",
-	long_message : "The credit card failed Stripe's authentication"
-};
-module.exports._10103 = {
-	status : 10103,
-	short_message : "Transaction Mismatch",
-	long_message : "The authorized total does not match the calculated total."
+	short_message : "Something went wrong. Please contact customer support",
+	long_message : "Something went wrong. Please contact customer support"
 };

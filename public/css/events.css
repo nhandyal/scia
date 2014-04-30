@@ -94,3 +94,27 @@
     margin-top: 10px;
 }
 
+#event-purchase-tickets-wrapper {
+    display: inline-block;
+    float: right;
+    margin-left: 30px;
+}
+
+.event-button {
+    width: 200px;
+    line-height: 50px;
+    background: rgb(3, 172, 220);
+    color: white;
+    text-align: center;
+    margin: 15px auto 15px auto;
+}
+
+.event-button:hover {
+    cursor: pointer;
+    background: rgb(3, 162, 180);
+}
+
+#event-purchase-member-ticket {
+    margin-top: 0;
+}
+

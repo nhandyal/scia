@@ -98,6 +98,7 @@ SCIA.Sidebar.purchase_membership = {
         // this doesn't need to be done on _render() because display (higher up the chain)
         // takes care of calling _expose() for us.
         SCIA.Sidebar._expose();
+        SCIA.Sidebar.refreshOnClose = true;
     },
 
     submit : function(callingElement) {

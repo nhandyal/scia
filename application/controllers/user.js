@@ -314,6 +314,12 @@ module.exports.buyMembership = function(res, params) {
                 return ResponseHandler.sendError(res, 10103);
             }
 
+            var saveCard = false;
+            params.saveCard = (params.saveCard).toLowerCase();
+            if(params.saveCard === "true") {
+                saveCard = true;
+            }
+
             var requestParams = {
                 cardID : params.stripeCardID,
                 stripeCardToken : params.stripeCardToken,
@@ -321,7 +327,7 @@ module.exports.buyMembership = function(res, params) {
                 description : "SCIA Membership"
             }
 
-            var chargeResponseHandler = function(err, charge) {
+            var chargeResponseHandler = function(err, card, charge) {
                 if(err) {
                     return ResponseHandler.processError(res, err);
                 }
@@ -329,17 +335,26 @@ module.exports.buyMembership = function(res, params) {
                 var set_membership = user.set_membership();
                 if (set_membership.err != undefined) {
                     return ResponseHandler.processError(res, set_membership);
-                } 
+                }
+
+
 
                 Tickets.createMembershipTicket(user, {
-                    'transaction_total' : amountAuthorized                    
+                    'transaction_total' : parseInt(charge.amount) / 100                 
                 }, function(err, ticket) {
                     if(err) {
                         console.log("there was an error writing the ticket to the db");
                         console.log("unfortunately we don't have any error handling for this");
                         console.log("contact Tanmay Asija to resolve this conflict");
-                    } else {
-                        console.log(ticket);
+                        console.log(err);
+
+                        // we should not persist any changes to the db. fail the
+                        // rest of the transaction and tell the user to contact
+                        // customer support for a refund.
+                        // we should also look into STRIPE api to issue an automatic refund
+                        return ResponseHandler.processError(res, {
+                            scia_errcode : 10100
+                        });
                     }
                 });
 
@@ -356,7 +371,7 @@ module.exports.buyMembership = function(res, params) {
             if(params.stripeCardID) {
                 user.chargeExistingCard(requestParams, chargeResponseHandler);
             }else {
-                if(params.saveCard) {
+                if(saveCard) {
                     user.addCardAndCharge(requestParams, chargeResponseHandler);
                 }else {
                     user.chargeNewCard(requestParams, chargeResponseHandler);

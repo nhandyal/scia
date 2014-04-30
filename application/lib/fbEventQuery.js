@@ -51,19 +51,19 @@ module.exports.queryFacebook = function() {
                 var description = fb_event.description;
                 var member_price = null;
                 var non_member_price = null;
-                if(typeof description != "undefined"){
-                    member_price = description.match(/\|\| +member.+/i);
+                if(typeof description != "undefined") {
+                    member_price = description.match(/\|\| members: [$0-9]{2,4}/i);
                     if(member_price == null) {
                         member_price = null;
                     } else {
-                        member_price = String(member_price).match(/\d+/);
+                        member_price = parseInt(member_price[0].match(/[0-9]{1,3}/)[0]);
                     }
 
-                    non_member_price = description.match(/\|\| +non.+/i);
+                    non_member_price = description.match(/\|\| non-members: [$0-9]{2,4}/i)
                     if(non_member_price == null) {
                         non_member_price = null;
                     } else {
-                        non_member_price = String(non_member_price).match(/\d+/);
+                        non_member_price = parseInt(non_member_price[0].match(/[0-9]{1,3}/)[0]);
                     }
                 } else {
                     description = null;
