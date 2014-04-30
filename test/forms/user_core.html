@@ -1,0 +1,52 @@
+<html>
+	<head>
+		<title>User Test Form</title>
+		<script type="text/javascript">
+			
+			function readCookie(name) {
+				var nameEQ = name + "=";
+				var ca = document.cookie.split(';');
+				for(var i=0;i < ca.length;i++) {
+					var c = ca[i];
+					while (c.charAt(0)==' ') c = c.substring(1,c.length);
+					if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+				}
+				return null;
+			}
+			
+		</script>
+	</head>
+	<body>
+		<h1>Create User</h1>
+		<form id="create-user" action="http://127.0.0.1:8000/d1/user/create" method="post">
+			First Name <input type="text" name="f_name"> <br/>
+			Last Name <input type="text" name="l_name"> <br/>
+			Email <input type="text" name="email"> <br/>
+			pwd <input type="text" name="pwd"> <br/>
+			cb <input type="hidden" name="cb" value="/"> <br/>
+			<input type="submit" value="submit" />
+		</form>
+		<br/>
+		<br/>
+		<h1>login User</h1>
+		<form id="login-user" action="http://127.0.0.1:8000/d1/user/login" method="post">
+			Email <input type="text" name="email"> <br/>
+			pwd <input type="text" name="pwd"> <br/>
+			<input type="submit" value="submit" />
+		</form>
+		<br/>
+		<br/>
+		<h1>Recover Password</h1>
+		<form id="recover-pwd" action="http://127.0.0.1:8000/d1/user/recover" method="get">
+			Email <input type="text" name="email"> <br/>
+			url <input type="text" name="cb" value="http://www.google.com"/>
+			<input type="submit" value="submit" />
+		</form>
+		<br/>
+		<br/>
+		<h1>Test Auth Middleware</h1>
+		<form id="recover-pwd" action="http://127.0.0.1:8000/d1/user/test" method="get">
+			<input type="submit" value="submit" />
+		</form>
+	</body>
+</html>

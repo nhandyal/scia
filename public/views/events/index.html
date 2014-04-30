@@ -1,0 +1,139 @@
+<html>
+    <head>
+        <title>USC SCIA | Events</title>
+        <link rel="stylesheet" type="text/css" href="../../css/global.css">
+        <link rel="stylesheet" type="text/css" href="../../css/sidebar.css">
+        <link rel="stylesheet" type="text/css" href="../../css/events.css">
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+        <script type="text/javascript" src="../../js/dist/SCIA.min.js"></script>
+        <script type="text/javascript" src="../../js/dist/Handlebars.runtime.min.js"></script>
+    </head>
+    <body>
+        <!-- 
+            Glad you like the site enough to check out the source,
+            Get in touch with us, especially if you'd like to make the site even better.
+
+            admin@uscscia.com
+        --> 
+        <div id="wrapper">
+            <div id="header">
+                <a id="header-logo" href="/"><img src="../../assets/scia-logo.png" height="50" width="218" border="0" alt="Southern California Indio Americans" /></a>
+                <ul id="navigation">
+                    <li id="nav-about" class="nav-element">
+                        <a href="/about">About</a>
+                    </li>
+                    <li id="nav-events" class="nav-element">
+                        <a href="/events">Events</a>
+                    </li>
+                    <li id="nav-register" class="nav-element">
+                        <a href="javascript:SC.Sidebar.register.display()">Register</a>
+                    </li>
+                    <li id="nav-login" class="nav-element">
+                        <a href="javascript:SC.Sidebar.login.display()">Login</a>
+                    </li>
+                    <li id="nav-personal" class="nav-element">
+                        <span></span>
+                        <ul>
+                            <li id="nav-buy-membership">
+                                <a href="javascript:SC.Sidebar.purchase_membership.display()">Buy Membership</a>
+                            </li>
+                            <li>
+                                <a href="javascript:SC.logout()">Logout</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="clear"></div>
+            </div>
+            <div id="upcoming-events-banner" class="event-element">Upcoming Events</div>
+            <div id="event-content-wrapper"></div>
+        </div>
+		<div id="footer">
+			<div id="legal">
+				&copy 2008-2013 USC SCIA
+			</div>
+		</div>
+        <div id="sidebar"></div>
+        <script id='event-template' type='text/x-handlebars-template'>
+            <div class="event-wrapper">
+                <div class="event-header event-element">
+                    <div class="event-date event-header-element">{{event_date}} : {{event_time}}</div>
+                    <a href="{{event_details_link}}">
+                        <div class="event-title event-header-element">{{event_title}}</div>
+                    </a>
+                    <div class="clear"></div>
+                </div>
+                <div class="event-content-main event-element">
+                    <a href="{{event_details_link}}">
+                        <div class="event-image event-content-element" style="background-image: url('{{event_image}}');"></div>
+                    </a>
+                    <div class="event-description event-content-element">
+                        {{event_description}}
+                        <a class="event-read-more" href="{{event_details_link}}">Read more</a>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </script>
+	    <script type="text/javascript">
+            (function() {
+    	        SC.core.init();
+                SC.navigation.init();
+                SC.Sidebar.init("wrapper", "sidebar", "../../assets/images/loading.gif");
+
+                var template_source = $("#event-template").html(),
+                    template = Handlebars.compile(template_source),
+                    now = new Date(),
+                    beginToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0),
+                    pageLocation = window.location.origin + window.location.pathname,
+
+                    truncateString = function(string, limit, breakChar, rightPad) {
+                        if (string.length <= limit) {
+                            return string;
+                        }
+
+                        var substr = string.substr(0, limit);
+                        if ((breakPoint = substr.lastIndexOf(breakChar)) >= 0) {
+                            if (breakPoint < string.length -1) {
+                                return string.substr(0, breakPoint) + rightPad;
+                            }
+                        }
+                    };
+
+                $.get("/d1/events", function(response) {
+                    
+                    if(response.status !== 0) {
+                        SCIA.Flash(response.short_message);
+                    }
+
+                    var eventData = response.data,
+                        html = "";
+                    for(var i = 0; i < eventData.length; i++) {
+                        var templateData = eventData[i],
+                            eventDate = new Date(templateData.start_time),
+                            friendlyDate = SCIA.utils.getFriendlyDateTime(eventDate);
+
+                        if(eventDate < beginToday) {
+                            // skip past events
+                            continue;
+                        }
+
+                        // rename fields to match template fields
+                        templateData.event_date = friendlyDate.event_date;
+                        templateData.event_time = friendlyDate.event_time;
+                        templateData.event_title = templateData.name;
+                        templateData.event_details_link = pageLocation + templateData.id;
+                        templateData.event_image = templateData.event_img_url;
+                        templateData.event_description = (truncateString(templateData.description, 265, " ", "...")).replace(/<br>/g, " ");
+
+                        html += template(templateData);
+                    }
+
+                    $("#event-content-wrapper").empty().append(html);
+
+                });
+            })();
+        </script>
+	</body>
+</html>

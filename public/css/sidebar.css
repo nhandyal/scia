@@ -1,0 +1,157 @@
+#sidebar *:focus {
+    outline: 0;
+}
+
+#sidebar {
+    position: fixed;
+    background: rgb(45, 45, 45);
+    width: 20%;
+    right: -400px;
+    top: 0px;
+    border-left: 1px solid rgb(10,10,10);
+}
+
+#sidebar-close {
+    position: relative;
+    top: 20px;
+    left: 10px;
+    width: 40px;
+    height: 20px;
+}
+
+#sidebar-close::before{
+    content:"";
+    display:inline-block;
+    width:35px;
+    height:3px;
+    border-radius:1px;
+    overflow:hidden;
+    background: rgb(60,60,60);
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+}
+#sidebar-close::after{
+    content:"";
+    display:inline-block;
+    width:35px;
+    height:3px;
+    border-radius:1px;
+    overflow:hidden;
+    background: rgb(60,60,60);
+    position:relative;
+    top: -3px;
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+}
+
+#sidebar-close:hover{
+    cursor: pointer;
+}
+
+#sidebar-close:hover::before{
+    background: rgb(90,90,90);
+}
+
+#sidebar-close:hover::after{
+    background: rgb(90,90,90);
+}
+
+#sidebar-loading-wrapper {
+    position: absolute;
+    display: none;
+    opacity: 0;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    z-index: 3;
+}
+
+#sidebar-loading-icon {
+    margin: 50%;
+    margin-top: 100%;
+}
+
+#sidebar-mainWrapper {
+    position: absolute;
+    width: 93%;
+    margin: 4%;
+    color: rgb(200,200,200);
+}
+
+.sidebar-label-smaller {
+    font-size: 10px;
+}
+
+.sidebar-ui-link {
+    color: rgb(200,200,200);
+    font-size: 13px;
+}
+
+.sidebar-input-wrapper {
+    margin-top: 5px;
+}
+
+.element-50 {
+    width : 50%;
+    float: left;
+}
+
+.sidebar-input {
+    width: 100%;
+    line-height: 2em;
+    background: rgb(30,30,30);
+    border: 1px solid rgb(40,40,40);
+    padding: 5px;
+    color: rgb(200,200,200);
+    font-size: 14px;
+}
+
+.element-25 {
+    width: 25%;
+    padding: 5px;
+    text-align: center;
+    float: left;
+}
+
+.sidebar-label {
+    padding: 5px;
+    padding-top: 0px;
+    color: rgb(200,200,200);
+    font-size: 14px;
+}
+
+.sidebar-button {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    text-align: center;
+    background: rgb(187, 32, 35);
+}
+
+.sidebar-button:hover {
+    cursor: pointer;
+    background: rgb(207, 32, 35);
+}
+
+.large-button {
+    width: 100%;
+    line-height: 35px;
+    font-size: 14px;
+}
+
+.sidebar-error {
+    width: 100%;
+    height: 30px;
+    text-align: center;
+    color: red;
+    font-size: 12px;
+}
+
+.no-pad {
+    padding: 0;
+}
+
+.clear {
+    clear: both;
+}

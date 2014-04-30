@@ -1,0 +1,123 @@
+<html>
+    <head>
+        <title>USC SCIA | Events</title>
+        <link rel="stylesheet" type="text/css" href="../../css/global.css">
+        <link rel="stylesheet" type="text/css" href="../../css/sidebar.css">
+        <link rel="stylesheet" type="text/css" href="../../css/events.css">
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+        <script type="text/javascript" src="../../js/dist/SCIA.min.js"></script>
+        <script type="text/javascript" src="../../js/dist/Handlebars.runtime.min.js"></script>
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="header">
+                <a id="header-logo" href="/"><img src="../../assets/scia-logo.png" height="50" width="218" border="0" alt="Southern California Indio Americans" /></a>
+                <ul id="navigation">
+                    <li id="nav-about" class="nav-element">
+                        <a href="/about">About</a>
+                    </li>
+                    <li id="nav-events" class="nav-element">
+                        <a href="/events">Events</a>
+                    </li>
+                    <li id="nav-register" class="nav-element">
+                        <a href="javascript:SC.Sidebar.register.display()">Register</a>
+                    </li>
+                    <li id="nav-login" class="nav-element">
+                        <a href="javascript:SC.Sidebar.login.display()">Login</a>
+                    </li>
+                    <li id="nav-personal" class="nav-element">
+                        <span></span>
+                        <ul>
+                            <li id="nav-buy-membership">
+                                <a href="javascript:SC.Sidebar.purchase_membership.display()">Buy Membership</a>
+                            </li>
+                            <li>
+                                <a href="javascript:SC.logout()">Logout</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="clear"></div>
+            </div>
+            <div id="event-detail-wrapper">
+
+            </div>
+        </div>
+        <div id="footer">
+            <div id="legal">
+                &copy 2008-2013 USC SCIA
+            </div>
+        </div>
+        <div id="sidebar"></div>
+        <script id='event-details-template' type='text/x-handlebars-template'>
+            <div class="event-image-cover" style="background-image: url('{{event_image}}');"></div>
+                <div class="event-details">
+                    <div class="event-details-header">
+                        <div id="event-details-date" class="event-date event-header-element">{{event_date}} : {{event_time}}</div>
+                        <div id="event-details-title" class="event-title event-header-element">{{event_title}}</div>
+                        <div class="clear"></div>
+                    </div>
+                    <div id="description" class="event-details-description">
+                        <div id="event-purchase-tickets-wrapper">
+                            <div id="event-purchase-member-ticket" class="event-button" onclick="SCIA.Sidebar.purchase_event_ticket.display('Member', '{{event_id}}', {{member_price}})">Buy Member Ticket</div>
+                            <div id="event-purchase-non-member-ticket" class="event-button" onclick="SCIA.Sidebar.purchase_event_ticket.display('Non-Member', '{{event_id}}', {{non_member_price}})">Buy Non-Member Ticket</div>
+                        </div>
+                    </div>
+                </div>
+        </script>
+        <script type="text/javascript">
+            (function(){
+                SC.core.init();
+                SC.navigation.init();
+                SC.Sidebar.init("wrapper", "sidebar", "../../assets/images/loading.gif");
+
+                var template_source = $("#event-details-template").html(),
+                    template = Handlebars.compile(template_source);
+
+		var eventID = window.location.pathname;
+		eventID = eventID.replace(/\/events\//,"");
+
+                //var eventID = '53607be2871e3498c7396716';
+                //var eventID = '5356f3daaa8cff2468532275';
+
+                $.get("/d1/events/" + eventID, function(response) {
+
+                    if(response.status !== 0) {
+                        SCIA.Flash(response.short_message);
+                    }
+
+                    var templateData = response.data,
+                        eventDate = new Date(templateData.start_time),
+                        friendlyDate = SCIA.utils.getFriendlyDateTime(eventDate);
+
+                    templateData.event_date         = friendlyDate.event_date;
+                    templateData.event_time         = friendlyDate.event_time;
+                    templateData.event_title        = templateData.name;
+                    templateData.event_image        = templateData.event_img_url;
+                    templateData.event_id           = eventID;
+                    templateData.member_price       = templateData.member_price;
+                    templateData.non_member_price   = templateData.non_member_price;
+
+
+                    var html = template(templateData);
+
+                    $("#event-detail-wrapper").empty().append(html);
+                    $("#description").append(templateData.description);
+
+                    // delete purchase ticket buttons that have null ticket prices
+                    if(templateData.member_price === null) {
+                        $("#event-purchase-member-ticket").remove();
+                    }
+                    if(templateData.non_member_price === null) {
+                        $('#event-purchase-non-member-ticket').remove();
+                    }
+		    email = decodeURIComponent(SCIA.utils.readCookie("email"));
+		    if(email == 'null') {
+			$("#event-purchase-tickets-wrapper").hide();
+		    }
+                });
+            })();
+        </script>
+    </body>
+</html>

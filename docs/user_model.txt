@@ -1,0 +1,59 @@
+/**
+ * Author: Nikhil Handyal
+ * Date: 12/29/2013
+ * Description: This doc provides a description of the user model. It provides an insight into the 
+ *				purpose of the various fields to make maintenence an easier task.
+ */
+
+
+Summary:
+	
+	pwd 				User password (after going through an md5 hash)
+	email :				String,
+	member_id : 		String,
+	vrf_code : 			String,
+	is_verified : 		Boolean,
+	created : 			Date,
+	last_login : 		Date,
+
+
+	is_member : 		Boolean,
+	is_board : 			Boolean,
+
+
+	// profile elements
+	f_name : 			String,
+	l_name : 			String,
+	major : 			String,
+	year : 				String,
+	
+	
+	// notification elements
+	mobile_number : 		String,
+	text_notify : 			Boolean,
+	carrier : 				String,
+	carrier_code : 			String,
+	is_phone_verified : 	Boolean,
+
+
+
+
+Details:
+Every user who uses the scia site must register an account (email and password).
+
+When a new user registers with the site, they are issued a new 6 digit numeric scia_id. The id value is issed by the 
+system through an auto increment field (id values cannot be manually set). The id is also printed on the issued member
+card (if the user is a member). If a member loses their card, they can request a new member id with a corresponding member card.
+
+So far so good?
+
+Now within the full set of members, their are members, and board members. So how do we differentiate between the two? That's
+where the is_board boolean flag is used. True if that particular member is on board, false otherwise. Now when a user transitions
+from being a member to being on board or vise versa, we can simply toggle this flag true or false to give them elevated board
+privileges or not. In this manner, we don't need to issue a new member id for members as they move onto board or off board. The
+slight caveat to this statement is that if board cards are still used, a new board card (with the users existing member id) needs
+to be issued.
+
+
+
+

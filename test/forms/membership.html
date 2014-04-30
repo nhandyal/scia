@@ -1,0 +1,43 @@
+<html>
+	<head>
+		<title>Membership Test Form</title>
+		<script type="text/javascript">
+			
+			function readCookie(name) {
+				var nameEQ = name + "=";
+				var ca = document.cookie.split(';');
+				for(var i=0;i < ca.length;i++) {
+					var c = ca[i];
+					while (c.charAt(0)==' ') c = c.substring(1,c.length);
+					if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+				}
+				return null;
+			}
+			
+		</script>
+	</head>
+	<body>
+		<h1>Update Membership Price</h1>
+		<form id="create-user" action="http://127.0.0.1:8000/d1/membership/update" method="post">
+			New Price <input type="text" name="price"> <br/>
+			<input type="submit" value="submit" />
+		</form>
+		<h1>Update Membership Price</h1>
+		<form id="purchase-ticket" action="http://127.0.0.1:8000/d1/checkout" method="post">
+			Save Card <input type="text" name="price"> <br/>
+			Event ID: <input type="text" name="event_id"><br/>
+			Ticket Count <input type="text" name="ticket_count"><br/>
+			Total: <input type="text" name="amountAuthorized"><br/>
+			Email: <input type="text" name="email"><br/>
+			<script
+    			src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+    			data-key="pk_test_HvH0HNcaXzQcAPN8wruR6JXU"
+    			data-amount="5000"
+    			data-name="Demo Site"
+    			data-description="2 widgets ($20.00)"
+    			data-image="/128x128.png">
+  			</script>
+			<input type="submit" value="submit" />
+		</form>
+	</body>
+</html>

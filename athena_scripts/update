@@ -1,0 +1,13 @@
+#!/bin/bash
+
+echo
+
+SCIA_DIR=/www/scia
+
+cd $SCIA_DIR
+
+npm install
+
+
+echo 
+echo

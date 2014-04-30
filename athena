@@ -1,0 +1,55 @@
+#!/bin/bash
+
+# trap ctrl-c and call ctrl_c()
+
+lib=athena_scripts
+
+function dbsync {
+	ensure_root
+	sudo mongod &
+	mongodPID=$!
+	sleep 2s
+	mongo < $lib/dbsync.js
+	mongo < $lib/dbconfig.js
+	sudo kill $mongodPID
+}
+
+function configure_remote {
+	#sshpass -p "$PASSWORD" ssh admin@uscscia.com 'chmod ugo+x /www/scia/athena_scripts/update | /www/scia/athena_scripts/update'
+	lib/sshsudo -v -p $PASSWORD admin@uscscia.com /www/scia/athena_scripts/update_sudo
+}
+
+
+function ensure_root {
+	if [ "$(id -u)" != "0" ]; then
+	   echo "This operation must be run as root"
+	   exit 1
+	fi
+}
+
+case "$1" in
+	dbsync )
+		dbsync
+		;;
+	deploy )
+		read -s -p "Enter password for admin on uscscia.com: " PASSWORD
+		echo
+		sshpass -p "$PASSWORD" rsync -rtvz -C --delete --exclude "node_modules/"  * admin@uscscia.com:/www/scia
+		configure_remote
+		exit $?
+		;;
+	run )
+		ensure_root
+		sudo mongod &		
+		sleep 2s
+		node server.js
+		;;
+	test )
+		dbsync
+		echo " "
+		echo " "
+		echo "Beginning Tests..."
+		echo " "
+		make test
+		;;
+esac

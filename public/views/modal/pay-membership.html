@@ -1,0 +1,119 @@
+﻿<script type="text/javascript">
+// ======================================================================== //
+//   PAY MEMBERSHIP MODAL                                                   //
+
+// Verify Form
+function verify(x) {
+    switch (x.filter) {
+        case 'PaymentCardNumber':
+            field.pass(x, true, 'creditcard');
+            break;
+        case 'PaymentCvc':
+            field.pass(x, true, 'csc');
+            break;
+        default:
+            var simplyExist = [
+                    'PaymentName',
+                    'PaymentExpirationDate'
+                ];
+            if (simplyExist.indexOf(x.filter) > -1) {
+                field.pass(x);
+            } else {
+                x.val;
+            }
+            break;
+    }
+}
+
+Stripe.setPublishableKey('pk_test_HvH0HNcaXzQcAPN8wruR6JXU');
+var stripeToken = '';
+var stripeResponseHandler = function (status, response) {
+    var $form = $('form#payment');
+    if (response.error) {
+        $('div#payment-error').html(response.error.message);
+    }
+    else {
+        // token contains id, last4, and card type
+        stripeToken = response.id;
+        var userId = $.cookie('id');
+        svc('/d1/user/' + userId + '/buyMembership', {
+            stripeCardToken: stripeToken,
+            saveCard: false,
+            amountAuthorized: '45'
+        }, function (data) {
+            if (data.status == 0) {
+                $('#modal-pay-membership-payment').hide();
+                $('#modal-pay-membership-thankyou').show();
+            }
+            else {
+                // Error all other
+                alert('Payment failed');
+            }
+        }, true);
+    }
+};
+
+$(document).ready(function () {
+    $('#modal-pay-membership-payment').show();
+    $('#modal-pay-membership-thankyou').hide();
+
+    $('#btn-purchase').click(function (event) {
+        var $form = $('form#payment');
+        var alertString = '';
+        event.preventDefault();
+        allPass = field.checkAll('form#payment');
+        if (allPass) {
+            var paymentExpirationDate = $('input[name=PaymentExpirationDate]').val();
+            var paymentExpirationDateArray = paymentExpirationDate.split('/');
+            $('input[data-stripe="exp-month"]').val(paymentExpirationDateArray[0]);
+            $('input[data-stripe="exp-year"]').val(paymentExpirationDateArray[1]);
+            Stripe.createToken($form, stripeResponseHandler);
+        }
+    });
+});
+</script>
+
+<a class="modal-close" href="javascript:modal.close()">X</a>
+
+<div id="modal-pay-membership-thankyou" class="modal-screen">
+    <h1>Thank you!</h1>
+    <div class="col col2">
+        <div id="welcome">
+            Thank you for your payment.<br /><br />
+            Cheers,<br/>
+            SCIA Executive Board<br /><br />
+        </div>
+        <div id="user-info">
+        </div>
+    </div>
+    <div class="action-buttons">
+        <a id="btn-close" class="go" href="javascript:modal.close()" tabindex="1">X &nbsp; Close</a>
+    </div>
+</div>
+
+<div id="modal-pay-membership-payment" class="modal-screen">
+    <h1>Membership Payment</h1>
+    <form action="#" id="payment" method="post">
+        <div class="col col2">
+            <p style="margin-top:10px;">Please enter your payment information for:<br /><b>SCIA Membership Fee: $45</b></p>
+            <label for="PaymentCardNumber">Card Number:</label>
+            <input type="text" data-stripe="number" id="PaymentCardNumber" value="" tabindex="1" onblur="field.check(this)" />
+            <label for="PaymentName">Name:</label>
+            <input type="text" name="PaymentName" id="PaymentName" value="" tabindex="2" onblur="field.check(this)" />
+            <div class="expdate-cvc">
+                <label for="PaymentExpirationDate">Exp Date (MM/YYYY):</label>
+                <label for="PaymentCvc">CVC:</label>
+                <input type="text" name="PaymentExpirationDate" id="PaymentExpirationDate" value="" tabindex="3" onblur="field.check(this)" />
+                <input type="text" data-stripe="cvc" id="PaymentCvc" value="" tabindex="4" onblur="field.check(this)" />
+                <input type="hidden" data-stripe="exp-month" />
+                <input type="hidden" data-stripe="exp-year" />
+            </div>
+        </div>
+        <div class="col col2">
+            <div id="payment-error"></div>
+        </div>
+        <div class="action-buttons">
+            <a id="btn-purchase" class="go" href="#" tabindex="5">Purchase &nbsp; &gt;</a>
+        </div>
+    </form>
+</div>

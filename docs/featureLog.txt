@@ -1,0 +1,78 @@
+/*
+ *	In an effort to simplify the process flow for users
+ */
+
+
+9/25/13
+	requires : API UPDATE
+	Seperate account registration from buying membership
+		This opens the possibility to have non-member accounts
+		| why ?
+			- someone may be frequent events but not want to be a member
+			- stored preferences (credit card details, notification settings)
+			- alumni
+			- simplifies renewal process*
+
+
+	The registration flow now proceeds the same as previously outlined except we don't request payment details. After a user
+	registers and logs into their account, they can go to account settings --> purchase membership, and then buy membership.
+
+	* Since a user has to buy membership each year, instead of having a sepearte flow for new users and one for continuing users,
+	we can now have every user (new/returning) by membership (renewal or not) through the same process flow.
+
+
+9/25/13
+	requires : API UPDATE
+	Include a shopping cart for user convenience
+		| why ?
+			- allow a user to buy multiple tickets or services within a single transaction
+			- convenience
+
+	When a user says buy ticket (or service), the ticket is added to a shopping cart (client side). Once the user clicks checkout
+	the transaction is posted to the server where we will issue the requested tickets. There will have to be stringent client side
+	checks to only allow one member ticket to be bought per account per event.
+
+	use : http://simplecartjs.org/ to implement the shopping cart.
+
+
+9/27/13
+	requires : nothing
+	Allow vrf_tokens to persist till used (no automatic expiration)
+		| why ?
+			 - why not?
+
+	What bennefit does it serve to automatically delete a vrf token after a certain time. In addition to annoying the shit out of
+	a user, it adds unnescesary clutter and bloat to the code base. Since a vrf token is unique (in its randomness and email binding),
+	there shouldn't be any reason to delete the vrf token. To remove bloat from the user table, we may consider deleting unverified
+	user accounts after some time, but that's a different story.
+
+
+10/25/13
+	requires : NODE controller updates
+	Perform static page writebacks from node so that we take "dyncamic" pages and convert them to static pages.
+		| why ?
+			- we can reduce the load on node and allow nginx to handle a much larger amount of web traffic.
+
+	Currently the schema with nginx acting as our static server and node the app server, we have seperated the data layer and the view layer.
+	We chose to do this so that we can 
+			1. reduce the load on node
+			2. provide an easy to use api for 3rd party applications
+	The seperation has so far provided us with a solid platform for point 2, but since we need to query node for any page with data, we haven't
+	really reduced load on node, we've just added layers of complexity and extra network overhead. Therefore if we perform an html writeback to disk
+	on the server, we can have a request for a dynamic page hadnled entirely ocne through nginx.
+	(This description needs be clarified, but hopefully you get the point).
+
+
+10/8/13
+	requires : update to user model
+	Updated registration model
+		| why ?
+			- simplicity of user registration, buying membership, and joinging and leaving board
+
+	When a user registers on the site they are automatically given a card_id number. This value is sequentially updated and is handled
+	by the system. Once a user buys membership on the site, the member flag is toggled on in the user entry and signifies that this user
+	is a member. This means we can now have non-sequential card_ids for members (an issue for the physical member cards). When new cards
+	are ordered, a print out of member card_ids can be obtained and those cards can be ordered. 
+
+	Now when a user joins board the board flag will be toggled true and the board_id field will be set to valid 900 series board card_id.
+	Their old card_id is still present so once they leave board, they can continue to use their old member cards (less waste and code overhead).

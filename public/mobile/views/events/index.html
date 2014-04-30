@@ -1,0 +1,139 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Southern California Indo Americans</title>
+    <link rel="stylesheet" href="../../../css/mobile/foundation.css" />
+    <script src="../../../js/mobile/vendor/modernizr.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="../../../js/dist/SCIA.min.js"></script>
+    <script type="text/javascript" src="../../../js/dist/Handlebars.runtime.min.js"></script>
+    <style>
+    	#event-content-wrapper {
+    		text-align:center;
+    	}
+		body {
+			font-weight: normal;
+			font-family: Verdana;
+			font-size: 13px;
+			text-align: justify;
+		}
+		.mEventDate {
+			border-top: 1px solid rgb(150,150,150);
+			margin-top: 10px;
+			padding-top: 10px;
+			width: 60%;
+			margin-left:auto;
+			margin-right:auto;
+		}
+		.mEventTime {
+			
+		}
+		.mEventTitle {
+			border-top: 1px solid rgb(150,150,150);
+			margin-top: 10px;
+			padding-top: 10px;
+			width: 60%;
+			margin-left:auto;
+			margin-right:auto;
+		}
+		.mEventDescription {
+			border-top: 1px solid rgb(150,150,150);
+			margin-top: 10px;
+			padding-top: 10px;
+			width: 60%;
+			margin-left:auto;
+			margin-right:auto;
+		}
+    </style>
+  </head>
+  <body>
+  
+  
+<nav class="top-bar" data-topbar>
+  <ul class="title-area">
+    <li class="name">
+      <h1><a href="../index.html">USC SCIA</a></h1>
+    </li>
+	<li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
+  </ul>
+    
+
+  <section class="top-bar-section">
+    <!-- Right Nav Section -->
+    <ul class="right">
+	  <li><a href="#">Events</a></li>
+    </ul>
+  </section>
+</nav>
+<div id="event-content-wrapper">
+</div>
+    
+    <script src="../../../js/mobile/vendor/jquery.js"></script>
+    <script src="../../../js/mobile/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+    </script>
+    <script type="text/javascript">
+    	/*$.get("www.uscscia.com/d1/events", function(response) {
+    		var eventData = response.data;
+    		window.alert(eventData);
+    	});*/
+    	
+    	var json = [{
+description: "We love the end of the year because it means that it's finally time for one of SCIA's favorite events, End of the Year Banquet!<br><br>The event is a surprise by tradition and is completely planned by the SCIA VPs and Presidents as a thank you to our lovely E-board and members for being awesome and supporting us all year!<br><br>Everyone goes and will be going so don't miss out and come celebrate an amazing year of new friendships and unforgettable/ tooh forgettable memories with us! We promise we'll give you an amazing night to end with!<br><br>//EVENT FEATURES//<br><br>OPEN BAR (this is all you really need to know)<br>FULL DINNER<br>SICK DJ+Dance floor<br>Transportation that is NOT ugly yellow school buses<br>+ more super fun awesome surprises!<br><br>//DRESS CODE//<br>Formal Indian Attire<br><br>//TICKETS//<br><br>Until Sunday, April 27th:<br>|| Members: $45<br>|| Non-Members: $100<br><br>After April 27th:<br>$55 Members<br>$110 Non-Members<br><br>Get your tickets early because the event is capped and tickets are first come first serve! <br>Sales WILL close MAY 2nd, NO EXCEPTIONS! We're staying #classynottrashy so we need an accurate headcount. I repeat, NO SALES AT THE BUSES!<br><br>Transportation will leave from behind Leavey at 8 PM sharp! Don't be late because you'll be wasting precious open bar hours!<br><br>//PROMO//<br><br>We want to hear about your favorite experiences/memories with SCIA this year! Post a picture of your favorite SCIA experience and tell us about it in your caption! Tag our Facebook/Instagram and use the hashtag #sciabanquet2014 to qualify!<br><br>The post that receives the most likes will win! The prize* is a free banquet ticket to members or a member-priced ticket if you're a non-member! The winner will be announced next week so get your posts up soon!<br><br>*you must purchase a ticket on time to qualify. The winner will be refunded once chosen!",
+event_img_url: "https://scontent-b.xx.fbcdn.net/hphotos-prn2/t1.0-9/s720x720/1493180_723873737654580_4375101786159688085_n.jpg",
+location: "USC Leavey Library",
+name: "SCIA End of the Year Banquet 2014",
+start_time: "2014-05-04T03:00:00.000Z",
+id: "5356dabb64f7f650754d5785"
+		}];
+		var now = new Date();
+		var beginToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+		var html = "";
+		var pageLocation = window.location.origin + window.location.pathname;
+		
+		truncateString = function(string, limit, breakChar, rightPad) {
+		if (string.length <= limit) {
+			return string;
+		}
+
+		var substr = string.substr(0, limit);
+		if ((breakPoint = substr.lastIndexOf(breakChar)) >= 0) {
+			if (breakPoint < string.length -1) {
+				return string.substr(0, breakPoint) + rightPad;
+			}
+		}
+		};
+                    
+		for(var i = 0; i < json.length; i++) {
+			
+                        var templateData = json[i],
+                            eventDate = new Date(templateData.start_time),
+                            friendlyDate = SCIA.utils.getFriendlyDateTime(eventDate);
+                        if(eventDate < beginToday) {
+                            // skip past events
+                            continue;
+                        }
+                        
+                        // rename fields to match template fields
+                        html += "<div class='mEventImgUrl'><img src='";
+                        html += templateData.event_img_url;
+                        html += "' /></div><br/>";
+                        html += "<div class='mEventDate'>";
+                        html += friendlyDate.event_date;
+						html += " " + friendlyDate.event_time;
+                        html += "</div><br/>";
+                        html += "<div class='mEventTitle'>";
+                        html += templateData.name;
+                        html += "</div><br/>";
+                        html += "<div class='mEventDescription'>";
+                        html += templateData.description;
+                        html += "</div><br/>";
+						
+        }
+        $("#event-content-wrapper").empty().append(html);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,26 @@
+<html>
+	<head>
+		<title>Membership Test Form</title>
+		<script type="text/javascript">
+			
+			function readCookie(name) {
+				var nameEQ = name + "=";
+				var ca = document.cookie.split(';');
+				for(var i=0;i < ca.length;i++) {
+					var c = ca[i];
+					while (c.charAt(0)==' ') c = c.substring(1,c.length);
+					if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+				}
+				return null;
+			}
+			
+		</script>
+	</head>
+	<body>
+		<h1>Update Membership Price</h1>
+		<form id="create-user" action="/d1/membership/update" method="post">
+			New Price <input type="text" name="price"> <br/>
+			<input type="submit" value="submit" />
+		</form>
+	</body>
+</html>

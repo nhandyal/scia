@@ -1,0 +1,13 @@
+/**
+ * Author : Nikhil Handyal
+ * Date : 12/29/2013
+ * Description : A list of all the node package dependencies and descriptions on why we're using them
+ */
+
+"express" : "3.3.4",		// application core : http://expressjs.com/
+"mongoose" : "3.6.19",		// db : http://mongoosejs.com/index.html
+"ejs" : "0.8.4",			// template engine : http://embeddedjs.com/
+"nodemailer" : "0.5.2",		// https://github.com/andris9/Nodemailer
+"fbgraph" : "0.2.7",		// facebook
+"async" : "0.2.9",			// https://github.com/caolan/async
+"stripe" : "1.3.0",			// payments

@@ -1,0 +1,38 @@
+# https://www.digitalocean.com/community/articles/how-to-install-and-configure-monit
+
+# Monit control file
+
+set daemon 30 								      # Poll in 30 second intervals
+set logfile /var/log/monit.log			# Default facility is LOG_USER
+
+set mailserver smtp-mail.outlook.com port 25 username "admin@uscscia.com" password "Sci@2013" using tlsv1
+set alert admin@uscscia.com 				# Alert system admin on any event
+
+set httpd port 2812
+    use address uscscia.com      # only accept connection from localhost
+    allow 0.0.0.0/0.0.0.0        # allow localhost to connect to the server and
+    # allow admin:monit
+
+check process nginx with pidfile /opt/nginx/logs/nginx.pid
+  	start program = "/etc/init.d/nginx start"
+  	stop  program = "/etc/init.d/nginx stop"
+  	if failed host 127.0.0.1 port 80 then restart
+  	if cpu is greater than 40% for 2 cycles then alert
+  	if cpu > 60% for 5 cycles then restart 
+  	if 10 restarts within 10 cycles then timeout
+
+check process nodejs with pidfile "/var/run/scia.pid"
+    start program = "/sbin/start scia"
+    stop program  = "/sbin/stop scia"
+    if failed port 8000 protocol HTTP
+        request /d1/monit
+        with timeout 10 seconds
+        then restart
+
+check host mongodb with address 127.0.0.1
+    start program = "/usr/bin/sudo /usr/bin/mongod"
+    stop program = "/usr/bin/sudo /usr/bin/pkill -f mongod"
+    if failed port 28017 protocol HTTP
+        request /
+        with timeout 10 seconds
+        then restart

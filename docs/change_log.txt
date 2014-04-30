@@ -1,0 +1,5 @@
+Nikhil Handyal - 9/15/13
+	- wrote athena deploy script (mac/linux only). Automatically copies modified files into appropriate folders on scia server.
+		*Requires rsa public/private keys to be configured for the local machine and scia servers.
+
+	

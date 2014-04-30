@@ -1,0 +1,23 @@
+{
+  "name": "SCIA",
+  "version": "0.0.0",
+  "description": "SCIA javascript site controller",
+  "main": "dist/scia.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nhandyal/scia.git"
+  },
+  "author": "Nikhil Handyal",
+  "license": "MIT",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-uglify": "~0.2.0",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-jshint": "~0.4.3",
+    "grunt-jsbeautifier": "~0.1.8",
+    "grunt-contrib-watch": "~0.6.1"
+  }
+}

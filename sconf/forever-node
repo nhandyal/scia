@@ -1,0 +1,33 @@
+#! /bin/sh
+
+### BEGIN INIT INFO
+# Provides:          nginx
+# Required-Start:    $all
+# Required-Stop:     $all
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: starts the nginx web server
+# Description:       starts nginx using start-stop-daemon
+### END INIT INFO
+
+FOREVER=/usr/local/lib/node_modules/forever/bin/forever
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/local/lib/node_modules/forever/bin/
+NODESERVER=/www/scia/private.simple-server.js
+
+
+case "$1" in
+  start)
+        echo "Starting Forever: scia node server"
+		su - www-data -c "$FOREVER start $NODESERVER"
+		su - www-data -c "$FOREVER list"
+		printf "\n"
+	;;
+  stop)
+        echo "Stopping all forever processes: "
+		su - www-data -c "$FOREVER stopall"
+		su - www-data -c "$FOREVER list"
+		printf "\n"
+	;;
+esac
+
+    exit 0

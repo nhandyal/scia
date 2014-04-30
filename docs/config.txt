@@ -1,0 +1,25 @@
+there are a bunch of shits installed all over the place in our project
+
+the local project with node dependencies is pretty straight forward,
+clone the git repo
+npm install
+and you're good to go
+
+(If you don't have node and mongo installed yet, there are a few other steps)
+    (If you're running Mac OSX and haven't installed homebrew yet, shame on you)
+    (If you're running windows, GG).
+
+brew install node
+brew install mongo
+
+
+On the server side there is much more to do. I'm attempting to automate this, but till then
+I need to keep a track of all the stuff I've done, and why
+
+# makes deployment easy
+# https://code.google.com/p/sshsudo/
+# sshsudo (for the client) is included in our project under /lib
+# nvm, apparently sshpass needs to be installed on the client so..
+brew install https://raw.github.com/eugeneoden/homebrew/eca9de1/Library/Formula/sshpass.rb
+
+sudo apt-get install  sshpass   --> for the server (not nescessary?)

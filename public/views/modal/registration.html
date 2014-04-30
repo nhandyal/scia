@@ -1,0 +1,120 @@
+﻿<script type="text/javascript">
+// ======================================================================== //
+//   REGISTRATION MODAL                                                     //
+
+var registerFirstName, registerLastName, registerEmail, registerPassword;
+// Verify Form
+function verify(x) {
+    switch (x.filter) {
+        case 'RegisterPassword':
+            field.pass(x, true, 'password');
+            break;
+        case 'RegisterConfirm':
+            field.pass(x, true, 'match', $('input#RegisterPassword').val());
+            break;
+        case 'RegisterEmail':
+            field.pass(x, true, 'email');
+            break;
+        default:
+            var simplyExist = [
+                    'RegisterFirstName',
+                    'RegisterLastName'
+                ];
+            if (simplyExist.indexOf(x.filter) > -1) {
+                field.pass(x);
+            } else {
+                x.val;
+            }
+            break;
+    }
+}
+
+$(document).ready(function () {
+    $('#modal-registration-userinfo').show();
+    $('#modal-registration-thankyou').hide();
+
+    $('#btn-register').click(function (event) {
+        var alertString = '';
+        event.preventDefault();
+        allPass = field.checkAll('form#registration');
+        registerFirstName = $('input[name=RegisterFirstName]').val().toUpperCase();
+        registerLastName = $('input[name=RegisterLastName]').val().toUpperCase();
+        $('span#ThankYouName').html(registerFirstName + ' ' + registerLastName);
+        if ($('input[name=RegisterEmail]').val() != '') {
+            registerEmail = $('input[name=RegisterEmail]').val().toLowerCase();
+            $('span#ThankYouEmail').html('(' + registerEmail + ')');
+        }
+        registerPassword = $('input[name=RegisterPassword]').val();
+        if (allPass) {
+            svc('/d1/user/create', {
+                'f_name': registerFirstName,
+                'l_name': registerLastName,
+                'email': registerEmail,
+                'pwd': registerPassword,
+                'cb': '/index.html?action=verified'
+            }, function (data) {
+                if (data.status == 0) {
+                    $('#modal-registration-userinfo').hide();
+                    $('#modal-registration-thankyou').show();
+                }
+                else if (data.status == 10002) {
+                    // Error duplicate entry - email is already registered
+                    alert(data.short_message + '\n' + data.long_message);
+                }
+                else {
+                    // Error all other
+                    alert('Register failed');
+                }
+            }, true);
+            //TEST
+            //$('#modal-registration-userinfo').hide();
+            //$('#modal-registration-thankyou').show();
+            //TODO add AJAX
+            //alertString = '<label>' + alertString + '</label>';
+            //$('div#user-info').html(alertString);
+        }
+    });
+});
+</script>
+
+<a class="modal-close" href="javascript:modal.close()">X</a>
+
+<div id="modal-registration-userinfo" class="modal-screen">
+    <h1>Registration</h1>
+    <form action="#" id="registration" method="post">
+        <div class="col col2">
+            <label for="RegisterFirstName">First Name:</label>
+            <input type="text" name="RegisterFirstName" id="RegisterFirstName" value="" tabindex="1" onblur="field.check(this)" />
+            <label for="RegisterLastName">Last Name:</label>
+            <input type="text" name="RegisterLastName" id="RegisterLastName" value="" tabindex="2" onblur="field.check(this)" />
+            <label for="RegisterEmail">Email (USC Email required for membership):</label>
+            <input type="text" name="RegisterEmail" id="RegisterEmail" value="" tabindex="3" onblur="field.check(this)" />
+            <label for="RegisterPassword">Password:</label>
+            <input type="password" name="RegisterPassword" id="RegisterPassword" value="" tabindex="7" onblur="field.check(this)" />
+            <label for="RegisterConfirm">Confirm Password:</label>
+            <input type="password" name="RegisterConfirm" id="RegisterConfirm" value="" tabindex="8" onblur="field.check(this)" />
+        </div>
+        <div class="action-buttons">
+            <a id="btn-register" class="go" href="#" tabindex="9">Register &nbsp; &gt;</a>
+        </div>
+    </form>
+</div>
+
+<div id="modal-registration-thankyou" class="modal-screen">
+    <h1>Thank you!</h1>
+    <div class="col col2">
+        <div id="welcome">
+            Hey <span id="ThankYouName"></span>, and welcome to USC SCIA!<br /><br />
+            We're super excited that you decided to become a part of the south indian community here at USC and we can't wait to begin showing you
+            what SCIA is all about. Before we can get started we need to verify your account.  Simply retrieve the confirmation code from your email
+            <span id="ThankYouEmail"></span> and log into your SCIA account to complete the verification process.<br /><br />
+            Cheers,<br/>
+            SCIA Executive Board<br /><br />
+        </div>
+        <div id="user-info">
+        </div>
+    </div>
+    <div class="action-buttons">
+        <a id="btn-close" class="go" href="javascript:modal.close()" tabindex="1">X &nbsp; Close</a>
+    </div>
+</div>
