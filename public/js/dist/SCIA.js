@@ -540,7 +540,7 @@
                 $.post(d1Route, {
                     "stripeToken": stripeToken,
                     "saveCard": false,
-                    "amountAuthorized": SELF.ticketPrice,
+                    "amountAuthorized": SELF.ticketPrice * quantity,
                     "event_id": SELF.eventID,
                     "email": decodeURIComponent(SCIA.utils.readCookie("email")),
                     //"email" : "jackkwan@usc.edu",
