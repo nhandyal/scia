@@ -109,6 +109,10 @@
                     if(templateData.non_member_price === null) {
                         $('#event-purchase-non-member-ticket').remove();
                     }
+		    email = decodeURIComponent(SCIA.utils.readCookie("email"));
+		    if(email == 'null') {
+			$("#event-purchase-tickets-wrapper").hide();
+		    }
                 });
             })();
         </script>

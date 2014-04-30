@@ -136,8 +136,8 @@ SCIA.Sidebar.purchase_event_ticket = {
                 "saveCard" : false,
                 "amountAuthorized" : SELF.ticketPrice,
 		"event_id" : SELF.eventID,
-		//"email" : decodeURIComponent(SCIA.utils.readCookie("email")),
-		"email" : "jackkwan@usc.edu",
+		"email" : decodeURIComponent(SCIA.utils.readCookie("email")),
+		//"email" : "jackkwan@usc.edu",
 		"ticket_count" : quantity
             }, function(resposne) {
                 SCIA.Sidebar._endTransaction();
