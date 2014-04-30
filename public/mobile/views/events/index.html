@@ -13,6 +13,39 @@
     	#event-content-wrapper {
     		text-align:center;
     	}
+		body {
+			font-weight: normal;
+			font-family: Verana;
+			font-size: 18px;
+			text-align: justify;
+		}
+		.mEventDate {
+			border-top: 1px solid rgb(150,150,150);
+			margin-top: 10px;
+			padding-top: 10px;
+			width: 60%;
+			margin-left:auto;
+			margin-right:auto;
+		}
+		.mEventTime {
+			
+		}
+		.mEventTitle {
+			border-top: 1px solid rgb(150,150,150);
+			margin-top: 10px;
+			padding-top: 10px;
+			width: 60%;
+			margin-left:auto;
+			margin-right:auto;
+		}
+		.mEventDescription {
+			border-top: 1px solid rgb(150,150,150);
+			margin-top: 10px;
+			padding-top: 10px;
+			width: 60%;
+			margin-left:auto;
+			margin-right:auto;
+		}
     </style>
   </head>
   <body>
@@ -30,7 +63,6 @@
   <section class="top-bar-section">
     <!-- Right Nav Section -->
     <ul class="right">
-      <li><a href="#">About</a></li>
 	  <li><a href="#">Events</a></li>
     </ul>
   </section>
@@ -91,9 +123,7 @@ id: "5356dabb64f7f650754d5785"
                         html += "' /></div><br/>";
                         html += "<div class='mEventDate'>";
                         html += friendlyDate.event_date;
-                        html += "</div><br/>";
-                        html += "<div class='mEventTime'>";
-                        html += friendlyDate.event_time;
+						html += " " + friendlyDate.event_time;
                         html += "</div><br/>";
                         html += "<div class='mEventTitle'>";
                         html += templateData.name;
