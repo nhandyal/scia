@@ -4,8 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Southern California Indo Americans</title>
-    <link rel="stylesheet" href="../../css/foundation.css" />
-    <script src="../../js/vendor/modernizr.js"></script>
+    <link rel="stylesheet" href="../../../css/mobile/foundation.css" />
+    <script src="../../../js/mobile/vendor/modernizr.js"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script type="text/javascript" src="../../../js/dist/SCIA.min.js"></script>
     <script type="text/javascript" src="../../../js/dist/Handlebars.runtime.min.js"></script>
@@ -13,6 +13,39 @@
     	#event-content-wrapper {
     		text-align:center;
     	}
+		body {
+			font-weight: normal;
+			font-family: Verdana;
+			font-size: 13px;
+			text-align: justify;
+		}
+		.mEventDate {
+			border-top: 1px solid rgb(150,150,150);
+			margin-top: 10px;
+			padding-top: 10px;
+			width: 60%;
+			margin-left:auto;
+			margin-right:auto;
+		}
+		.mEventTime {
+			
+		}
+		.mEventTitle {
+			border-top: 1px solid rgb(150,150,150);
+			margin-top: 10px;
+			padding-top: 10px;
+			width: 60%;
+			margin-left:auto;
+			margin-right:auto;
+		}
+		.mEventDescription {
+			border-top: 1px solid rgb(150,150,150);
+			margin-top: 10px;
+			padding-top: 10px;
+			width: 60%;
+			margin-left:auto;
+			margin-right:auto;
+		}
     </style>
   </head>
   <body>
@@ -30,7 +63,6 @@
   <section class="top-bar-section">
     <!-- Right Nav Section -->
     <ul class="right">
-      <li><a href="#">About</a></li>
 	  <li><a href="#">Events</a></li>
     </ul>
   </section>
@@ -38,8 +70,8 @@
 <div id="event-content-wrapper">
 </div>
     
-    <script src="../../js/vendor/jquery.js"></script>
-    <script src="../../js/foundation.min.js"></script>
+    <script src="../../../js/mobile/vendor/jquery.js"></script>
+    <script src="../../../js/mobile/foundation.min.js"></script>
     <script>
       $(document).foundation();
     </script>
@@ -91,9 +123,7 @@ id: "5356dabb64f7f650754d5785"
                         html += "' /></div><br/>";
                         html += "<div class='mEventDate'>";
                         html += friendlyDate.event_date;
-                        html += "</div><br/>";
-                        html += "<div class='mEventTime'>";
-                        html += friendlyDate.event_time;
+						html += " " + friendlyDate.event_time;
                         html += "</div><br/>";
                         html += "<div class='mEventTitle'>";
                         html += templateData.name;
